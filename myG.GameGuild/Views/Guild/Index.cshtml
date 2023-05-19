@@ -1,0 +1,97 @@
+﻿@using Activity.DAL.Entity.GameGuild;
+@using Activity.DAL.Entity;
+@using Activity.DAL.Enum;
+@{
+    List<Guild> games = Model;
+    SessionManager sessionManager = (SessionManager)ViewData["_sessionManager"];
+    ViewData["Title"] = "Danh sách Guild";
+}
+
+<div class="row row-sm">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"] </h3>
+                <div class="card-options">
+                    @if(sessionManager.UserType1 == UserType.CenterAdmin)
+                        {
+                           <a class="btn btn-primary " href="@Url.Action("CreateGuild")"><i class="fe fe-plus"></i> Thêm Guild</a>
+                        }
+                    
+                </div>
+            </div>
+            <div class="card-body">
+                        <div class="row row-cols-4">
+
+                            @{
+                                foreach (var item in games)
+                                {
+                                    <div class="col-xl-3 col-sm-12">
+                                        <div class="card border p-0">
+                                            <div class="card-body text-center">
+                                                
+                                                <img style="max-height:162px" id="image" @*src="/assets/images/media/26.jpg"*@ onerror="this.src='/assets/images/media/26.jpg'" src="@item.Thumb" alt="img" class="w-200 m-1 br-5">
+                                                <h4 class="h4 mb-0 mt-3">@item.Name</h4>
+                                                <h4 class=" h4 mb-0 mt-3 fa fa-gamepad"> @item.Gamename</h4>
+                                                <p class="card-text"></p>
+                                            </div>
+                                            <div class="card-footer text-center">
+                                                @{
+                                                    <a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xem Guild" href="@Url.Action("ViewGuild",new {GuildId= item.Id })" class="btn btn-warning mb-1 btn-block">Xem Guild<i class=""></i></a>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+
+                        </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script src="/assets/js/del.js"></script>
+<script>
+
+    const img = document.getElementById("image")
+    //img.addEventListener("error", function (event) {
+    //    event.target.src = "/assets/images/media/26.jpg"
+    //    event.onerror = null
+    //})
+
+    function Dangkychoi(GameId) {
+        var param = {
+            'GameId': GameId,
+            }
+            console.log(param);
+
+            $.ajax({
+            type: 'POST',
+            url: "@Url.Action("Dangkychoi")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data);
+                if (data == true) {
+                    swal("Đăng ký game thành công !");
+
+                            document.querySelectorAll('.confirm').forEach(item => {
+                                item.addEventListener('click', event => {
+                                    location.href = '@Url.Action("Danhsachgamescholar")';
+                                })
+                            })
+                } if (data == false) {
+                    not_mess("không thể đăng ký!");
+                }
+            }
+            });
+    }
+
+
+</script>
+<!-- End Row -->

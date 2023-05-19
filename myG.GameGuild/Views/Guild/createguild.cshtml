@@ -1,0 +1,163 @@
+﻿@using Activity.DAL.Entity.GameGuild;
+@using Activity.DAL.Entity;
+@using Activity.DAL.Enum;
+
+@{
+    List<Games> games = Model;
+}
+<div class="col-xl-12">
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card panel-theme">
+                <div class="card-header">
+                    <div class="float-start">
+                        <h3 class="card-title">Thêm guild mới</h3>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="card-body no-padding">
+                    @*<form class="form-horizontal">*@
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="name">Tên guild</label>
+                        <div class="col-md-9">
+                            <div class="input-group mb-2">
+                                <input required id="name" type="text" class="form-control" placeholder="" @*onkeypress="TextChange()"*@ value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="name">Mô tả</label>
+                        <div class="col-md-9">
+                            <div class="input-group mb-2">
+                                <input required id="Description" type="text" class="form-control" placeholder="" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="name">Game</label>
+                        <div class="col-md-9">
+                            <div class="input-group mb-2">
+                                <select id="game" class="form-control select2-show-search form-select" style="display: none;" required>
+                                    
+                                    @{
+                                        foreach (var item in games)
+                                        {
+                                            <option value="@item.Id"> @item.Name </option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="capnhat_tt" class="btn btn-primary py-1 px-4 mb-1" onclick="capnhatthongtin()">Tạo guild</button>
+                    @*</form>*@
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-5">
+            <div class=" row mb-4">
+                <label class="col-md-3 form-label" for="name">Ảnh guild</label>
+                <div class="col-md-9">
+                    <div class="input-group mb-2">
+                        <input required id="thumb" type="text" class="form-control" placeholder="" disabled value="">
+                        @* <a style="margin-left:50px" data-bs-toggle="tooltip" title="" data-bs-original-title="upload ảnh" href="javascript:upload_t()" id="file_t" class="btn btn-primary">Upload File </a> <p id="filename">*@
+                    </div>
+                    <img onclick="upload_t()" id="cmnd_truoc" src="/assets/images/media/upload.png" alt="img" class="w-100 m-1 br-5">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+
+<input type="file" id="file-upload_t" accept=".png,.jpg" style="display:none;">
+<script>
+
+
+    function upload_t() {
+        $("#file-upload_t").trigger('click');
+    }
+
+    function capnhatthongtin() {
+        let name = document.getElementById("name").value;
+        let Description = document.getElementById("Description").value;
+        let game = document.getElementById("game").value;
+        let thumb = document.getElementById("thumb").value;
+
+        if (name == "" || Description == "" || game == "" ) {
+            console.log("thieu thong tin");
+        } else {
+            var param = {
+                'Name': name,
+                'Description': Description,
+                "Game": game,
+                "Thumb": thumb
+
+            }
+            console.log(param);
+
+            $.ajax({
+            type: 'POST',
+            url: "@Url.Action("AddGuild")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data);
+                if (data == true) {
+                    swal("Tạo guild thành công !");
+                            document.querySelectorAll('.confirm').forEach(item => {
+                                item.addEventListener('click', event => {
+                                    location.href = '@Url.Action("Index","Guild")';
+                                })
+                            })
+                } if (data == false) {
+                    not_mess("không thể cập nhật thông tin!");
+                }
+            }
+            });
+
+        }
+    }
+         $(document).ready(function () {
+
+
+        const fileUpload_t = document.querySelector("#file-upload_t");
+        fileUpload_t.addEventListener("change", (event) => {
+            const { files } = event.target;
+
+            var formData = new FormData();
+            for (var i = 0; i != files.length; i++) {
+                formData.append("File", files[i]);
+            }
+            $("#file_t").toggleClass("btn-loading");
+            $(fileUpload_t).val("")
+            $.ajax(
+                {
+                    url: "@Url.Action("Index", "UploadFile")",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: "POST",
+                    success: function (data) {
+                        console.log("data", data);
+                        $('#thumb').val(data);
+                        $("#file_t").toggleClass("btn-loading");
+                        jQuery("#cmnd_truoc").attr("src",data);
+                    }
+                }
+            );
+        })
+
+    });
+
+</script>
+<!-- SWEET-ALERT JS -->
+<script src="/assets/plugins/sweet-alert/sweetalert.min.js"></script>
+<script src="/assets/js/sweet-alert.js"></script>
+<!-- INTERNAL Notifications js -->
+<script src="/assets/plugins/notify/js/sample.js"></script>

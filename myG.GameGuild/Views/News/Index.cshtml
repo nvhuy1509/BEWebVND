@@ -1,0 +1,333 @@
+﻿@using Minxtu.DAL.Entity;
+@using Activity.DAL.Enum;
+@{
+    Layout = null;
+    List<News> lstBlogs = Model;
+    var count = 0;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MyMoney Blog</title>
+    <link rel="icon" type="image/x-icon" href="../images/logo.svg">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+      integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+      integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <!-- Owl Stylesheets -->
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"
+    />
+    <link rel="stylesheet" href="./css/app.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Open+Sans:ital,wght@0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Poppins">
+    <!-- <script
+        type="text/javascript"
+        src="https://code.jquery.com/jquery-1.11.0.min.js"
+      ></script> -->
+    <!-- <link
+        rel="stylesheet"
+        href="https://unpkg.com/swiper/swiper-bundle.min.css"
+      /> -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+      integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+
+      $(document).ready(function () {
+        var blogActive = document.querySelector(".slick-active .blog-image img");
+
+          changeBackGround(blogActive); //function change Bg follow image of blog
+          getAverageRGB(blogActive);  //function get main color of image
+
+        $(".slider").on("afterChange", function (){
+        var blogActive1 = document.querySelector(".slick-active .blog-image img");
+
+        changeBackGround(blogActive1); //function change Bg follow image of blog
+            getAverageRGB(blogActive1); //function get main color of image
+
+        });
+        
+         
+        const btn = [].slice.call(document.getElementsByTagName("button"));
+          btn.forEach((item, index) => {
+            item.addEventListener("click", function () {
+              document.getElementById("tab").children[index].scrollIntoView();
+            });
+          });
+        
+      })
+
+    function changeBackGround(blogActive) {
+
+        var bgBlur = $('.blog .bg-blur');
+        bgBlur.css("background","url('"+blogActive.src+"') no-repeat center/cover");
+        console.log("changeBG-----")
+    }
+
+      function getAverageRGB(imgEl) {
+    
+          console.log( imgEl);
+
+        var blockSize = 5, // only visit every 5 pixels
+            defaultRGB = {r:0,g:0,b:0}, // for non-supporting envs
+            canvas = document.createElement('canvas'),
+            context = canvas.getContext && canvas.getContext('2d'),
+            data, width, height,
+            i = -4,
+            length,
+            rgb = {r:0,g:0,b:0},
+            count = 0;
+        
+        if (!context) {
+            return defaultRGB;
+        }
+
+         console.log("------------------");
+        console.log( context);
+    
+        height = canvas.height = imgEl.naturalHeight || imgEl.offsetHeight || imgEl.height;
+        width = canvas.width = imgEl.naturalWidth || imgEl.offsetWidth || imgEl.width;
+
+        console.log(typeof(imgEl))
+         console.log("height------------------" + height);
+         console.log("width------------------" + width);
+
+        context.drawImage(imgEl, 0, 0);
+    
+        try {
+            data = context.getImageData(0, 0, width, height);
+        } catch(e) {
+            /* security error, img on diff domain */alert('x');
+            return defaultRGB;
+        }
+    
+        length = data.data.length;
+    
+        while ( (i += blockSize * 4) < length ) {
+            ++count;
+            rgb.r += data.data[i];
+            rgb.g += data.data[i+1];
+            rgb.b += data.data[i+2];
+        }
+    
+        // ~~ used to floor values
+        rgb.r = ~~(rgb.r/count);
+        rgb.g = ~~(rgb.g/count);
+        rgb.b = ~~(rgb.b/count);
+        var menuText = document.querySelectorAll(".menu-item a");
+          var imgLG = document.getElementById("colorlogo");
+              for (const item of menuText) {
+                  if (rgb.r >= 125 && rgb.g >= 125 && rgb.b >= 125) {
+                      imgLG.src = "./images/PC_blog/Logo.svg"
+                      item.classList.add('text-black');
+                      item.classList.remove('text-white');
+                      item.classList.remove('menu-blog');
+                  } else {
+                      imgLG.src = "./images/PC_blog/Logo-PC.svg"
+                      item.classList.add('text-white');
+                      item.classList.remove('text-black');
+                      item.classList.remove('menu-blog');
+                  }
+              }
+    
+    }
+
+    </script>
+  </head>
+  <body>
+    <div class="wrapper">
+        <header >
+            <div class="header-solution"> 
+                <a id="logoHeader" href="@Url.Action("Index","Home")" class="logo">
+                  <img src="./images/PC_blog/Logo-PC.svg" id="colorlogo" class="visible-lg logo-desktop" alt="" />
+                  <img src="./images/PC_blog/Logo.svg" class="visible-s" alt="" />
+                </a>
+                <div id="imgBarHeader" class="header-bar visible-s">
+                  <img src="./images/PC_blog/icon-bar.svg" alt="" />
+                </div>
+                <div class="header-fixed">
+                  <ul class="menu">
+                    <li class="menu-item">
+                      <i class="fa fa-times close-header-fixed visible-s"></i>
+                    </li>
+                    <li class="menu-item">
+                      <a href="@Url.Action("Index","Home")" class="menu-link menu-blog menu-active "
+                        >Home</a
+                      >
+                    </li>
+                    <li class="menu-item">
+                      <a href="@Url.Action("Index","Solution")" class="menu-link menu-blog menu-active " >Solutions</a>
+                    </li>
+                    <li class="menu-item">
+                      <a
+                        target="_blank" href="https://docs.mymoney.credit/"
+                        class="menu-link menu-blog menu-active "
+                        >Docs
+                      </a>
+                    </li>
+                    <li class="menu-item">
+                      <a href="@Url.Action("Index","News")" class="menu-link menu-blog menu-active menu-blog-active">Blog</a>
+                    </li>
+                    <li class="menu-item">
+                      <a href="@Url.Action("Index","Contact")" class="menu-link menu-blog menu-active ">Contact</a>
+                    </li>
+                  </ul>
+                  <ul class="header-cta">
+                    <li class="header-cta-item">
+                      <form action="">
+                        <input type="text" placeholder="" class="visible-s" />
+                        <button><i class="fas fa-search"></i></button>
+                      </form>
+                    </li>
+                    <li class="header-cta-item">
+                      <button onclick="changeLanguage()">
+                        <span id="language">EN</span>
+                      </button>
+                    </li>
+                    <li class="header-cta-item">
+                      <button>Register</button>
+                    </li>
+                    <li class="header-cta-item">
+                      <button class="active">Login</button>
+                    </li>
+                  </ul>
+                  <!-- <ul class="header-social footer-social visible-s">
+                    <li>
+                      <a href="#!">
+                        <img src="./images/PC_index/header-icon-fb.svg" alt="" />
+                      </a>
+                    </li>
+                    <li>
+                      <a href="#!">
+                        <img src="./images/PC_index/header-icon-tt.svg" alt="" />
+                      </a>
+                    </li>
+                  </ul> -->
+                </div>
+            </div>
+        </header>
+        <main>  
+
+            <section class="blog" id="myBlog">
+              <div class="bg-blur"></div>
+              <img id="imgBG1" src="/images/PC_blog/img-blog-5.svg" class="img-abso1" alt="">
+              <img id="imgBG2" src="/images/PC_blog/img-blog-6.svg" class="img-abso2" alt="">
+              <div class="slider slider-for" >
+                @foreach (var obj in lstBlogs)
+                {
+                    <div class="blog-item">
+                      <div class="blog-content"> 
+                        <div class="blog-content-wrap">
+                          <div class="blog-left">
+                            <div class="blog-header">
+                              <div class="blog-header-text">@obj.MetaDescription</div>
+                              <div class="blog-header-date">@obj.CreateTime</div>
+                            </div>
+                            <div class="blog-mid" onclick="window.open('@obj.MainContent', '_blank');">
+                                @obj.Title       
+                            </div>
+                            <div class="blog-bottom">
+                                @obj.Description
+                            </div>
+                          </div>
+                        </div> 
+                        <div class="blog-right">
+                          <img class="slider-onclick" src="/images/PC_blog/icon_next.svg" alt="">
+                        </div>
+                      </div>
+                      <div class="blog-image"> 
+                        <img src="@obj.Thumb" id="imgBlog+@obj.Id" alt="">
+                      </div>
+                       <div class="blog-blur"></div>
+                    </div>    
+                }
+              </div>
+            </section>
+            <section class="mbBlog">
+              <ul class="ulEffect">
+                @foreach (var obj in lstBlogs)
+                {
+                    <li class="effect">
+                      <div class="mbBlog-item mbBlog-item-odd">
+                        <div class="mbBlog-top ">
+                          <div class="mbBlog-date">@obj.CreateTime</div>
+                          <div class="mbBlog-title">
+                                @obj.Title
+                          </div>
+                          <div class="mbBlog-desc">
+                                @obj.Description                                 
+                          </div>
+                          <div >
+                            <a  class="mbBlog-more" href="@obj.MainContent"> Read more <img src="/images/PC_blog/icon-more.svg" alt=""></a>
+                          </div>
+                        </div>
+                    
+                        <div>
+                          <img class="mbBlog-img" src="@obj.Thumb" alt="">
+                        </div>
+                      </div>
+                    </li>   
+                }
+              </ul>
+              
+            </section>
+        </main>
+    </div>
+    <script
+      type="text/javascript"
+      src="//code.jquery.com/jquery-1.11.0.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
+    ></script>
+    <script src="./js/slide.js"></script>
+    <script src="./js/app.js"></script>
+    <script src="./js/effect.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+      integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+</body>
+</html>

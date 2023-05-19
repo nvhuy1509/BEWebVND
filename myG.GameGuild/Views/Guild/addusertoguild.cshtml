@@ -1,0 +1,200 @@
+﻿@using Activity.DAL.Entity.GameGuild;
+@using Activity.DAL.Entity;
+@using Activity.DAL.Enum;
+
+@{
+    Guild guild = Model.guild;
+    List<UserInformation> usergame = Model.user;
+    List<UserInformation> userGuild = Model.userGuild;
+}
+<div class="card panel-theme">
+    <div class="card-header">
+        <div class="float-start">
+            <h3 class="card-title">Thêm người chơi </h3>
+        </div>
+        <div class="card-options">
+            <a href="javascript:addUserToGuid()" class="btn btn-primary ">Lưu</a>
+            <a href="@Url.Action("ViewGuild", "Guild",new { GuildId=guild.Id})" class="btn btn-danger  ms-2">Huỷ</a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="card-body no-padding">
+
+        <div class="row">
+            <div class="col-xl-6 col-sm-12">
+                <div class="card">
+                    <div class="float-start">
+                        <h3 class="card-title">Tài khoản đăng ký chơi game. </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable-2">
+                                <thead>
+                                    <tr>
+                                        <th class="wd-15p border-bottom-0">UserName</th>
+                                        <th class="wd-3p " style="width:10px">Tính năng</th>
+                                    </tr>
+                                </thead>
+                                @if (usergame.Count > 0)
+                                {
+                                    <tbody>
+                                        @foreach (var (obj, i) in usergame.Select((value, i) => (value, i)))
+                                        {
+
+                                            <tr class="row-@obj.Id" data-id="@obj.Id">
+
+                                                <td class="userName"><span data-id="@obj.Id">@obj.UserName</span></td>
+                                                <td>
+                                                    <a href="javascript:addAccounts('@obj.Id')" class="btn btn-icon  btn-success btn-add"><i class="fe fe-plus"></i></a>
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                }
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-sm-12">
+                <div class="card">
+                    <div class="float-start">
+                        <h3 class="card-title">Tài khoản trong Guild  </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable-1">
+                                <thead>
+                                    <tr>
+                                        <th class="wd-15p border-bottom-0">UserName</th>
+                                        <th class="wd-0p wd-center border-bottom-0">Tính năng</th>
+                                    </tr>
+                                </thead>
+                                @if (userGuild.Count > 0)
+                                {
+                                    <tbody>
+                                        @foreach (var (obj, i) in userGuild.Select((value, i) => (value, i)))
+                                        {
+
+                                            <tr class="row-@obj.Id" data-id="@obj.Id">
+                                                <td><span data-id="@obj.Id">@obj.UserName</span></td>
+                                                <td>
+                                                    @if (obj.Id != Guid.Parse(ViewData["AccountId"].ToString()))
+                                                    {
+                                                        <a data-bs-placement="top" href="javascript:delAccounts('@obj.Id')" class="btn btn-icon  btn-danger btn-del"><i class="fe fe-trash"></i></a>
+
+                                                    }
+                                                </td>
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                }
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SWEET-ALERT JS -->
+<!-- INTERNAL Notifications js -->
+<script>
+
+    function addUserToGuid() {
+        let UserId = []
+        let datas = t.rows().data();
+        for (var i = 0; i < datas.length; i++) {
+            UserId.push($(datas[i][0]).data("id"));
+        }
+        console.log("userid", UserId);
+       
+
+        var param = {
+            'GuildId': '@guild.Id',
+            'UserId': UserId
+            }
+            console.log(param);
+
+            $.ajax({
+            type: 'POST',
+            url: "@Url.Action("AddUserGuild")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data);
+                if (data == true) {
+                    swal("Thêm thành công user vào Guild !");
+                            document.querySelectorAll('.confirm').forEach(item => {
+                                item.addEventListener('click', event => {
+                                    location.href = '@Url.Action("ViewGuild", "Guild",new { GuildId=guild.Id})';
+                                })
+                            })
+                } if (data == false) {
+                    not_mess("không thể cập nhật thông tin!");
+                }
+            }
+            });
+    }
+</script>
+@section Scripts{
+
+    <script>var t = $('#responsive-datatable-1').DataTable({
+            language: {
+                searchPlaceholder: 'Search...',
+                scrollX: "100%",
+                sSearch: '',
+            }
+
+
+        });
+
+        var t2 = $('#responsive-datatable-2').DataTable({
+            language: {
+                searchPlaceholder: 'Search...',
+                scrollX: "100%",
+                sSearch: '',
+            }
+
+
+        });
+
+        function addAccounts(id) {
+            let tr = $(".row-" + id);
+
+            let userName = $(tr).find('td').eq(0).text();//get username
+
+
+            var trDOM = t.row.add([
+                `<span data-id='${id}'>${userName}</span>`,
+                `<a data-bs-placement="top"  title=""  href="javascript:delAccounts('${id}')" class="btn btn-icon  btn-danger btn-del"><i class="fe fe-trash"></i></a>`,
+            ]).draw().node();//add row
+
+            $(trDOM).addClass("row-" + id);////add class id
+            $(trDOM).attr("data-id", id);////add data id
+
+            t2.row(tr).remove().draw();
+        }
+        function delAccounts(id) {
+            let tr = $(".row-" + id);
+
+            let userName = $(tr).find('td').eq(0).text();//get username
+
+            var trDOM = t2.row.add([
+                `<span data-id='${id}'>${userName}</span>`,
+                `<a data-bs-placement="top"  title="" href="javascript:addAccounts('${id}')" class="btn btn-icon  btn-success btn-add"><i class="fe fe-plus"></i></a>`
+            ]).draw(false).node();//add row
+
+            $(trDOM).addClass("row-" + id);//add class id
+            $(trDOM).attr("data-id", id);////add data id
+
+            t.row(tr).remove().draw();//remove right
+
+
+        }</script>
+}

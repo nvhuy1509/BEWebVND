@@ -1,0 +1,60 @@
+﻿
+@using Minxtu.DAL.Entity;
+@using Activity.DAL.Enum;
+@{
+    List<Config> lstData = Model;
+    ViewData["Title"] = "Danh sách Config";
+}
+
+<!-- Row -->
+<div class="row row-sm">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"] </h3>
+                <div class="card-options">
+                    @*<a class="btn btn-primary " href="@Url.Action("AddConfig")"><i class="fe fe-plus"></i> Thêm mới</a>*@
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p border-bottom-0">STT</th>
+                                <th class="wd-15p border-bottom-0">Key</th>
+                                <th class="wd-15p border-bottom-0">Value</th>
+                                <th class="wd-0p wd-center border-bottom-0">Tính năng</th>
+                            </tr>
+                        </thead>
+                        @if (lstData.Count > 0)
+                        {
+                            var stt = 0;
+                            <tbody>
+                                @foreach (var obj in lstData)
+                                    {
+                                    stt++;
+                                    <tr>
+                                            <td>@stt</td>
+                                            <td>@obj.Key</td>
+                                            <td>@obj.Value</td>
+                                            <td>
+                                                <a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Chỉnh sửa" href="@Url.Action("EditConfig", new {key=obj.Key })" class="btn btn-icon  btn-success"><i class="fe fe-edit"></i></a>
+                                            </td>
+                                        </tr>
+
+                                    }
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/del.js"></script>
+<script>
+</script>
+<script>//var t = document.getElementById("demo").innerHTML;</script>
+<!-- End Row -->

@@ -1,0 +1,88 @@
+﻿
+@using Activity.DAL.Entity;
+@using Activity.DAL.Enum;
+@{
+    List<Contact> user = Model;
+    ViewData["Title"] = "Danh sách tài khoản chưa xác thực";
+}
+
+<!-- Row -->
+<div class="row row-sm">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"] </h3>
+                @*<div class="card-options">
+                        <a class="btn btn-primary " href="@Url.Action("AddGame")"><i class="fe fe-plus"></i> Thêm Game</a>
+                    </div>*@
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p border-bottom-0">STT</th>
+                                <th class="wd-15p border-bottom-0">Tên</th>
+                                <th class="wd-15p border-bottom-0">Discord</th>
+                                <th class="wd-15p border-bottom-0">Email</th>
+                                <th class="wd-15p border-bottom-0">Telegram</th>
+                                <th class="wd-15p border-bottom-0">Facebook</th>
+                                <th class="wd-15p border-bottom-0">Địa chỉ</th>
+                                <th class="wd-15p border-bottom-0">Trạng thái</th>
+                                <th class="wd-0p wd-center border-bottom-0">Tính năng</th>
+                            </tr>
+                        </thead>
+                        @if (user.Count > 0)
+                        {
+                            <tbody>
+                                @foreach (var (obj, i) in user.Select((value, i) => (value, i)))
+                                {
+
+                                    <tr>
+                                        <td>@(i+1)</td>
+                                        <td>@obj.Name</td>
+                                        <td>@obj.Discord</td>
+                                        <td>@obj.Email</td>
+                                        <td>@obj.Telegram</td>
+                                        <td><button onclick="openFacebook('@obj.Facebook')" style="border:none;background-color:white" ;" type="button"><i class="fa fa-facebook-square" data-bs-toggle="tooltip" title="Facebook"></i></button></td>
+                                        <td>@obj.Address</td>
+                                        @if (obj.Status == GAStatus.Active)
+                                        {
+
+                                            <td><span class="tag tag-green">Đã xác thực</span></td>
+
+                                        }
+                                        else if (obj.Status == GAStatus.Delete)
+                                        {
+                                            <td><span class="tag tag-red">Xoá</span></td>
+                                        }
+                                        else
+                                        {
+                                            <td><span class="tag tag-red">Chưa xác thực</span></td>
+                                        }
+
+                                        <td>
+                                            <a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xác minh" href="@Url.Action("ViewProfile","Profile",new {UserId=obj.UserId })" class="btn btn-icon  btn-success"><i class="fe fe-check"></i></a>
+                                            @*<a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Chỉnh sửa" href="@Url.Action("UpdateGame","Game",new {id=obj.Id })" class="btn btn-icon  btn-success"><i class="fe fe-edit"></i></a>
+                                            <a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xóa" href="javascript:del('@obj.Id','@obj.Name','@Url.Action("Del")')" class="btn btn-icon  btn-danger"><i class="fe fe-trash"></i></a>*@
+
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/del.js"></script>
+<script> 
+    function openFacebook(link) {
+        window.open(link);
+    }
+</script>
+<!-- End Row -->

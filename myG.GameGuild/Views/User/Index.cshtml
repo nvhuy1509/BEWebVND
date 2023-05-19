@@ -1,0 +1,120 @@
+﻿
+@using Activity.Biz.Enum
+@using Minxtu.DAL.Entity;
+@{
+    List<Admin> user = Model;
+    ViewData["Title"] = "Danh sách tài khoản";
+}
+
+<!-- Row -->
+<div class="row row-sm">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"] </h3>
+                @*<div class="card-options">
+                    <a class="btn btn-primary " href="@Url.Action("AddGame")"><i class="fe fe-plus"></i> Thêm tài khoản</a>
+                </div>*@
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p border-bottom-0">STT</th>
+                                <th class="wd-15p border-bottom-0">UserName</th>
+                                <th class="wd-15p border-bottom-0">FullName</th>
+                                <th class="wd-15p border-bottom-0">Role</th>
+                                <th class="wd-15p border-bottom-0">Status</th>
+                                <th class="wd-0p wd-center border-bottom-0">Tính năng</th>
+                            </tr>
+                        </thead>
+                        @if (user.Count > 0)
+                        {
+                            var stt = 0;
+                            <tbody>
+                                @foreach (var obj in user)
+                                {
+                                    stt++;
+                                    <tr>
+                                        <td>@stt</td>
+                                        <td>@obj.UserName</td>
+                                        <td>@obj.FullName</td>
+                                        @if (obj.Level == (int)Role.SuperAdmin)
+                                        {
+
+                                            <td><span class="tag tag-green">SuperAdmin</span></td>
+
+                                        }
+                                        @if (obj.Status == (int)AdminStatus.Active)
+                                        {
+                                            <td><span class="tag tag-blue"> Hoạt động </span></td>
+                                        }
+                                        @if (obj.Status == (int)AdminStatus.InActive)
+                                        {
+                                            <td><span class="tag tag-cyan">Ngừng hoạt động</span></td>
+                                        }
+                                        <td>
+                                            @if(obj.Level != (int)Role.SuperAdmin)
+                                            {
+                                                <a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xóa" style="color:white" onclick="delUser('@obj.Id')" class="btn btn-icon  btn-danger"><i class="fe fe-trash"></i></a>
+
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/del.js"></script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({
+            html: true
+        });
+    });
+    function openFacebook(link) {
+        window.open(link);
+    }
+    function delUser(id) {
+         swal({
+            title: " ",
+            text: "Xác nhận xóa tài khoản",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText:"Hủy"
+        });
+         document.querySelectorAll('.confirm').forEach(item => {
+            item.addEventListener('click', event => {
+                   var param = {
+            'Id': id,
+        }
+        console.log("param", param)
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("DelUser")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data)
+                if (data) {
+                    window.location.reload();
+                }
+                else {
+                    notifyError(data.errorMessage);
+                }
+            }
+
+        });
+            })
+        })
+    }
+</script>
+<script>//var t = document.getElementById("demo").innerHTML;</script>
+<!-- End Row -->

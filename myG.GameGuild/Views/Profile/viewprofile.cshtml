@@ -1,0 +1,169 @@
+﻿
+@using Activity.DAL.Entity;
+@using Activity.DAL.Enum;
+@{
+    Contact profile = Model;
+    ViewData["Title"] = "Profile";
+}
+<style>
+   
+</style>
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Thông tin tài khoản</div>
+            </div>
+            <div class="card-body">
+                <div class="text-center chat-image mb-5">
+
+                    <div class="main-chat-msg-name">
+                        @{
+                            if (profile.Status == GAStatus.InActive)
+                            {
+                                <h5 class="mb-1 text-danger">Chưa xác thực</h5>
+                            }
+                            if (profile.Status == GAStatus.Active)
+                            {
+                                <h5 class="mb-1 text-green">Đã xác thực</h5>
+                            }
+                        }
+                        @*<p class=" text-danger">Chưa xác thực</p>*@
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Tên</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input disabled id="name" type="text" class="form-control" placeholder="" value="@profile.Name">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Số điện thoại</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input disabled id="name" type="text" class="form-control" placeholder="" value="@profile.Mobile">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Discord</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input disabled id="name" type="text" class="form-control" placeholder="" value="@profile.Discord">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Email</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input disabled id="name" type="text" class="form-control" placeholder="" value="@profile.Email">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Facebook</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input disabled id="name" type="text" class="form-control" placeholder="" value="@profile.Facebook">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Telegram</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input disabled id="name" type="text" class="form-control" placeholder="" value="@profile.Telegram">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Số CMND</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input disabled id="name" type="text" class="form-control" placeholder="" value="@profile.IndentityId">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Địa chỉ</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input disabled id="name" type="text" class="form-control" placeholder="" value="@profile.Address">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                @{
+                    if (profile.Status == GAStatus.InActive)
+                    {
+                        <a href="javascript:xacminh('@profile.UserId')" class="btn btn-primary">Xác minh</a>
+                        <a class="btn btn-danger " href="@Url.Action("Index","User")"> Thoát</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-danger " href="@Url.Action("Userdaxacthuc","User")"> Thoát</a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-5">
+
+        <div class=" row mb-4">
+            <img id="cmnd_t" data-bs-placement="right" data-bs-toggle="tooltip" title="" data-bs-original-title="Ảnh cmnd mặt trước" src="" alt="img" class="w-70 m-1 br-5">
+        </div>
+        <div class=" row mb-4">
+            <img id="cmnd_s" data-bs-placement="right" data-bs-toggle="tooltip" title="" data-bs-original-title="Ảnh cmnd mặt sau" src="''" alt="img" class="w-70 m-1 br-5">
+        </div>
+
+
+
+    </div>
+</div>
+<script>
+    function xacminh(userid) {
+        console.log("xac minh");
+        var param = {
+            'UserId': userid,
+
+            }
+            console.log(param);
+
+            $.ajax({
+            type: 'POST',
+            url: "@Url.Action("Xacminh")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data);
+                if (data == true) {
+                    swal("Xác minh thành công !");
+
+                            document.querySelectorAll('.confirm').forEach(item => {
+                                item.addEventListener('click', event => {
+                                    location.href = '@Url.Action("Index", "Home")';
+                                })
+                            })
+                } if (data == false) {
+                    not_mess("không thể xác minh thông tin!");
+                }
+            }
+            });
+
+
+
+    }
+    $(document).ready(function () {
+        var url_t ='@profile.Image_front' ;
+        var url_s = '@profile.Image_back';
+        jQuery("#cmnd_t").attr("src", url_t);
+        jQuery("#cmnd_s").attr("src", url_s);
+    });
+
+
+</script>
+

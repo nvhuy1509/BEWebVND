@@ -1,0 +1,107 @@
+﻿
+@using Minxtu.DAL.Entity;
+@using Activity.DAL.Enum;
+@{
+    List<Feedback> lstFeedback = Model;
+    ViewData["Title"] = "Danh sách Feedback";
+}
+
+<!-- Row -->
+<div class="row row-sm">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"] </h3>
+                <div class="card-options">
+                    <a class="btn btn-primary" onclick="exportData()"><i class="fe fe-download"></i> Xuất Excel</a>
+                </div>
+            </div>
+            <table style="display: none" id="fulldata">
+                <thead>
+                            <tr>
+                                <th>STT</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Ngày gửi</th>
+                            </tr>
+                        </thead>
+                        @if (lstFeedback.Count > 0)
+                        {
+                            var stt = 0;
+                            <tbody>
+                                @foreach (var obj in lstFeedback)
+                                    {
+                                    stt++;
+                                    <tr>
+                                            <td>@stt</td>
+                                            <td>@obj.NameGuess</td>
+                                            <td>@obj.Email</td>
+                                            <td>@obj.PhoneNumber</td>
+                                            <td>@obj.CreateTime</td>
+                                        </tr>
+
+                                    }
+                            </tbody>
+                        }
+            </table>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p border-bottom-0">STT</th>
+                                <th class="wd-15p border-bottom-0">Name</th>
+                                <th class="wd-15p border-bottom-0">Email</th>
+                                <th class="wd-15p border-bottom-0">Phone</th>
+                                <th class="wd-15p border-bottom-0">Ngày gửi</th>
+                            </tr>
+                        </thead>
+                        @if (lstFeedback.Count > 0)
+                        {
+                            var stt = 0;
+                            <tbody>
+                                @foreach (var obj in lstFeedback)
+                                    {
+                                    stt++;
+                                    <tr>
+                                            <td>@stt</td>
+                                            <td>@obj.NameGuess</td>
+                                            <td>@obj.Email</td>
+                                            <td>@obj.PhoneNumber</td>
+                                            <td>@obj.CreateTime</td>
+                                        </tr>
+
+                                    }
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/del.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.12.13/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2014-11-29/FileSaver.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.js"></script>
+<script>
+    function exportData(){
+          var workbook = XLSX.utils.book_new();
+        
+        //var worksheet_data  =  [['hello','world']];
+        //var worksheet = XLSX.utils.aoa_to_sheet(worksheet_data);
+      
+        var worksheet_data  = document.getElementById("datatable");
+        var worksheet = XLSX.utils.table_to_sheet(worksheet_data);
+        
+        workbook.SheetNames.push("Customers");
+        workbook.Sheets["Customers"] = worksheet;
+      
+        return XLSX.writeFile(workbook, "Feedback.xlsx");
+      
+    }
+</script>
+<!-- End Row -->

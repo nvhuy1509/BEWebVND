@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\ReportAdmin\**" />
+    <Content Remove="Views\ReportAdmin\**" />
+    <EmbeddedResource Remove="Views\ReportAdmin\**" />
+    <None Remove="Views\ReportAdmin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="3.6.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.13" />
+    <PackageReference Include="EPPlus" Version="6.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="MimeKit" Version="3.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Activity.Biz\Activity.Biz.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\myGo.Core\myGo.Core.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\Activity.DAL\Activity.DAL.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+    <ProjectReference Include="..\myGUnitTest\myGUnitTest.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Extensions\" />
+    <None Remove="Views\Auth\" />
+    <None Remove="Views\Manager\" />
+    <None Remove="Views\Game\" />
+    <None Remove="Views\GameAccount\" />
+    <None Remove="Views\ScholarReport\" />
+    <None Remove="Views\ReportAdmin\" />
+    <None Remove="EPPlus" />
+    <None Remove="Views\Excel\" />
+    <None Remove="Views\StepNReport\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Views\Manager\" />
+    <Folder Include="wwwroot\uploads\" />
+    <Folder Include="Views\Excel\" />
+  </ItemGroup>
+</Project>

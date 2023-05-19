@@ -1,0 +1,34 @@
+﻿<input id="excel"  type="file"/>
+<button class="btn btn-danger" id="choseFile" onclick="javascript:chosseFile()">excel</button>
+<button class="btn btn-danger" onclick="javascript:upload()">upload</button>
+
+<script>
+    function chosseFile() {
+        $("#excel").trigger('click');
+    }
+
+
+    function upload() {
+        var fd = new FormData();
+        fd.append('Avatar', $('#excel')[0].files[0]);
+                console.log("upload...all")
+                $.ajax({
+                    url: '@Url.Action("upload")',
+                    type: 'post',
+                    data: fd,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+
+                      
+
+                    },
+                    error: function (xhr, status, error) {
+
+                        console.log('Error: ' + error.message);
+                    }
+                });
+    }
+
+
+</script>

@@ -1,0 +1,213 @@
+﻿
+@{
+    Layout = null;
+    ViewData["Title"] = "Login";
+}
+<!doctype html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <!-- META DATA -->
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="@ViewData["Title"]">
+    <meta name="author" content="@ViewData["Title"]">
+    <meta name="keywords" content="admin,admin dashboard,admin panel,admin template,bootstrap,clean,dashboard,flat,jquery,modern,responsive,premium admin templates,responsive admin,ui,ui kit.">
+
+    <!-- FAVICON -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/brand/favicon.ico" />
+
+    <!-- TITLE -->
+    <title>Đăng nhập</title>
+
+    <!-- BOOTSTRAP CSS -->
+    <link id="style" href="/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- STYLE CSS -->
+    <link href="/assets/css/style.css" rel="stylesheet" />
+    <link href="/assets/css/dark-style.css" rel="stylesheet" />
+    <link href="/assets/css/transparent-style.css" rel="stylesheet">
+    <link href="/assets/css/skin-modes.css" rel="stylesheet" />
+
+    <!--- FONT-ICONS CSS -->
+    <link href="/assets/css/icons.css" rel="stylesheet" />
+
+    <!-- COLOR SKIN CSS -->
+    <link id="theme" rel="stylesheet" type="text/css" media="all" href="/assets/colors/color1.css" />
+
+</head>
+
+<body class="app sidebar-mini ltr">
+
+    <!-- BACKGROUND-IMAGE -->
+    <div class="login-img">
+
+        <!-- GLOABAL LOADER -->
+        <div id="global-loader">
+            <img src="/assets/images/loader.svg" class="loader-img" alt="Loader">
+        </div>
+        <!-- /GLOABAL LOADER -->
+        <!-- PAGE -->
+        <div class="page">
+            <div class="">
+
+                <!-- CONTAINER OPEN -->
+                <div class="col col-login mx-auto">
+                    <div class="text-center">
+                        <img src="/images/logo_cms.svg" class="header-brand-img" alt="">
+                    </div>
+                </div>
+
+                <div class="container-login100">
+                    <div class="wrap-login100 p-6">
+                        <form class="login100-form validate-form needs-validation">
+                            <span class="login100-form-title pb-5">
+                                Đăng nhập
+                            </span>
+                            <div class="panel panel-primary">
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab5">
+                                        <div class="wrap-input100 validate-input input-group">
+                                            <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                <i class="zmdi zmdi-phone text-muted" aria-hidden="true"></i>
+                                            </a>
+                                            <input class="input100 border-start-0 form-control ms-0" id="txtUsername" type="text" required placeholder="Tên đăng nhập">
+                                            <div class="invalid-feedback">Bạn cần điền tên đăng nhập.</div>
+                                        </div>
+                                        <div class="wrap-input100 validate-input input-group" id="Password-toggle">
+                                            <a href="javascript:void(0)" class="input-group-text bg-white text-muted">
+                                                <i class="zmdi zmdi-eye text-muted" aria-hidden="true"></i>
+                                            </a>
+                                            <input class="input100 border-start-0 form-control ms-0" id="txtPassword" required type="password" placeholder="Mật khẩu">
+                                            <div class="invalid-feedback">Bạn cần điền mật khẩu.</div>
+                                        </div>
+                                        @*<div class="text-end pt-4">
+                                                <p class="mb-0"><a href="#" class="text-primary ms-1">Forgot Password?</a></p>
+                                            </div>*@
+                                        <div class="container-login100-form-btn">
+                                            <button class="login100-form-btn btn-primary " >
+                                                Đăng nhập
+                                            </button>
+                                        </div>
+                                        <div class="text-center pt-3">
+                                            <p class="text-dark mb-0">Chưa có tài khoản?<a href="@Url.Action("Register")" class="text-primary ms-1">Đăng ký</a></p>
+                                        </div>
+                                        @*<div class="text-center pt-3">
+                                                <p class="text-dark mb-0">Not a member?<a href="#" class="text-primary ms-1">Sign UP</a></p>
+                                            </div>*@
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                <!-- CONTAINER CLOSED -->
+            </div>
+        </div>
+        <!-- End PAGE -->
+
+    </div>
+    <script type="text/javascript">
+
+
+        window.addEventListener('load', function () {
+            console.log("tesst")
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    console.log("aaaaaa")
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (form.checkValidity() === true) {
+                        console.log("bbbbbbb")
+                        Login();
+                    }
+                    else {
+                            console.log("cccccc")
+                    }
+
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+
+
+
+        function Login() {
+        let username = document.getElementById("txtUsername").value;
+        let password = document.getElementById("txtPassword").value;
+        let param = {
+            'username': username,
+            'password': password
+        };
+              $("#btnLogin").toggleClass("btn-loading");
+
+         $.ajax({
+            type: 'POST',
+            url: "@Url.Action("Login")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data)
+                // Utils.UnLoading();
+                if (data.isSuccess) {
+                    var url = new URL(location.href);
+                    var c = url.searchParams.get("t");
+                    console.log('c========' + c)
+                    if (c == null || c == undefined) {
+                        location.href = "@Url.Action("IndexAdmin", "Home")";
+                    }
+                    else {
+                        location.href = c;
+                    }
+
+                }
+                else {
+                    $("#btnLogin").toggleClass("btn-loading");
+                    not_mess(data.errorMessage);
+                }
+            }
+
+        });
+
+    }
+    </script>
+    <!-- BACKGROUND-IMAGE CLOSED -->
+    <!-- JQUERY JS -->
+    <script src="/assets/js/jquery.min.js"></script>
+
+    <!-- BOOTSTRAP JS -->
+    <script src="/assets/plugins/bootstrap/js/popper.min.js"></script>
+    <script src="/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- SHOW PASSWORD JS -->
+    <script src="/assets/js/show-password.min.js"></script>
+
+    <!-- GENERATE OTP JS -->
+    <script src="/assets/js/generate-otp.js"></script>
+
+    <!-- Perfect SCROLLBAR JS-->
+    <script src="/assets/plugins/p-scroll/perfect-scrollbar.js"></script>
+
+    <!-- Color Theme js -->
+    <script src="/assets/js/themeColors.js"></script>
+    <script src="/assets/plugins/notify/js/rainbow.js"></script>
+    <script src="/assets/plugins/notify/js/jquery.growl.js"></script>
+    <script src="/assets/plugins/notify/js/notifIt.js"></script>
+    <script src="/assets/js/notify-custom.js"></script>
+    <!-- CUSTOM JS -->
+    <script src="/assets/js/custom.js"></script>
+    <script src="/assets/plugins/notify/js/sample.js"></script>
+</body>
+
+</html>
+<script>
+    
+</script>

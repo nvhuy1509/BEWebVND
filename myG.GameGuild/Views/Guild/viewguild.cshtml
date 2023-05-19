@@ -1,0 +1,305 @@
+﻿
+@using Activity.DAL.Entity.GameGuild;
+@using Activity.DAL.Enum;
+@using Activity.DAL.Entity;
+@{
+    List<UserGuild> user = Model.user;
+    Guild guild = Model.guild;
+    ViewData["Title"] = "Danh sách người chơi guild";
+    var role = ViewData["ROLE"].ToString();
+    SessionManager sessionManager = (SessionManager)ViewData["_sessionManager"];
+}
+
+<!-- Row -->
+<div class="row row-sm">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"] @guild.Name </h3>
+                <div class="card-options">
+                    @if (sessionManager.UserType1 == UserType.CenterAdmin)
+                    {
+                       <a class="btn btn-primary " href="@Url.Action("AddUser", "Guild", new { GuildId = guild.Id })"><i class="fe fe-plus"></i> Thêm, xoá người chơi guild</a>
+                    }
+                    </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p border-bottom-0">STT</th>
+                                <th class="wd-15p border-bottom-0">Tên</th>
+                                <th class="wd-15p border-bottom-0">Game</th>
+                                <th class="wd-15p border-bottom-0">NGÀY TẠO</th>
+                                <th class="wd-15p border-bottom-0">NGÀY SỬA</th>
+                                <th class="wd-0p wd-center border-bottom-0">Tính năng</th>
+                            </tr>
+                        </thead>
+                        @if (user.Count > 0)
+                        {
+                            <tbody>
+                                @foreach (var (obj, i) in user.Select((value, i) => (value, i)))
+                                {
+
+                                    <tr>
+                                        <td>@(i+1)</td>
+                                        <td>@obj.UserName</td>
+                                        <td>@guild.Gamename</td>
+                                        <td>@obj.CreatedDate</td>
+                                        <td>@obj.UpdateDate</td>
+                                        <td>
+                                            @if (sessionManager.UserType1 == UserType.CenterAdmin)
+                                            {
+                                                <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xem tài khoản" href="@Url.Action("ListAccounts","ScholarReport",new { gameId =ViewData["GameId"], taccountId = obj.UserId })" class="btn btn-icon  btn-success"><i class="fe fe-eye"></i></a>
+                                                <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xóa user khỏi guild" onclick="xoauser('@obj.UserId')" class="btn btn-icon  btn-danger"><i class="fe fe-trash"></i></a>
+
+                                                if (obj.Status == GAPremission.UserGuild)
+                                                {
+                                                    <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Thêm làm chủ guild" onclick="themchuguild('@obj.UserId')" class="btn btn-icon  btn-gray"><i class="fe fe-star"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xóa chủ guild" onclick="themchuguild('@obj.UserId')" class="btn btn-icon  btn-warning"><i class="fe fe-star"></i></a>
+                                                }
+                                            }
+                                            else if (sessionManager.UserType1 == UserType.Manager)
+                                            {
+
+                                                <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xem tài khoản" href="@Url.Action("ListAccounts","ScholarReport",new { gameId =ViewData["GameId"], taccountId = obj.UserId })" class="btn btn-icon  btn-success"><i class="fe fe-eye"></i></a>
+
+                                                if (obj.Status == GAPremission.UserGuild)
+                                                {
+                                                    <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Thêm làm chủ guild" onclick="themchuguild('@obj.UserId')" class="btn btn-icon  btn-gray"><i class="fe fe-star"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xóa chủ guild" onclick="themchuguild('@obj.UserId')" class="btn btn-icon  btn-warning"><i class="fe fe-star"></i></a>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (obj.Status == GAPremission.UserGuild)
+                                                {
+                                                    <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Thành viên guild" class="btn btn-icon  btn-gray"><i class="fe fe-star"></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a style="color:white" data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Quản lý guild" class="btn btn-icon  btn-warning"><i class="fe fe-star"></i></a>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+
+                                }
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4">
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Thông tin guild </h3>
+                <div class="card-options">
+
+                </div>
+            </div>
+            <div class="card-body">
+                <div class=" row mb-4">
+                    <img id="cmnd_s" data-bs-placement="right" data-bs-toggle="tooltip" title="" data-bs-original-title="Ảnh Guild" src="@guild.Thumb" alt="img" class="w-70 m-1 br-5">
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Tên guild</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input required id="Nameguild" type="text" disabled class="form-control" placeholder="" value="@guild.Name">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Mô tả</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input required id="Description" type="text" disabled class="form-control" placeholder="" value="@guild.Description">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Game</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input required id="address" type="text" disabled class="form-control" placeholder="" value="@guild.Gamename">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row mb-4">
+                    <label class="col-md-3 form-label" for="name">Số lượng người chơi</label>
+                    <div class="col-md-9">
+                        <div class="input-group mb-2">
+                            <input required id="address" type="text" disabled class="form-control" placeholder="" value="@user.Count()">
+                        </div>
+                    </div>
+                </div>
+
+                @if (sessionManager.UserType1 == UserType.CenterAdmin)
+                {
+                    <a id="chinhsua" class="btn btn-primary " onclick="chinhsua('@guild.Id')"><i class="fe fe-edit"></i> Chỉnh sửa</a>
+                    <a class="btn btn-danger  ms-2" onclick="xoaguild('@guild.Id')" style="color:white;"><i class="fe fe-trash"></i> Xóa guild</a>
+                }
+            </div>
+        </div>
+
+
+    </div>
+    <script src="/assets/js/del.js"></script>
+    <script>
+          function xoaguild(GuidId) {
+               swal({
+            title: " ",
+            text: "Xác nhận xóa guild",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText:"Hủy"
+        });
+         document.querySelectorAll('.confirm').forEach(item => {
+            item.addEventListener('click', event => {
+
+            var param = {
+                'GuildId': GuidId,
+
+            }
+
+            $.ajax({
+            type: 'POST',
+            url: "@Url.Action("DeleteGuild")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data);
+                if (data == true) {
+                    swal("Xóa guild thành công !");
+                            document.querySelectorAll('.confirm').forEach(item => {
+                                item.addEventListener('click', event => {
+                                    location.href = '@Url.Action("Index","Guild")';
+                                })
+                            })
+                } if (data == false) {
+                    not_mess("không thể cập nhật thông tin!");
+                }
+            }
+            });
+            })
+        })
+        }
+        function chinhsua(GuidId) {
+            if ($('#Description').is(':disabled')) {
+                $("#Description").prop('disabled', false);
+                $("#Nameguild").prop('disabled', false);
+                $("#chinhsua").toggleClass("btn-primary");
+                $("#chinhsua").toggleClass("btn-success");
+
+                $("#Nameguild").focus();
+
+            } else {
+                let name = document.getElementById("Nameguild").value;
+                let Description = document.getElementById("Description").value;
+
+                 var param = {
+                     'GuildId': GuidId,
+                     'Name': name,
+                     'Description': Description,
+                 }
+
+            $.ajax({
+            type: 'POST',
+            url: "@Url.Action("UpdateGuild")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data);
+                if (data == true) {
+                    
+                                    /*location.href = 'ViewGuild?GuildId=' + GuildId;*/
+                                    location.reload();
+                } if (data == false) {
+                    not_mess("không thể cập nhật thông tin!");
+                }
+            }
+            });
+
+            }
+
+        }
+
+        function xoauser(UserId) {
+            swal({
+                title: " ",
+                text: "Xác nhận xóa người chơi",
+                showCancelButton: true,
+                confirmButtonText: "Xóa",
+                cancelButtonText: "Hủy"
+            });
+            document.querySelectorAll('.confirm').forEach(item => {
+                item.addEventListener('click', event => {
+                 var param = {
+                     'UserId': UserId,
+                     'GuildId': '@guild.Id',
+                 }
+
+            $.ajax({
+            type: 'POST',
+            url: "@Url.Action("DeleteUser")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data);
+                if (data == true) {
+                                    /*location.href = 'ViewGuild?GuildId=' + GuildId;*/
+                                    location.reload();
+                } if (data == false) {
+                    not_mess("không thể cập nhật thông tin!");
+                }
+            }
+            });
+                })
+            })
+        }
+
+        function themchuguild(UserId) {
+
+                 var param = {
+                     'UserId': UserId,
+                     'GuildId': '@guild.Id',
+                 }
+
+            $.ajax({
+            type: 'POST',
+            url: "@Url.Action("SetManagerGuild")",
+            data: param,
+            async: true,
+            success: function (data) {
+                console.log("data", data);
+                if (data == true) {
+                    swal("Cập nhật thành công !");
+                            document.querySelectorAll('.confirm').forEach(item => {
+                                item.addEventListener('click', event => {
+                                    /*location.href = 'ViewGuild?GuildId=' + GuildId;*/
+                                    location.reload();
+                                })
+                            })
+                } if (data == false) {
+                    not_mess("không thể cập nhật thông tin!");
+                }
+            }
+            });
+
+            }
+
+    </script>
+    <script>//var t = document.getElementById("demo").innerHTML;</script>
+    <!-- End Row -->

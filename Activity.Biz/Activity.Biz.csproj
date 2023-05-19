@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Castle.Windsor" />
+    <None Remove="Enum\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Castle.Windsor" Version="5.1.1" />
+    <PackageReference Include="RestSharp" Version="107.3.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Activity.DAL\Activity.DAL.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Enum\" />
+  </ItemGroup>
+</Project>

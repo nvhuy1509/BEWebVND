@@ -1,0 +1,219 @@
+﻿
+@using Minxtu.DAL.Entity;
+@using System.Globalization;
+@{
+    News NewItem = Model;
+}
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Chỉnh sửa Blog</h4>
+            </div>
+            <div class="card-body">
+                <form class=" needs-validation" novalidate>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="image">Ảnh blog <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="file" id="uploadImage" class="form-control"  accept="image/*">
+                        </div>
+                    </div>
+                    
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" ></label>
+                        <div class="col-md-9">
+                            <img id="viewImage" src="@NewItem.Thumb" />
+                        </div>
+                    </div>
+                    
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="featured">Featured <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="featured" class="form-control" value="@NewItem.MetaDescription" placeholder="Điền Featured" required>
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="title">Title <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="title" class="form-control" value="@NewItem.Title" placeholder="Điền title" required>
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="description">Description <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <textarea type="text" id="description" class="form-control"  placeholder="Điền mô tả" rows="10" required>@NewItem.Description</textarea>
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="fullcontent">Link full content <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="fullcontent" class="form-control" value="@NewItem.MainContent" placeholder="Điền link điều hướng đến trang full content">
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <label class="col-md-3 form-label" for="status"> Trạng thái</label>
+                        <div class="col-md-9">
+                            <select id="status" class="form-control  form-select"  >
+                                @if(@NewItem.Status == 1)
+                                {
+                                    <option value="1" selected> Hiện </option>
+                                    <option value="3"> Ẩn </option>
+                                }
+                                else
+                                {
+                                    <option value="1"> Hiện </option>
+                                    <option value="3" selected> Ẩn </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary" onclick="saveBlog()">Lưu</a>
+                    <a class="btn btn-danger" href="@Url.Action("Detail")">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="file-upload" accept=".jpg, .png" style="display:none;">
+
+<script>
+
+    var urlImage = '@NewItem.Thumb';
+    $(document).ready(function() {
+        uploadImage.onchange = evt => {
+          const [ file ] = uploadImage.files
+
+            if (file) {
+                console.log('file-------');
+                console.log(file)
+                var fr = new FileReader;
+
+                    fr.onload = function () { // file is loaded
+                        var img = new Image;
+
+                        img.onload = function () {
+                            console.log(img.width); // image is loaded; sizes are available
+                            console.log(img.height); // image is loaded; sizes are available
+                            if (img.width != 1110 && img.height != 700) {
+                                alert("Sử dụng ảnh đúng kích thước 1110 x 700 nhé!");
+                            } else {
+                                var param = {  
+                                    'Item': file,
+                                    'IdUser': '@ViewData["UserID"]'
+                                }
+
+                                console.log('param-------');
+                                console.log(param);
+
+                                var formData = new FormData();
+                                formData.append("Item", file);
+                                formData.append("IdUser", @ViewData["UserID"]);
+
+                                console.log('formData-------');
+                                console.log(formData);
+                                $.ajax({
+                                    type: "POST",
+                                    url: "@Url.Action("UploadFile", "UploadFile")",
+                                    data: formData,
+                                    processData: false,
+                                    contentType: false,
+                                    //async: true,
+                                    success: function(data) {
+                                        console.log("data", data)
+                                        let obj = JSON.parse(data);
+                                        if (obj.uploaded == 1) {
+                                            urlImage = obj.url;
+                                            viewImage.src = URL.createObjectURL(file)
+                                        }
+                                        else {
+                                            alert("Lỗi upload ảnh");
+                                            urlImage = "";
+                                        }
+                                    },
+                                    error: function(errors) {
+                                        alert('error al postear');
+                                        return false;
+                                    }
+                                });
+                            }
+                        };
+
+                        img.src = fr.result; // is the data URL because called with readAsDataURL
+                    };
+
+                fr.readAsDataURL(file);
+            } else {
+                urlImage = "";
+                viewImage.src = "";
+            }
+        }
+    });
+
+    function saveBlog() {
+
+        var featured = document.getElementById("featured").value;
+        var title = document.getElementById("title").value;
+        var description = document.getElementById("description").value;
+        var content = document.getElementById("fullcontent").value;
+        var status = document.getElementById("status").value;
+
+        if (featured == "") {
+            alert('Bạn cần điền thông tin featured');
+        }
+        else if (title == "") {
+            alert('Bạn cần điền thông tin title');
+        }
+        else if (description == "") {
+            alert('Bạn cần điền thông tin description');
+        }
+        else if (urlImage == "") {
+            alert('Bạn cần tải lên ảnh');
+        }
+        else {
+            var param = {
+                "Id": '@NewItem.Id',
+                "Featured": featured,
+                "Title": title,
+                "Description": description,
+                "Content": content,
+                "Url": urlImage,
+                "Status": status
+            }
+
+            console.log(param);
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Update")",
+                data: param,
+                async: true,
+                success: function (data) {
+                    console.log("data", data)
+                    if (data.isSuccess) {
+                        alert('Chỉnh sửa thành công');
+                        location.href = '@Url.Action("Detail")';
+                    }
+                    else {
+                        notifyError(data.errorMessage);
+                    }
+                }
+            });
+        }
+       
+    }
+
+
+
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />

@@ -1,0 +1,193 @@
+﻿
+@using Activity.DAL.Entity;
+@using System.Globalization;
+@{
+    ViewData["Title"] = "Thêm mới Solution";
+}
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Thêm mới Solution</h4>
+            </div>
+            <div class="card-body">
+                <form class=" needs-validation" novalidate>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="image">Image<span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="file" id="uploadImage" class="form-control"  accept="image/*">
+                        </div>
+                    </div>
+                    
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" ></label>
+                        <div class="col-md-9">
+                            <img id="viewImage" width="300" height="300" />
+                        </div>
+                    </div>
+                    
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="name">Name Solution <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="name" class="form-control" placeholder="Điền Name" required>
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="title">Title <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="title" class="form-control" placeholder="Điền title" required>
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="description">Description <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <textarea type="text" id="description" class="form-control" placeholder="Điền mô tả" rows="10" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="fullcontent">Link full content <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="fullcontent" class="form-control" placeholder="Điền link điều hướng đến trang full content">
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <label class="col-md-3 form-label" for="status"> Trạng thái</label>
+                        <div class="col-md-9">
+                            <select id="status" class="form-control  form-select"  >
+                                <option value="1" selected> Hiện </option>
+                                <option value="3"> Ẩn </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary" onclick="saveBlog()">Tạo</a>
+                    <a class="btn btn-danger" href="@Url.Action("Detail")">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="file-upload" accept=".jpg, .png" style="display:none;">
+
+<script>
+
+    var urlImage = "";
+    $(document).ready(function() {
+        uploadImage.onchange = evt => {
+          const [ file ] = uploadImage.files
+
+            if (file) {
+                console.log('file-------');
+                console.log(file)
+                var param = {
+                    'Item': file,
+                    'IdUser': '@ViewData["UserID"]'
+                }
+
+                console.log('param-------');
+                console.log(param);
+
+                var formData = new FormData();
+                    formData.append("Item", file);
+                    formData.append("IdUser", @ViewData["UserID"]);
+
+                console.log('formData-------');
+                console.log(formData);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("UploadFile", "UploadFile")",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    //async: true,
+                    success: function(data) {
+                        console.log("data", data)
+                        let obj = JSON.parse(data);
+                        if (obj.uploaded == 1) {
+                            urlImage = obj.url;
+                            viewImage.src = URL.createObjectURL(file)
+                        }
+                        else {
+                            alert("Lỗi upload ảnh");
+                            urlImage = "";
+                        }
+                    },
+                    error: function (errors) {
+                        alert('error al postear');
+                        return false;
+                    }
+                });
+
+            } else {
+                urlImage = "";
+                viewImage.src = "";
+            }
+        }
+    });
+
+    function saveBlog() {
+
+        var name = document.getElementById("name").value;
+        var title = document.getElementById("title").value;
+        var description = document.getElementById("description").value;
+        var content = document.getElementById("fullcontent").value;
+        var status = document.getElementById("status").value;
+
+        if (name == "") {
+            alert('Bạn cần điền thông tin name');
+        }
+        else if (title == "") {
+            alert('Bạn cần điền thông tin title');
+        }
+        else if (description == "") {
+            alert('Bạn cần điền thông tin description');
+        }
+        else if (urlImage == "") {
+            alert('Bạn cần tải lên ảnh');
+        }
+        else {
+            var param = {
+                "Name": name,
+                "Title": title,
+                "Description": description,
+                "Url": urlImage,
+                "Content": content,
+                "Status": status
+            }
+
+            console.log(param);
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Add")",
+                data: param,
+                async: true,
+                success: function (data) {
+                    console.log("data", data)
+                    if (data.isSuccess) {
+                        alert('Thêm mới thành công');
+                        location.href = '@Url.Action("Detail")';
+                    }
+                    else {
+                        notifyError(data.errorMessage);
+                    }
+                }
+            });
+        }
+       
+    }
+
+
+
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
