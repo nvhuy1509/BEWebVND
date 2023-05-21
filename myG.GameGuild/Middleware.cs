@@ -26,7 +26,7 @@ namespace myG.GameGuild
 
             _sessionManager = sessionManager;
             _sessionManager.IsPremission = true;
-            if (httpContext.Request.Path.ToString().EndsWith("/") || httpContext.Request.Path.ToString().EndsWith("/Solution") || httpContext.Request.Path.ToString().EndsWith("/News") || httpContext.Request.Path.ToString().EndsWith("/Contact") || httpContext.Request.Path.ToString().EndsWith("/Contact/SendMail"))
+            if (httpContext.Request.Path.ToString().EndsWith("/") || httpContext.Request.Path.ToString().EndsWith("/Work") || httpContext.Request.Path.ToString().EndsWith("/Transparency") || httpContext.Request.Path.ToString().EndsWith("/News") || httpContext.Request.Path.ToString().EndsWith("/Contact") || httpContext.Request.Path.ToString().Contains("/News/Post"))
             {
                 await _next(httpContext);
             }

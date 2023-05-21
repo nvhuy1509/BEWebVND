@@ -194,8 +194,8 @@ $('.slider-nav').slick({
     slidesToScroll: 1,
     dots: false,
     arrows: true,
-    prevArrow: '<img src="/images/PC_blog/slide-arrow-back.svg" class="slick-prev" alt="">',
-    nextArrow: '<img src="/images/PC_blog/slide-arrow-next.svg" class="slick-next" alt="">',
+    prevArrow: '<img src="../../images/pc_blog/slide-arrow-back.svg" class="slick-prev" alt="">',
+    nextArrow: '<img src="../../images/pc_blog/slide-arrow-next.svg" class="slick-next" alt="">',
     focusOnSelect: true,
     responsive: [
         {

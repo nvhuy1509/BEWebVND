@@ -2,19 +2,61 @@
 @using Minxtu.DAL.Entity;
 @using System.Globalization;
 @{
-    News NewItem = Model;
+    News NewItem = Model.dataItem;
+    var tagArray =  Model.lstTag;
 }
-<div class="row">
-    <div class="col-xl-12 col-lg-12">
-        <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Chỉnh sửa Blog</h4>
-            </div>
-            <div class="card-body">
-                <form class=" needs-validation" novalidate>
+
+ <script src="/lib/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+      tinymce.init({
+        selector: '#detailblog',
+        plugins: 'image code',
+          toolbar: 'undo redo | link image ',
+          /* enable title field in the Image dialog*/
+          image_title: true,
+          /* enable automatic uploads of images represented by blob or data URIs*/
+          automatic_uploads: true,
+          /*
+            URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
+            images_upload_url: 'postAcceptor.php',
+            here we add custom filepicker only to Image dialog
+          */
+          file_picker_types: 'image',
+          /* and here's our custom image picker*/
+          file_picker_callback: (cb, value, meta) => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+
+            input.addEventListener('change', (e) => {
+              const file = e.target.files[0];
+
+              const reader = new FileReader();
+              reader.addEventListener('load', () => {
+                /*
+                  Note: Now we need to register the blob in TinyMCEs image blob
+                  registry. In the next release this part hopefully won't be
+                  necessary, as we are looking to handle it internally.
+                */
+                const id = 'blobid' + (new Date()).getTime();
+                const blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                const base64 = reader.result.split(',')[1];
+                const blobInfo = blobCache.create(id, file, base64);
+                blobCache.add(blobInfo);
+
+                /* call the callback and populate the Title field with the file name */
+                cb(blobInfo.blobUri(), { title: file.name });
+              });
+              reader.readAsDataURL(file);
+            });
+
+            input.click();
+          },
+      });
+</script>
 
                     <div class=" row mb-4">
-                        <label class="col-md-3 form-label" for="image">Ảnh blog <span class="text-red">*</span></label>
+                        <label class="col-md-3 form-label" for="image">Ảnh thumb<span class="text-red">*</span></label>
                         <div class="col-md-9">
                             <input type="file" id="uploadImage" class="form-control"  accept="image/*">
                         </div>
@@ -23,35 +65,43 @@
                     <div class=" row mb-4">
                         <label class="col-md-3 form-label" ></label>
                         <div class="col-md-9">
-                            <img id="viewImage" src="@NewItem.Thumb" />
+                            <img id="viewImage" src="@NewItem.Thumb" width="300" height="300" />
                         </div>
                     </div>
                     
                     <div class=" row mb-4">
-                        <label class="col-md-3 form-label" for="featured">Featured <span class="text-red">*</span></label>
-                        <div class="col-md-9">
-                            <input type="text" id="featured" class="form-control" value="@NewItem.MetaDescription" placeholder="Điền Featured" required>
-                        </div>
-                    </div>
-
-                    <div class=" row mb-4">
                         <label class="col-md-3 form-label" for="title">Title <span class="text-red">*</span></label>
                         <div class="col-md-9">
-                            <input type="text" id="title" class="form-control" value="@NewItem.Title" placeholder="Điền title" required>
+                            <input type="text" id="title" value="@NewItem.Title" class="form-control" placeholder="Điền title" required>
                         </div>
                     </div>
 
-                    <div class=" row mb-4">
+                     <div class=" row mb-4">
                         <label class="col-md-3 form-label" for="description">Description <span class="text-red">*</span></label>
                         <div class="col-md-9">
-                            <textarea type="text" id="description" class="form-control"  placeholder="Điền mô tả" rows="10" required>@NewItem.Description</textarea>
+                            <input type="text" id="description" value="@NewItem.Description" class="form-control" placeholder="Điền mô tả" required>
                         </div>
                     </div>
 
                     <div class=" row mb-4">
-                        <label class="col-md-3 form-label" for="fullcontent">Link full content <span class="text-red">*</span></label>
+                        <label class="col-md-3 form-label" for="description">Tag <span class="text-red">*</span></label>
                         <div class="col-md-9">
-                            <input type="text" id="fullcontent" class="form-control" value="@NewItem.MainContent" placeholder="Điền link điều hướng đến trang full content">
+                            <a class="btn btn-primary " onclick="addTag()"><i class="fe fe-plus"></i>Add Tag</a>
+                            
+                            
+                            <div id="divTag" style="display: flex; gap: 10px; padding-top: 5px">
+                                @if(tagArray.Count() > 0)
+                                {
+                                    @foreach( var obj in tagArray)
+                                    {
+                                        <input type="text" name="tag[]" class="form-control" value="@obj" placeholder="Điền Tag" required>
+                                    }
+                                } else
+                                {
+                                    <input type="text" name="tag[]" class="form-control" value="" placeholder="Điền Tag" required>
+                                }
+
+                            </div>
                         </div>
                     </div>
 
@@ -59,7 +109,7 @@
                         <label class="col-md-3 form-label" for="status"> Trạng thái</label>
                         <div class="col-md-9">
                             <select id="status" class="form-control  form-select"  >
-                                @if(@NewItem.Status == 1)
+                                  @if(@NewItem.Status == 1)
                                 {
                                     <option value="1" selected> Hiện </option>
                                     <option value="3"> Ẩn </option>
@@ -73,13 +123,15 @@
                         </div>
                     </div>
 
-                    <a class="btn btn-primary" onclick="saveBlog()">Lưu</a>
-                    <a class="btn btn-danger" href="@Url.Action("Detail")">Hủy</a>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+                    <div class=" row">
+                        <label class="col-md-3 form-label">Chi tiết bài viết <span class="text-red">*</span></label>
+                        <textarea id="detailblog">@NewItem.MainContent</textarea>
+                    </div>
+                    
+                    <div class="p-3">
+                        <a class="btn btn-primary" onclick="saveBlog()">Tạo</a>
+                        <a class="btn btn-danger" href="@Url.Action("Detail")">Hủy</a>
+                    </div>
 
 <input type="file" id="file-upload" accept=".jpg, .png" style="display:none;">
 
@@ -156,18 +208,38 @@
         }
     });
 
+    function addTag() {
+            const input_Value = document.createElement('input');
+			input_Value.type = 'text';
+			input_Value.setAttribute("class", "form-control");
+			input_Value.placeholder="Điền Tag" ;
+			input_Value.name = 'tag[]' ; 
+
+            var divTag = document.getElementById('divTag');
+
+            divTag.appendChild(input_Value);
+    }
+
     function saveBlog() {
 
-        var featured = document.getElementById("featured").value;
-        var title = document.getElementById("title").value;
+         var title = document.getElementById("title").value;
+        var thumb = urlImage;
         var description = document.getElementById("description").value;
-        var content = document.getElementById("fullcontent").value;
+        var detailBlog = tinyMCE.get('detailblog').getContent();
         var status = document.getElementById("status").value;
+        var lstTag = [];
 
-        if (featured == "") {
-            alert('Bạn cần điền thông tin featured');
+        // Lấy tất cả các phần tử input có thuộc tính "name"
+        var inputElements = document.querySelectorAll('input[name="tag[]"]');
+
+        // Lặp qua từng phần tử input và thêm giá trị vào mảng nameValues
+        for (var i = 0; i < inputElements.length; i++) {
+          var value = inputElements[i].value;
+          lstTag.push(value);
         }
-        else if (title == "") {
+          
+      
+        if (title == "") {
             alert('Bạn cần điền thông tin title');
         }
         else if (description == "") {
@@ -176,15 +248,18 @@
         else if (urlImage == "") {
             alert('Bạn cần tải lên ảnh');
         }
+        else if (detailBlog == "") {
+            alert('Bạn cần điền thông tin chi tiết bài viết');
+        }
         else {
             var param = {
                 "Id": '@NewItem.Id',
-                "Featured": featured,
+                "Thumb": thumb,
                 "Title": title,
                 "Description": description,
-                "Content": content,
-                "Url": urlImage,
-                "Status": status
+                "Content": detailBlog,
+                "Status": status,
+                "MetaDescription": JSON.stringify(lstTag),
             }
 
             console.log(param);

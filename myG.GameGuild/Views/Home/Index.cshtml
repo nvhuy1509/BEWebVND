@@ -1,4 +1,5 @@
-﻿
+﻿@using Newtonsoft.Json
+@using Minxtu.DAL.Entity;
 @{
     Layout = null;
         var urlFb = Model.urlFb;
@@ -7,6 +8,7 @@
         var urlTt = Model.urlTt;
         var urlAp = Model.urlAp;
         var urlAndr = Model.urlAndr;
+        List<News> lstBlog = Model.lstBLogs;
 }
 
 <!DOCTYPE html>
@@ -74,7 +76,7 @@
     <div class="wrapper body-home">
       <header>
         <div class="header-top">
-          <a href="index.html" class="logo">
+          <a href="@Url.Action("Index","Home")" class="logo">
             <img src="../images/logo.svg" alt="" />
           </a>
           <div class="header-bar visible-s">
@@ -83,22 +85,22 @@
           <div class="header-fixed">
             <ul class="menu">
               <li class="menu-item menu-home">
-                <a href="index.html" class="menu-link menu-active actived"
+                <a href="@Url.Action("Index","Home")" class="menu-link menu-active actived"
                   >Home</a
                 >
                 <i class="fas fa-times close-header-fixed visible-s"></i>
               </li>
               <li class="menu-item">
-                <a href="work.html" class="menu-link menu-active">How It Works</a>
+                <a href="@Url.Action("Index","Work")" class="menu-link menu-active">How It Works</a>
               </li>
               <li class="menu-item">
-                <a href="blog.html" class="menu-link menu-active ">Blog</a>
+                <a href="@Url.Action("Index","News")" class="menu-link menu-active ">Blog</a>
               </li>
               <li class="menu-item">
-                <a href="transparency.html" class="menu-link menu-active ">Transparency</a>
+                <a href="@Url.Action("Index","Transparency")" class="menu-link menu-active ">Transparency</a>
               </li>
               <li class="menu-item">
-                <a href="contact.html" class="menu-link menu-active">Contact</a>
+                <a href="@Url.Action("Index","Contact")" class="menu-link menu-active">Contact</a>
               </li>
             </ul>
           </div>
@@ -112,7 +114,7 @@
           <div class="text-about-star visible-lg"><img src="/images/PC_index/star-black.svg" alt=""></div>
           <div class="text-about-top"><img src="/images/PC_index/img-top.svg" alt=""></div>
           <div  class="text-about-dong">
-            <img src="/images/PC_index/star-yellow.svg visible-lg" alt="">
+            <img src="/images/PC_index/star-yellow.svg" class=" visible-lg" alt="">
             <div class="text-about-mid">VIetnam DOng coin</div>
           </div>
           <div class="d-flex justify-content-center">
@@ -211,141 +213,222 @@
             </div>
           </div>
         </section>
-        <section class="detail-trending">
+               <section class="detail-trending">
           <div class="detail-trending-title"><img src="/images/PC_blog/icon-arrow.svg" alt=""> Trending Blogs</div>
           <div class="main visible-lg">
             <div>
-              <div class="slider-hr"></div>
+                @if (lstBlog.Count() > 3)
+                {
+                    <div class="slider-hr"></div>
+                }
+                        
             </div>
             <div class="slider slider-nav">
-              <div>
-                <img src="/images/PC_blog/img-post-mb.svg" alt="">
-                <div class="slide-date">May 09</div>
-                <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
-                <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
-                  Don't miss out on the opportunity to be part of the future of finance.
+                @if (lstBlog.Count() > 0)
+                {
+                    @foreach (var obj in lstBlog)
+                    {
+                         <div>
+                            <img src="@obj.Thumb" alt="">
+                            <div class="slide-date">@obj.CreateTime</div>
+                            <div class="slide-title">@obj.Title</div>
+                            <div class="slide-desc">@obj.Description
+                            </div>
+                            <div class="slide-btn">
+                               @if (!string.IsNullOrEmpty(obj.MetaDescription))
+                                {
+                                    List<string> lstTag = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
+                                   
+                                    foreach (var item in lstTag)
+                                    {
+                                        <button>@item</button>
+                                    }
+                                }
+                            </div>
+                        </div>       
+                    }
+
+                } else {
+                    <div>
+                        <img src="/images/PC_blog/img-post-mb.svg" alt="">
+                        <div class="slide-date">May 09</div>
+                        <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
+                        <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
+                            Don't miss out on the opportunity to be part of the future of finance.
+                        </div>
+                        <div class="slide-btn">
+                            <button>Tag01</button>
+                            <button>Tag02</button>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="/images/PC_blog/img-post-mb.svg" alt="">
+                        <div class="slide-date">May 09</div>
+                        <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
+                        <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
+                          Don't miss out on the opportunity to be part of the future of finance.
+                        </div>
+                        <div class="slide-btn">
+                          <button>Tag01</button>
+                          <button>Tag02</button>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="/images/PC_blog/img-post-mb.svg" alt="">
+                        <div class="slide-date">May 09</div>
+                        <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
+                        <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
+                          Don't miss out on the opportunity to be part of the future of finance.
+                        </div>
+                        <div class="slide-btn">
+                          <button>Tag01</button>
+                          <button>Tag02</button>
+                        </div>
+                    </div>
+                    <div>
+                        <img src="/images/PC_blog/img-post-mb.svg" alt="">
+                        <div class="slide-date">May 09</div>
+                        <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
+                        <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
+                          Don't miss out on the opportunity to be part of the future of finance.
+                        </div>
+                        <div class="slide-btn">
+                          <button>Tag01</button>
+                          <button>Tag02</button>
+                        </div>
+                      </div>
+                    
+                 
+                }
                 </div>
-                <div class="slide-btn">
-                  <button>Tag01</button>
-                  <button>Tag02</button>
-                </div>
-              </div>
-              <div>
-                <img src="/images/PC_blog/img-post-mb.svg" alt="">
-                <div class="slide-date">May 09</div>
-                <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
-                <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
-                  Don't miss out on the opportunity to be part of the future of finance.
-                </div>
-                <div class="slide-btn">
-                  <button>Tag01</button>
-                  <button>Tag02</button>
-                </div>
-              </div>
-              <div>
-                <img src="/images/PC_blog/img-post-mb.svg" alt="">
-                <div class="slide-date">May 09</div>
-                <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
-                <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
-                  Don't miss out on the opportunity to be part of the future of finance.
-                </div>
-                <div class="slide-btn">
-                  <button>Tag01</button>
-                  <button>Tag02</button>
-                </div>
-              </div>
-              <div>
-                <img src="/images/PC_blog/img-post-mb.svg" alt="">
-                <div class="slide-date">May 09</div>
-                <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
-                <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
-                  Don't miss out on the opportunity to be part of the future of finance.
-                </div>
-                <div class="slide-btn">
-                  <button>Tag01</button>
-                  <button>Tag02</button>
-                </div>
-              </div>
-              <div>
-                <img src="/images/PC_blog/img-post-mb.svg" alt="">
-                <div class="slide-date">May 09</div>
-                <div class="slide-title">Why the DONG Forum Is the Heart of the Maker Community</div>
-                <div class="slide-desc">Follow our social media for the latest updates and insights on My Money Credit and DONG token. 
-                  Don't miss out on the opportunity to be part of the future of finance.
-                </div>
-                <div class="slide-btn">
-                  <button>Tag01</button>
-                  <button>Tag02</button>
-                </div>
-              </div>
             </div>
-          </div>
-          <div id="demo" class="carousel slide visible-s" data-bs-ride="carousel">
+              
+            <div id="demo" class="carousel slide visible-s" data-bs-ride="carousel">
           
-            <!-- The slideshow/carousel -->
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="/images/PC_blog/img-news.svg"  class="d-block w-100">
-                <div class="blogall-item-author">
-                  May 09
+                <!-- The slideshow/carousel -->
+                <div class="carousel-inner">
+                    @if (lstBlog.Count() > 0)
+                    {
+                        var count = 0;
+                        @foreach (var obj in lstBlog)
+                        {
+                            count++;
+                            @if(count == 1)
+                            {
+                                <div class="carousel-item active">
+                                    <img src="@obj.Thumb"  class="d-block w-100">
+                                    <div class="blogall-item-author">
+                                      @obj.CreateTime
+                                    </div>
+                                    <div class="blogall-item-title">
+                                      @obj.Title
+                                    </div>
+                                    <div  class="blogall-item-desc">
+                                        @obj.Description
+                                    </div>
+                                    <div  class="blogall-item-btn">
+                                      @if (!string.IsNullOrEmpty(obj.MetaDescription))
+                                        {
+                                            List<string> lstTag = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
+                                   
+                                            foreach (var item in lstTag)
+                                            {
+                                                <button>@item</button>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            } else
+                            {
+                                    <div class="carousel-item">
+                                        <img src="@obj.Thumb"  class="d-block w-100">
+                                        <div class="blogall-item-author">
+                                          @obj.CreateTime
+                                        </div>
+                                        <div class="blogall-item-title">
+                                          @obj.Title
+                                        </div>
+                                        <div  class="blogall-item-desc">
+                                            @obj.Description
+                                        </div>
+                                        <div  class="blogall-item-btn">
+                                          @if (!string.IsNullOrEmpty(obj.MetaDescription))
+                                            {
+                                                List<string> lstTag = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
+                                   
+                                                foreach (var item in lstTag)
+                                                {
+                                                    <button>@item</button>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                            }
+                        }
+                    } else {
+                        <div class="carousel-item active">
+                            <img src="/images/PC_blog/img-news.svg"  class="d-block w-100">
+                            <div class="blogall-item-author">
+                              May 09
+                            </div>
+                            <div class="blogall-item-title">
+                              Why the DONG Forum Is the Heart of the Maker Community
+                            </div>
+                            <div  class="blogall-item-desc">
+                              Follow our social media for the latest updates and insights on My Money Credit and DONG token. Don't miss out on the opportunity to be part of the future of finance.
+                            </div>
+                            <div  class="blogall-item-btn">
+                              <button>Tag01</button>
+                              <button>Tag02</button>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/images/PC_blog/img-post-mb.svg" class="d-block w-100">
+                            <div class="blogall-item-author">
+                              May 09
+                            </div>
+                            <div class="blogall-item-title">
+                              Why the DONG Forum Is the Heart of the Maker Community
+                            </div>
+                            <div  class="blogall-item-desc">
+                              Follow our social media for the latest updates and insights on My Money Credit and DONG token. Don't miss out on the opportunity to be part of the future of finance.
+                            </div>
+                            <div  class="blogall-item-btn">
+                              <button>Tag01</button>
+                              <button>Tag02</button>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="/images/PC_blog/img-post.svg" class="d-block w-100">
+                            <div class="blogall-item-author">
+                              May 09
+                            </div>
+                            <div class="blogall-item-title">
+                              Why the DONG Forum Is the Heart of the Maker Community
+                            </div>
+                            <div  class="blogall-item-desc">
+                              Follow our social media for the latest updates and insights on My Money Credit and DONG token. Don't miss out on the opportunity to be part of the future of finance.
+                            </div>
+                            <div  class="blogall-item-btn">
+                              <button>Tag01</button>
+                              <button>Tag02</button>
+                            </div>
+                        </div>
+                    }
                 </div>
-                <div class="blogall-item-title">
-                  Why the DONG Forum Is the Heart of the Maker Community
-                </div>
-                <div  class="blogall-item-desc">
-                  Follow our social media for the latest updates and insights on My Money Credit and DONG token. Don't miss out on the opportunity to be part of the future of finance.
-                </div>
-                <div  class="blogall-item-btn">
-                  <button>Tag01</button>
-                  <button>Tag02</button>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <img src="/images/PC_blog/img-post-mb.svg" class="d-block w-100">
-                <div class="blogall-item-author">
-                  May 09
-                </div>
-                <div class="blogall-item-title">
-                  Why the DONG Forum Is the Heart of the Maker Community
-                </div>
-                <div  class="blogall-item-desc">
-                  Follow our social media for the latest updates and insights on My Money Credit and DONG token. Don't miss out on the opportunity to be part of the future of finance.
-                </div>
-                <div  class="blogall-item-btn">
-                  <button>Tag01</button>
-                  <button>Tag02</button>
-                </div>
-              </div>
-              <div class="carousel-item">
-                <img src="/images/PC_blog/img-post.svg" class="d-block w-100">
-                <div class="blogall-item-author">
-                  May 09
-                </div>
-                <div class="blogall-item-title">
-                  Why the DONG Forum Is the Heart of the Maker Community
-                </div>
-                <div  class="blogall-item-desc">
-                  Follow our social media for the latest updates and insights on My Money Credit and DONG token. Don't miss out on the opportunity to be part of the future of finance.
-                </div>
-                <div  class="blogall-item-btn">
-                  <button>Tag01</button>
-                  <button>Tag02</button>
-                </div>
-              </div>
+                <div class="carousel-control-hr"></div>
+                <!-- Left and right controls/icons -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                  <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
-            <div class="carousel-control-hr"></div>
-            <!-- Left and right controls/icons -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-              <span class="carousel-control-next-icon"></span>
-            </button>
-          </div>
-          <div class="btn-readmore">
-            <a href="blog.html">Read more <i class="fa fa-caret-right"></i></a>
-          </div>
-        </section>
+            <div class="btn-readmore">
+                    <a href="@Url.Action("Index","News")">Read more <i class="fa fa-caret-right"></i></a>
+                  </div>
+            </section>
       </main>
       <footer>
         <div class="footer-top"><img src="/images/logo.svg" alt="">Dong </div>
@@ -356,22 +439,22 @@
         </div >
             <ul class="footer-menu">
               <li>
-                <a class="footer-menu-active" href="index.html">Home</a>
+                <a class="footer-menu-active" href="@Url.Action("Index","Home")">Home</a>
               </li>
               <li>
-                <a href="work.html">How It Works</a>
+                <a href="@Url.Action("Index","Work")">How It Works</a>
               </li>
               <li>
                 <a href="https://docs.mymoney.credit/my-money-credit/how-my-money-credit-operates/2.-vietnam-dong-coin-dong" target="_blank">Whitepaper</a>
               </li>
               <li>
-                <a  href="blog.html">Blog</a>
+                <a  href="@Url.Action("Index","News")">Blog</a>
               </li>
               <li>
-                <a  href="transparency.html">Transparency</a>
+                <a  href="@Url.Action("Index","Transparency")">Transparency</a>
               </li>
               <li>
-                <a href="contact.html">Contact</a>
+                <a href="@Url.Action("Index","Contact")">Contact</a>
               </li>
             </ul>
             <div class="d-flex justify-content-center visible-lg">

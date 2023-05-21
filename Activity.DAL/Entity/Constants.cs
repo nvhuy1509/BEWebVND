@@ -133,8 +133,8 @@ namespace Activity.DAL.Entity
             public const string UserPath = @"contact/user";
             public const string ImageUrl = @"contact/user";
             public const string Thumbnail = @"Thumbnail";
-            public const string MMC_User = @"MMC/User";
-            public const string MMC_UserNull = @"MMC";
+            public const string MMC_User = @"VNDmoney/User";
+            public const string MMC_UserNull = @"VNDmoney";
         }
         public static class SocialNotification
         {

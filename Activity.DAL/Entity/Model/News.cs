@@ -108,5 +108,6 @@ namespace Minxtu.DAL.Entity
             get { return _displayNo; }
             set { _displayNo = value; }
         }
+
     }
 }

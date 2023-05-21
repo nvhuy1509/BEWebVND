@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using Activity.Biz;
 using Activity.DAL;
 using Microsoft.AspNetCore.Mvc;
 using Minxtu.DAL.Entity;
+using Newtonsoft.Json;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -34,7 +36,27 @@ namespace myG.GameGuild.Controllers
         {
             ViewData["UserID"] = _sessionManager.AccountId;
             News NewItem = Provider.DataAccessSQLServerService.SelectNewsById(id);
-            return View(NewItem);
+            List<string> tags = JsonConvert.DeserializeObject<List<string>>(NewItem.MetaDescription);
+
+            dynamic mymodel = new ExpandoObject();
+            mymodel.dataItem = NewItem;
+            mymodel.lstTag = tags;
+
+            return View(mymodel);
+        }
+        [Route("News/Post/{Id}")]
+        public IActionResult DetailBlog(int id)
+        {
+            ViewData["UserID"] = _sessionManager.AccountId;
+            News NewItem = Provider.DataAccessSQLServerService.SelectNewsById(id);
+            List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).ToList();
+
+            dynamic mymodel = new ExpandoObject();
+            mymodel.NewItem = NewItem;
+            mymodel.lstBLogs = lstBLogs;
+            
+
+            return View(mymodel);
         }
          public IActionResult Detail()
         {
@@ -44,7 +66,7 @@ namespace myG.GameGuild.Controllers
 
         #region http
         [HttpPost]
-        public async Task<JsonResult> Add(string Featured, string Title , string Description, string Content, string Url, int Status)
+        public async Task<JsonResult> Add(string Title, string Thumb, string Description, string Content, string MetaDescription, int Status)
         {
             DalResult result = new DalResult();
             try
@@ -55,13 +77,13 @@ namespace myG.GameGuild.Controllers
                     CategoryId = 1, // đặt mặc định = 1 là blog
                     Title = Title,
                     Description = Description,
-                    MetaDescription = Featured,
+                    MetaDescription = MetaDescription,
                     MainContent = Content,
-                    Thumb = Url,
+                    Thumb = Thumb,
                     PageView = 1, // đặt mặc định vì chưa có page quản lý
                     CreateTime = DateTime.Now,
                     UpdateTime = DateTime.Now,
-                    DisplayNo = 0,
+                    DisplayNo = int.Parse(_sessionManager.AccountId), //Id người tạo để lấy author
                     Status = Status, // status == 1 : active
                 };
 
@@ -80,7 +102,7 @@ namespace myG.GameGuild.Controllers
 
         }
         [HttpPost]
-        public async Task<JsonResult> Update(int Id, string Featured, string Title, string Description, string Content, string Url, int Status)
+        public async Task<JsonResult> Update(int Id, string Title, string Thumb, string Description, string Content, string MetaDescription, int Status)
         {
             DalResult result = new DalResult();
             try
@@ -88,9 +110,9 @@ namespace myG.GameGuild.Controllers
                 var item = Provider.DataAccessSQLServerService.SelectNewsById(Id);
                 item.Title = Title;
                 item.Description = Description;
-                item.Thumb = Url;
+                item.Thumb = Thumb;
                 item.MainContent = Content;
-                item.MetaDescription = Featured;
+                item.MetaDescription = MetaDescription;
                 item.Status = Status;
 
                 Provider.DataAccessSQLServerService.UpdateNews(Id, item);

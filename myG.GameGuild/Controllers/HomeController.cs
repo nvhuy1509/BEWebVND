@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Activity.Biz;
-using Activity.DAL.Entity.GameGuild;
-using Activity.DAL.Entity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using myG.GameGuild.Models;
@@ -42,6 +40,8 @@ namespace myG.GameGuild.Controllers
             var urlAp = lstConfig.Where(t => t.Key == "downloadAppStore").Select(t => t.Value).ToList();
             var urlAndr = lstConfig.Where(t => t.Key == "downloadAndroid").Select(t => t.Value).ToList();
 
+            List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).ToList();
+
             dynamic mymodel = new ExpandoObject();
             mymodel.urlFb = urlFb[0];
             mymodel.urlTele = urlTele[0];
@@ -49,6 +49,7 @@ namespace myG.GameGuild.Controllers
             mymodel.urlTt = urlTt[0];
             mymodel.urlAp = urlAp[0];
             mymodel.urlAndr = urlAndr[0];
+            mymodel.lstBLogs = lstBLogs;
 
             return View(mymodel);
         }
