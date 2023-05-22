@@ -1,14 +1,14 @@
 ﻿@charset "UTF-8";
 @import url("https://fonts.cdnfonts.com/css/inter");
 @import url("https://fonts.cdnfonts.com/css/poppins");
+@import url("https://cdn.jsdelivr.net/npm/typeface-integral-cf@1.1.0/index.css");
 
 html {
     overflow-x: hidden;
 }
 
 @font-face {
-    font-family: "Integral CF";
-    src: url("/fonts/IntegralCF/Fontspring-DEMO-integralcf-bold.otf") format("truetype"); /* Đường dẫn tới tệp font */
+    font-family: "Integral CF", sans-serif;
     /* Nếu bạn có các định dạng tệp font khác, hãy thêm chúng vào đây */
 }
 
@@ -332,6 +332,16 @@ footer .footer-char {
     line-height: 130%;
 }
 
+.icon-footer {
+    color: #FFFFFF;
+    font-size: 24px;
+}
+
+.icon-footer:hover {
+    color: #FFB800;
+}
+
+
 footer .footer-bot {
     font-family: "Inter";
     font-style: normal;
@@ -619,7 +629,7 @@ h3 {
     display: flex;
     align-items: center;
     gap: 5px;
-    font-family: "Integral CF";
+    font-family: "Integral CF", sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
@@ -641,7 +651,7 @@ h3 {
 }
 
 .blog-trending .trending-post-header {
-    font-family: "Integral CF";
+    font-family: "Integral CF", sans-serif;
     font-style: normal;
     font-weight: 800;
     font-size: 18px;
@@ -693,7 +703,7 @@ h3 {
         display: flex;
         align-items: center;
         gap: 5px;
-        font-family: "Integral CF";
+        font-family: "Integral CF", sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 32px;
@@ -730,7 +740,7 @@ h3 {
     }
 
 .blogall-item-title {
-    font-family: "Integral CF";
+    font-family: "Integral CF", sans-serif;
     font-style: normal;
     font-weight: 800;
     font-size: 18px;
@@ -765,6 +775,10 @@ h3 {
     color: #8E8E8E;
 }
 
+.blogall-item-title:hover {
+    color: #FFB800;
+}
+
 .blogall-item .blogall-hr {
     margin: 20px 0px 0px 15px;
     border-bottom: 1px solid #494949;
@@ -773,6 +787,11 @@ h3 {
 
 .blogall-item img {
     width: 100%;
+    border-radius: 8px
+
+}
+.blog-trending .trending-post img {
+    border-radius: 7px;
 }
 
 @media screen and (max-width: 768px) {
@@ -819,6 +838,8 @@ h3 {
     .blog-trending .trending-post {
         padding: 55px 55px 16px 55px;
     }
+
+
 
     .blog-trending .trending-post-header {
         font-weight: 800;
@@ -876,9 +897,11 @@ h3 {
         font-weight: 800;
         font-size: 16px;
         line-height: 130%;
-        color: #BFBFBF;
+        color: #BFBFBF ;
         padding-bottom: 4px;
     }
+
+       
 
     .blogall-item-desc {
         font-weight: 500;
@@ -927,7 +950,7 @@ h3 {
 }
 
 .contact .contact-title {
-    font-family: "Integral CF";
+    font-family: "Integral CF", sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 75px;
@@ -1197,6 +1220,7 @@ h3 {
         transform: translate(-50%, 100%);
         bottom: -10px;
         position: absolute;
+        background-color: #111111;
     }
 
 @media screen and (max-width: 768px) {
@@ -1318,7 +1342,7 @@ h3 {
     }
 
     .detailblog .detailblog-header {
-        font-family: "Integral CF";
+        font-family: "Integral CF", sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 32px;
@@ -1350,7 +1374,7 @@ h3 {
         }
 
     .detailblog .detailblog-title {
-        font-family: "Integral CF";
+        font-family: "Integral CF", sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 20px;
@@ -1380,7 +1404,7 @@ h3 {
 }
 
 .detail-trending-title {
-    font-family: "Integral CF";
+    font-family: "Integral CF", sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 32px;
@@ -1409,7 +1433,7 @@ h3 {
     }
 
     .detail-trending .main .slide-title {
-        font-family: "Integral CF";
+        font-family: "Integral CF", sans-serif;
         font-style: normal;
         font-weight: 800;
         font-size: 18px;
@@ -1417,6 +1441,10 @@ h3 {
         padding: 4px 0px;
         letter-spacing: 0.02em;
         color: #BFBFBF;
+    }
+
+    .detail-trending .main .slide-title:hover {
+        color: #FFB800;
     }
 
     .detail-trending .main .slide-desc {
@@ -1596,7 +1624,7 @@ h3 {
 }
 
 .text-about-mid {
-    font-family: "Integral CF";
+    font-family: "Integral CF", sans-serif;
     font-style: normal;
     font-weight: 700;
     font-size: 80px;
@@ -1710,16 +1738,18 @@ h3 {
     background: rgba(73, 73, 73, 0.2);
     position: relative;
     border-radius: 12px;
+    border: 0.2px solid transparent;
     padding: 20px 16px;
-    backdrop-filter: blur(5px);
+    /*backdrop-filter: blur(5px);*/
 }
 
 .information .infor-item-title {
-    font-family: "Integral CF";
+    font-family: "Integral CF", sans-serif;
     font-style: normal;
     font-weight: 800;
     font-size: 18px;
     line-height: 130%;
+    text-transform: uppercase;
     letter-spacing: 0.02em;
     color: #BFBFBF;
 }
@@ -1737,11 +1767,11 @@ h3 {
 
 .information .infor-item-yellow {
     color: #FFB800;
+    font-size: 32px;
 }
 
 .information .infor-item-image {
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
 }
 
     .information .infor-item-image .icon-libra {
@@ -1844,10 +1874,9 @@ h3 {
 }
 
 .infor-item:hover {
-    border: 1px solid #FFB800;
+    animation: showBorder 1s ease-in-out forwards;
     box-shadow: 4px 4px 16px rgba(255, 184, 0, 0.2);
     /* Note: backdrop-filter has minimal browser support */
-    border-radius: 12px;
 }
 
     .infor-item:hover .infor-item-desc {
@@ -1855,25 +1884,26 @@ h3 {
     }
 
     .infor-item:hover .infor-item-image {
-        transition-delay: 0.5s;
-        animation: showElement 3s ease-in-out forwards infinite;
+        animation: showItemImg 1s ease-in-out forwards;
     }
 
-.information .infor-item-image .icon-libra {
-    animation: showItem1 2.8s ease-in-out forwards infinite;
-}
+    .infor-item:hover .infor-item-image .icon-libra {
+        animation: showItem1 1.4s ease-in-out forwards;
+    }
 
-.information .infor-item-image .icon-11 {
-    animation: showItem2 2.8s ease-in-out forwards infinite;
-}
+    .infor-item:hover .infor-item-image .icon-11 {
+        animation: showItem2 1.4s ease-in-out forwards;
+    }
 
-.information .infor-item-image .icon-circleback {
-    animation: showItem3 2.8s ease-in-out forwards infinite;
-}
+    .infor-item:hover .infor-item-image .icon-circleback {
+        animation: showItem3 1.4s ease-in-out forwards;
+    }
 
-.information .infor-item-image .icon-circlecheck {
-    animation: showItem4 2.8s ease-in-out forwards infinite;
-}
+    .infor-item:hover .infor-item-image .icon-circlecheck {
+        animation: showItem4 1.4s ease-in-out forwards;
+    }
+
+
 
 .infor-item-image::before {
     content: "";
@@ -1887,6 +1917,29 @@ h3 {
     backdrop-filter: blur(5px);
     z-index: 2; /* Đặt z-index cao hơn so với ảnh */
 }
+
+@keyframes showBorder {
+    from {
+        border: 0.2px solid transparent;
+        ; /* Start font-size at 0 */
+    }
+
+    to {
+        border: 0.2px solid #FFB800; /* End font-size at 16 */
+    }
+}
+
+@keyframes showItemImg {
+    from {
+        opacity: 0;
+        ; /* Start font-size at 0 */
+    }
+
+    to {
+        opacity: 1; /* End font-size at 16 */
+    }
+}
+
 
 @keyframes showItem1 {
     from {

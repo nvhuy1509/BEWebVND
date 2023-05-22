@@ -6,6 +6,6 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>D:\OtherProject\BEwebVND\myG.GameGuild\bin/Release/net5.0/publish</_PublishTargetUrl>
-    <History>False|2023-05-21T03:23:23.9895733Z;</History>
+    <History>False|2023-05-21T03:25:49.8654336Z;False|2023-05-21T10:23:23.9895733+07:00;</History>
   </PropertyGroup>
 </Project>

@@ -28,7 +28,7 @@ namespace myGUnitTest
                 //string conn = "Server=123.30.245.58;port=21032;Database=game_guild;User Id=postgres;Password=123JQKGame6789;CommandTimeout=60;Pooling=true;MinPoolSize=1;MaxPoolSize=100";
                 // string conn = "Server=123.30.245.58;port=16232;Database=webtest;User Id=postgres;Password=develop_myg_db;CommandTimeout=60;Pooling=true;MinPoolSize=1;MaxPoolSize=100";
                //  string conn = "server=ANPHATPC\\MYGSERVER;database=myG.VNDmoneyLocal;Trusted_Connection=True;";//local
-               string conn = "server=123.30.245.58,7433;database=myG.BetaVNDmoney;uid=myg.id;pwd=katKAT@123; "; // public
+               string conn = "server=192.168.10.170;database=myG.BetaVNDmoney;uid=myg.id;pwd=katKAT@123; "; // public
                 //conn = "Server=123.30.245.58;Port=16089;User=root;Password=AFFWINNOW2022;Database=webux_aff;SSL Mode=None";
                 //string conn = "server=123.30.245.58,61433;database=myG.BeAStar;uid=myg.id;pwd=myG.id_c0re123*654;";
                 var decryptConn = rijndaelKey.Encrypt(conn);
