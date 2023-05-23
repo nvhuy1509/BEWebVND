@@ -78,7 +78,7 @@ namespace myG.GameGuild.Controllers
                     Title = Title,
                     Description = Description,
                     MetaDescription = MetaDescription,
-                    MainContent = Content,
+                    MainContent = Content.Replace("<img src=\"..", "<img src=\""),
                     Thumb = Thumb,
                     PageView = 1, // đặt mặc định vì chưa có page quản lý
                     CreateTime = DateTime.Now,
@@ -102,20 +102,21 @@ namespace myG.GameGuild.Controllers
 
         }
         [HttpPost]
-        public async Task<JsonResult> Update(int Id, string Title, string Thumb, string Description, string Content, string MetaDescription, int Status)
+        public async Task<JsonResult> Update(string Id, string Title, string Thumb, string Description, string Content, string MetaDescription, int Status)
         {
             DalResult result = new DalResult();
             try
             {
-                var item = Provider.DataAccessSQLServerService.SelectNewsById(Id);
+                var item = Provider.DataAccessSQLServerService.SelectNewsById( Convert.ToInt64(Id) );
                 item.Title = Title;
                 item.Description = Description;
                 item.Thumb = Thumb;
-                item.MainContent = Content;
+                item.MainContent = Content.Replace("<img src=\"..", "<img src=\"");
                 item.MetaDescription = MetaDescription;
                 item.Status = Status;
 
-                Provider.DataAccessSQLServerService.UpdateNews(Id, item);
+
+                Provider.DataAccessSQLServerService.UpdateNews(Convert.ToInt64(Id), item);
 
                 result.IsSuccess = true;
                 return Json(result);

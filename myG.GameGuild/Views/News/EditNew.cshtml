@@ -8,6 +8,9 @@
 
  <script src="/lib/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
+
+       
+
       tinymce.init({
         selector: '#detailblog',
         plugins: 'image code',
@@ -16,42 +19,8 @@
           image_title: true,
           /* enable automatic uploads of images represented by blob or data URIs*/
           automatic_uploads: true,
-          /*
-            URL of our upload handler (for more details check: https://www.tiny.cloud/docs/configure/file-image-upload/#images_upload_url)
-            images_upload_url: 'postAcceptor.php',
-            here we add custom filepicker only to Image dialog
-          */
-          file_picker_types: 'image',
-          /* and here's our custom image picker*/
-          file_picker_callback: (cb, value, meta) => {
-            const input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
-
-            input.addEventListener('change', (e) => {
-              const file = e.target.files[0];
-
-              const reader = new FileReader();
-              reader.addEventListener('load', () => {
-                /*
-                  Note: Now we need to register the blob in TinyMCEs image blob
-                  registry. In the next release this part hopefully won't be
-                  necessary, as we are looking to handle it internally.
-                */
-                const id = 'blobid' + (new Date()).getTime();
-                const blobCache =  tinymce.activeEditor.editorUpload.blobCache;
-                const base64 = reader.result.split(',')[1];
-                const blobInfo = blobCache.create(id, file, base64);
-                blobCache.add(blobInfo);
-
-                /* call the callback and populate the Title field with the file name */
-                cb(blobInfo.blobUri(), { title: file.name });
-              });
-              reader.readAsDataURL(file);
-            });
-
-            input.click();
-          },
+          //images_upload_handler: example_image_upload_handler
+          images_upload_url: '@Url.Action("UploadFileTiny", "UploadFile")'
       });
 </script>
 
@@ -62,10 +31,10 @@
                         </div>
                     </div>
                     
-                    <div class=" row mb-4">
+                    <div class=" row mb-4" id="divViewImg" style="display: none">
                         <label class="col-md-3 form-label" ></label>
                         <div class="col-md-9">
-                            <img id="viewImage" src="@NewItem.Thumb" width="300" height="300" />
+                            <img id="viewImage" src="@NewItem.Thumb" width="471" height="300" />
                         </div>
                     </div>
                     
@@ -90,7 +59,7 @@
                             
                             
                             <div id="divTag" style="display: flex; gap: 10px; padding-top: 5px">
-                                @if(tagArray.Count() > 0)
+                                @if(tagArray.Count > 0)
                                 {
                                     @foreach( var obj in tagArray)
                                     {
@@ -155,6 +124,9 @@
                             console.log(img.height); // image is loaded; sizes are available
                             if (img.width != 1110 && img.height != 700) {
                                 alert("Sử dụng ảnh đúng kích thước 1110 x 700 nhé!");
+                                document.getElementById("uploadImage").value = "";
+                                document.getElementById('divViewImg').src = '';
+                                document.getElementById('divViewImg').style.display = 'none';
                             } else {
                                 var param = {  
                                     'Item': file,
@@ -182,7 +154,8 @@
                                         let obj = JSON.parse(data);
                                         if (obj.uploaded == 1) {
                                             urlImage = obj.url;
-                                            viewImage.src = URL.createObjectURL(file)
+                                            viewImage.src = URL.createObjectURL(file);
+                                            document.getElementById('divViewImg').style.display = 'flex';
                                         }
                                         else {
                                             alert("Lỗi upload ảnh");

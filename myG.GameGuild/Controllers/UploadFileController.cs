@@ -188,5 +188,86 @@ namespace myG.GameGuild.Controllers
                 return Content(reponse);
             }
         }
+
+        public async Task<ContentResult> UploadFileTiny(ItemGameTiny request)
+        {
+
+            try
+            {
+                Random rnd = new Random();
+                var a = request;
+                var b = request.File.FileName;
+
+                var uploadReqeust = new FileUploadRequest
+                {
+                    UserId = new Guid(),
+                    FileType = request.File.ContentType,
+                    FileName = rnd.Next(1, 999999) + request.File.FileName,
+                    File = request.File.GetBytes(),
+                    Path = $"{Constants.FileUpload.MMC_User}/{request.IdUser}"
+                };
+
+                if (request.IdUser == null)
+                {
+                    uploadReqeust.Path = $"{Constants.FileUpload.MMC_UserNull}/Other";
+                }
+                if (request.IdUser != null)
+                {
+                    uploadReqeust.Path = $"{Constants.FileUpload.MMC_User}/{request.IdUser}";
+                }
+                if (request.File.ContentType == "application/x-zip-compressed")
+                {
+                    uploadReqeust.Path = $"{Constants.FileUpload.Thumbnail}/{Guid.NewGuid().ToString()}";
+                }
+                var result = await _imageService.UploadFile(request.File, uploadReqeust.Path, uploadReqeust.FileName);
+
+
+                if (result && request.File.ContentType == "application/x-zip-compressed")
+                {
+                    string sourceFile = $"{_appSetting.FileFolder}/{uploadReqeust.Path}/{uploadReqeust.FileName}";
+                    string pathDir = $"{_appSetting.FileFolder}/{uploadReqeust.Path}";
+                    ZipFile.ExtractToDirectory(sourceFile, pathDir);
+
+                    string responseUrlspine = string.Format("{0}/images/{1}/{2}", _appSetting.FileUrl, uploadReqeust.Path, uploadReqeust.FileName);
+                    string reponse1 = string.Format("{{\"uploaded\": 1,\"fileName\": \"{0}\",\"url\": \"{1}\"}}", uploadReqeust.FileName, responseUrlspine);
+                    return Content(reponse1);
+                }
+
+                string responseUrl = string.Format("{0}/images/{1}/{2}", _appSetting.FileUrl, uploadReqeust.Path, uploadReqeust.FileName);
+                string reponse = string.Format("{{\"uploaded\": 1,\"fileName\": \"{0}\",\"location\": \"{1}\"}}", uploadReqeust.FileName, responseUrl);
+
+
+                try
+                {
+                    var mediaUser = new Photo
+                    {
+                        AlbumId = 1,  // đang đặt tạm = 1 vì chưa có phần quản lý album
+                        Name = uploadReqeust.FileName,
+                        Description = "Upload_By" + request.IdUser,
+                        ImageUrl = "/images/" + uploadReqeust.Path + "/" + uploadReqeust.FileName,
+                        CreateTime = DateTime.Now,
+                        Status = 1,
+                    };
+                    //await Provider.DataAccessService.AddRecord(mediaUser);
+                    Provider.DataAccessSQLServerService.InsertPhoto(mediaUser);
+
+                    return Content(reponse.Replace(_appSetting.FileUrl, ""));
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Exception => :" + ex);
+                    string reponse1 = string.Format("{{\"uploaded\": 0,\"fileName\": \"{0}\",\"url\": \"{1}\",\"classItem\":\"{2}\",\"error\":\"{3}\" }}", "", "", "", ex.Message);
+                    return Content(reponse1);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Exception => :" + ex);
+
+                string reponse = string.Format("{{\"uploaded\": 0,\"fileName\": \"{0}\",\"url\": \"{1}\",\"classItem\":\"{2}\",\"error\":\"{3}\" }}", "", "", "", ex.Message);
+                return Content(reponse);
+            }
+        }
     }
 }

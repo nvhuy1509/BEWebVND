@@ -19,4 +19,12 @@ namespace myG.GameGuild
         public IFormFile Item { get; set; }
         public int IdUser { get; set; }
     }
+    public class ItemGameTiny
+    {
+        [DataType(DataType.Upload)]
+        //[MaxFileSize(5  1024  1024)]
+        // [AllowedExtensions(new[] { ".jpg", ".png" })]
+        public IFormFile File { get; set; }
+        public int IdUser { get; set; }
+    }
 }

@@ -247,7 +247,10 @@
                                    
                                     foreach (var item in lstTag)
                                     {
-                                        <button>@item</button>
+                                        if(item != "")
+                                        {
+                                            <button>@item</button> 
+                                        }
                                     }
                                 }
                             </div>
@@ -366,7 +369,10 @@
                                    
                                             foreach (var item in lstTag)
                                             {
-                                                <button>@item</button>
+                                                if(item != "")
+                                                {
+                                                    <button>@item</button> 
+                                                }
                                             }
                                         }
                                     </div>
@@ -391,7 +397,10 @@
                                    
                                                 foreach (var item in lstTag)
                                                 {
-                                                    <button>@item</button>
+                                                    if(item != "")
+                                                    {
+                                                       <button>@item</button> 
+                                                    }
                                                 }
                                             }
                                         </div>

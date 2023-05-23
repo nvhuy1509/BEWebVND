@@ -216,13 +216,6 @@
                <section class="detail-trending">
           <div class="detail-trending-title"><img src="/images/PC_blog/icon-arrow.svg" alt=""> Trending Blogs</div>
           <div class="main visible-lg">
-            <div>
-                @if (lstBlog.Count() > 3)
-                {
-                    <div class="slider-hr"></div>
-                }
-                        
-            </div>
             <div class="slider slider-nav">
                 @if (lstBlog.Count() > 0)
                 {
@@ -241,7 +234,10 @@
                                    
                                     foreach (var item in lstTag)
                                     {
-                                        <button>@item</button>
+                                        if(item != "")
+                                        {
+                                            <button>@item</button> 
+                                        }
                                     }
                                 }
                             </div>
@@ -333,7 +329,10 @@
                                    
                                             foreach (var item in lstTag)
                                             {
-                                                <button>@item</button>
+                                                if(item != "")
+                                                {
+                                                    <button>@item</button> 
+                                                }
                                             }
                                         }
                                     </div>
@@ -358,7 +357,10 @@
                                    
                                                 foreach (var item in lstTag)
                                                 {
-                                                    <button>@item</button>
+                                                   if(item != "")
+                                                    {
+                                                       <button>@item</button> 
+                                                    }
                                                 }
                                             }
                                         </div>
@@ -418,11 +420,11 @@
                 </div>
                 <div class="carousel-control-hr"></div>
                 <!-- Left and right controls/icons -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon"></span>
+                <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev" onclick="onActiveBtnCarou(this)">
+                    <i class="fas fa-angle-left carousel-control-prev-icon" id="carouPrev"></i>
                 </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-                  <span class="carousel-control-next-icon"></span>
+                <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next" onclick="onActiveBtnCarou(this)">
+                    <i class="fas fa-angle-right carousel-control-next-icon" id="carouNext"></i>
                 </button>
             </div>
             <div class="btn-readmore">

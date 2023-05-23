@@ -44,71 +44,39 @@ headerBar.addEventListener("click", () => {
  
 });
 
-const iconCloseHeaderFixed = document.querySelector(".close-header-fixed");
-iconCloseHeaderFixed.addEventListener("click", () => {
-  headerFixed.classList.remove("show");
-  menuItem.forEach((element) => {
-    element.classList.remove("menu-itemShow");
-  });
-  logo.style.display = "block";
-  bar.style.display = "block";
-  header.style.background = "#000000"
-  
-});
+function onActiveBtnSlick(element) {
+    console.log(element)
+    var btnPrev = document.getElementById("btnPrev");
+    var btnNext = document.getElementById("btnNext");
+
+    if (element.classList.contains("slick-prev")) {
+        element.src = "/images/PC_blog/slide-prev-yellow.svg";
+        btnNext.src = "/images/PC_blog/slide-next-black.svg";
+    }
+    if (element.classList.contains("slick-next")) {
+        element.src = "/images/PC_blog/slide-next-yellow.svg";
+        console.log(element)
+        btnPrev.src = "/images/PC_blog/slide-prev-black.svg";
+    }
+
+}
 
 
-const roadmapOverlay = document.querySelectorAll(".roadmap-overlay");
-roadmapOverlay.forEach((item) =>
-  item.addEventListener("click", (e) => {
-    e.target.nextElementSibling.nextElementSibling.nextElementSibling.classList.toggle(
-      "active"
-    );
-  })
-);
+function onActiveBtnCarou(element) {
+    console.log(element)
+    var btnPrev = document.getElementById("carouPrev");
+    var btnNext = document.getElementById("carouNext");
 
-const roadmapVerticalOverLay = document.querySelectorAll(
-  ".roadmap-vertical-overlay"
-);
-roadmapVerticalOverLay.forEach((item) =>
-  item.addEventListener("click", (e) => {
-    e.target.parentNode.nextElementSibling.classList.toggle("show");
-  })
-);
+    if (element.classList.contains("carousel-control-prev")) {
+        btnPrev.classList.add("btn-slide-active");
+        btnNext.classList.remove("btn-slide-active");
+    }
+    if (element.classList.contains("carousel-control-next")) {
+        btnNext.classList.add("btn-slide-active");
+        btnPrev.classList.remove("btn-slide-active");
+    }
 
-const dropdowns = document.querySelectorAll(".faqs-dropdown");
-
-dropdowns.forEach((el) => {
-  const button = el.querySelector(".faqs-dropdown-btn");
-
-  button.addEventListener("click", () => {
-    // Close all
-    [...dropdowns]
-      .filter((x) => x != el)
-      .forEach((el) => el.classList.remove("is-open"));
-    // Toggle one
-    el.classList.toggle("is-open");
-  });
-});
-
-//number animation
-// function animateValue(obj, start, end, duration) {
-//   let startTimestamp = null;
-//   const step = (timestamp) => {
-//     if (!startTimestamp) startTimestamp = timestamp;
-//     const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-//     obj.innerHTML = Math.floor(progress * (end - start) + start);
-//     if (progress < 1) {
-//       window.requestAnimationFrame(step);
-//     }
-//   };
-//   window.requestAnimationFrame(step);
-// }
-
-const obj1 = document.getElementById("value-1");
-const obj2 = document.getElementById("value-2");
-const obj3 = document.getElementById("value-3");
-
-
+}
 //scroll-view-display
 
 function reveal() {
@@ -131,30 +99,3 @@ function reveal() {
 }
 
 window.addEventListener("scroll", reveal);
-
-//change language
-function changeLanguage() {
-  var x = document.getElementById("language");
-  if (x.innerHTML === "EN") {
-    x.innerHTML = "VN";
-  } else {
-    x.innerHTML = "EN";
-  }
-}
-
-// page solution
-
-$(document).ready(function(){
-  var itemBanners = $('.banner-item');
-  var itemThumbs = $('.thumb-item');
-  console.log($(body).height());
-
-  itemThumbs.each(function(index){
-      $(this).on('click', function(){
-          itemThumbs.removeClass('active');
-          $(this).addClass('active');
-          itemBanners.removeClass('active');
-          $(itemBanners[index]).addClass('active');
-      })
-  })
-})

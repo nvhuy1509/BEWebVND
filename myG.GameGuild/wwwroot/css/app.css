@@ -1,14 +1,14 @@
 ﻿@charset "UTF-8";
 @import url("https://fonts.cdnfonts.com/css/inter");
 @import url("https://fonts.cdnfonts.com/css/poppins");
-@import url("https://cdn.jsdelivr.net/npm/typeface-integral-cf@1.1.0/index.css");
 
 html {
     overflow-x: hidden;
 }
 
 @font-face {
-    font-family: "Integral CF", sans-serif;
+    font-family: 'Integral CF';
+    src: url('/fonts/IntegralCF/Fontspring-DEMO-integralcf-bold.otf') format('truetype'); /* Đường dẫn tới tệp font */
     /* Nếu bạn có các định dạng tệp font khác, hãy thêm chúng vào đây */
 }
 
@@ -551,10 +551,6 @@ li {
 }
 
 @media screen and (max-width: 1193px) {
-    .visible-s {
-        display: flex !important;
-    }
-
     .visible-lg {
         display: none;
     }
@@ -793,7 +789,9 @@ h3 {
 .blog-trending .trending-post img {
     border-radius: 7px;
 }
-
+.btn-slide-active {
+    color: #FFB800 !important;
+}
 @media screen and (max-width: 768px) {
     .blog-img-top img {
         width: 30% !important;
@@ -921,8 +919,8 @@ h3 {
     }
 
     .carousel-inner {
-        margin-left: 15%;
-        padding: 20px 0px;
+        padding: 20px 15px;
+        width: 90%;
     }
 
     .carousel-item {
@@ -932,10 +930,14 @@ h3 {
     .carousel-control-next {
         left: 0;
         right: unset;
+        top: 40%;
+    }
+    .carousel-control-next, .carousel-control-prev {
+        height: 10%;
     }
 
     .carousel-control-prev {
-        top: 80px;
+        top: 50%;
     }
 }
 
@@ -1420,6 +1422,13 @@ h3 {
     display: block;
     margin-left: 9%;
 }
+    .detail-trending .main .slick-arrow {
+        cursor: pointer;
+    }
+
+    .detail-trending .main .slick-arrow:hover {
+        color: #FFB800;
+    }
 
     .detail-trending .main .slide-date {
         font-family: "Inter";
@@ -1482,15 +1491,21 @@ h3 {
         }
 
     .detail-trending .main .slick-prev {
-        bottom: 35%;
+        top: 54%;
         position: absolute;
-        left: -5%;
+        left: -8%;
+        font-size: 50px;
+        color: #494949;
     }
 
     .detail-trending .main .slick-next {
-        top: 40%;
+        top: 35%;
         position: absolute;
         left: -5%;
+        left: -8%;
+        font-size: 50px;
+        color: #494949;
+        border-bottom: 2px solid #494949;
     }
 
     .detail-trending .main .slider-hr {
@@ -1585,12 +1600,16 @@ h3 {
         }
 
     .carousel-control-next-icon {
-        background-image: url("/images/PC_blog/slide-arrow-next.svg");
+        background-image: unset;
+        font-size: 40px;
+        color: #494949;
         margin-bottom: 40px;
     }
 
     .carousel-control-prev-icon {
-        background-image: url("/images/PC_blog/slide-arrow-back.svg");
+        background-image: unset;
+        font-size: 40px;
+        color: #494949;
         margin-top: 20px;
     }
 
@@ -1601,8 +1620,8 @@ h3 {
     .carousel-control-hr {
         position: absolute;
         width: 10%;
-        border-top: 1px solid #494949;
-        top: 54%;
+        border-top: 2px solid #494949;
+        top: 50%;
         left: 3%;
     }
 }

@@ -111,13 +111,6 @@
         <section class="detail-trending">
           <div class="detail-trending-title"><img src="/images/PC_blog/icon-arrow.svg" alt=""> Trending Blogs</div>
           <div class="main visible-lg">
-            <div>
-                @if (lstBlog.Count() > 3)
-                {
-                    <div class="slider-hr"></div>
-                }
-                        
-            </div>
             <div class="slider slider-nav">
                 @if (lstBlog.Count() > 0)
                 {
@@ -136,7 +129,10 @@
                                    
                                     foreach (var item in lstTag)
                                     {
-                                        <button>@item</button>
+                                        if(item != "")
+                                        {
+                                            <button>@item</button> 
+                                        }
                                     }
                                 }
                             </div>
@@ -252,8 +248,11 @@
                                                 List<string> lstTag = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
                                    
                                                 foreach (var item in lstTag)
-                                                {
-                                                    <button>@item</button>
+                                                {  
+                                                    if(item != "")
+                                                    {
+                                                       <button>@item</button> 
+                                                    }
                                                 }
                                             }
                                         </div>
