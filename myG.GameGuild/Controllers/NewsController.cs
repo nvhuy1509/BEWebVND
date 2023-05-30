@@ -24,8 +24,8 @@ namespace myG.GameGuild.Controllers
         public async Task<IActionResult> Index()
         {
 
-            List<News> tredingBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView)).Take(5).ToList();
-            List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1)).Take(5).ToList();
+            List<News> tredingBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime)).Take(3).ToList();
+            List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1)).OrderByDescending(t => t.CreateTime).Take(5).ToList();
             List<Tag> lstTag = (Provider.DataAccessSQLServerService.SelectAllTag().OrderByDescending(t => t.Count).Take(3)).ToList();
             foreach (News blog in lstBLogs)
             {
@@ -37,26 +37,6 @@ namespace myG.GameGuild.Controllers
             mymodel.lstTag = lstTag;
             return View(mymodel);
         }
-        //[Route("News/{page}")]
-        //public async Task<IActionResult> Index(int page)
-        //{
-        //    ViewData["page"] = page;
-        //    var count = 5;
-        //    var pageIndex = count * page;
-
-        //    List<News> tredingBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView)).Take(pageIndex).ToList(); 
-        //    List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1)).Take(pageIndex).ToList(); 
-        //    List<Tag> lstTag = (Provider.DataAccessSQLServerService.SelectAllTag().OrderByDescending(t => t.Count).Take(3)).ToList();
-        //    foreach (News blog in lstBLogs)
-        //    {
-        //        var username = Provider.DataAccessSQLServerService.SelectAdminById(blog.Id);
-        //    }
-        //    dynamic mymodel = new ExpandoObject();
-        //    mymodel.tredingBLogs = tredingBLogs;
-        //    mymodel.lstBLogs = lstBLogs;
-        //    mymodel.lstTag = lstTag;
-        //    return View(mymodel);
-        //}
         [Route("News/AddNew")]
         public IActionResult AddNew()
         {
@@ -84,7 +64,7 @@ namespace myG.GameGuild.Controllers
         {
             ViewData["UserID"] = _sessionManager.AccountId;
             News NewItem = Provider.DataAccessSQLServerService.SelectNewsById(id);
-            List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView)).ToList();
+            List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime)).Take(5).ToList();
 
             dynamic mymodel = new ExpandoObject();
             mymodel.NewItem = NewItem;
@@ -97,20 +77,27 @@ namespace myG.GameGuild.Controllers
         [Route("News/Detail")]
         public IActionResult Detail()
         {
-            List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status != 0).ToList(); 
+            List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status != 0).OrderByDescending(t => t.CreateTime).ToList(); 
             return View(lstBLogs);
         }
 
         #region http
         [HttpPost]
-        public async Task<JsonResult> getMoreBlog(List<int> listBlog)
+        public async Task<JsonResult> searchPostTrend( string TagName, string txtSearch)
         {
             DalResult result = new DalResult();
             try
             {
-                //List<News> lstBLogs = new List<News>();
-                List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => !listBlog.Contains(t.Id) && t.Status == 1)).ToList();
-               
+                List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime).ToList();
+                if(!string.IsNullOrEmpty(TagName))
+                {
+                    lstBLogs = lstBLogs.Where(t => t.MetaDescription.Contains(TagName)).ToList();
+                }
+                if(!string.IsNullOrEmpty(txtSearch))
+                {
+                    lstBLogs = lstBLogs.Where(t => t.Title.Contains(txtSearch)).ToList();
+                }
+                lstBLogs = lstBLogs.Take(3).ToList();
                 result.Data = lstBLogs;
                 result.IsSuccess = true;
                 return Json(result);
@@ -126,12 +113,96 @@ namespace myG.GameGuild.Controllers
         }
         
         [HttpPost]
-        public async Task<JsonResult> getPostFTag(string TagName)
+        public async Task<JsonResult> getMoreBlogTrend(List<int> listBlog, string TagName, string txtSearch)
         {
             DalResult result = new DalResult();
             try
             {
-                List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1 && t.MetaDescription.Contains(TagName))).ToList();
+                List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => !listBlog.Contains(t.Id) && t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime).ToList();
+                if(!string.IsNullOrEmpty(TagName))
+                {
+                    lstBLogs = lstBLogs.Where(t => t.MetaDescription.Contains(TagName)).ToList();
+                }
+                if(!string.IsNullOrEmpty(txtSearch))
+                {
+                    lstBLogs = lstBLogs.Where(t => t.Title.Contains(txtSearch)).ToList();
+                }
+                if(lstBLogs.Count <=3)
+                {
+                    result.EffectRow = 999;
+                }
+                lstBLogs = lstBLogs.Take(3).ToList();
+
+
+                result.Data = lstBLogs;
+                result.IsSuccess = true;
+                return Json(result);
+
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.ErrorMessage = ex.Message;
+                return Json(result);
+            }
+
+        }
+        [HttpPost]
+        public async Task<JsonResult> getMoreBlogAll(List<int> listBlog, string TagName)
+        {
+            DalResult result = new DalResult();
+            try
+            {
+                List<News> lstBLogs = new List<News>();
+                if (string.IsNullOrEmpty(TagName))
+                {
+                    lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => !listBlog.Contains(t.Id) && t.Status == 1).OrderByDescending(t => t.CreateTime)).Take(3).ToList();
+                }
+                else
+                {
+                    lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => !listBlog.Contains(t.Id) && t.Status == 1 && t.MetaDescription.Contains(TagName)).OrderByDescending(t => t.CreateTime)).Take(3).ToList();
+                }
+                result.Data = lstBLogs;
+                result.IsSuccess = true;
+                return Json(result);
+
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.ErrorMessage = ex.Message;
+                return Json(result);
+            }
+
+        }
+        
+        [HttpPost]
+        public async Task<JsonResult> getPostFTagTrend(string TagName)
+        {
+            DalResult result = new DalResult();
+            try
+            {
+                List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1 && t.MetaDescription.Contains(TagName)).OrderByDescending(t=> t.PageView).OrderByDescending(t => t.CreateTime)).ToList();
+                result.Data = lstBLogs;
+                result.IsSuccess = true;
+                return Json(result);
+
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.ErrorMessage = ex.Message;
+                return Json(result);
+            }
+
+        }
+        [HttpPost]
+        public async Task<JsonResult> getPostFTagAll(string TagName)
+        {
+            DalResult result = new DalResult();
+            try
+            {
+                List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1 && t.MetaDescription.Contains(TagName)).OrderByDescending(t => t.CreateTime)).ToList();
                 result.Data = lstBLogs;
                 result.IsSuccess = true;
                 return Json(result);

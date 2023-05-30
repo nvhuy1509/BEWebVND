@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Activity.Biz;
-using Activity.DAL.Entity;
+using Minxtu.DAL.Entity;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Activity.DAL.Enum;
@@ -26,18 +26,18 @@ namespace myG.GameGuild
 
             _sessionManager = sessionManager;
             _sessionManager.IsPremission = true;
-            if (httpContext.Request.Path.ToString().EndsWith("/") || httpContext.Request.Path.ToString().EndsWith("/Work")  || httpContext.Request.Path.ToString().EndsWith("/News/getPostFTag")  || httpContext.Request.Path.ToString().EndsWith("/News/getMoreBlog") || httpContext.Request.Path.ToString().EndsWith("/News") || httpContext.Request.Path.ToString().EndsWith("/Transparency") || httpContext.Request.Path.ToString().EndsWith("/Contact") || httpContext.Request.Path.ToString().Contains("/News/Post"))
+            if (httpContext.Request.Path.ToString().EndsWith("/") || httpContext.Request.Path.ToString().EndsWith("/Work")  || httpContext.Request.Path.ToString().EndsWith("/News/getPostFTagTrend")  || httpContext.Request.Path.ToString().EndsWith("/News/getPostFTagAll")  || httpContext.Request.Path.ToString().EndsWith("/News/searchPostTrend")  || httpContext.Request.Path.ToString().EndsWith("/News/getMoreBlogTrend") || httpContext.Request.Path.ToString().EndsWith("/News/getMoreBlogAll") || httpContext.Request.Path.ToString().EndsWith("/News") || httpContext.Request.Path.ToString().EndsWith("/Transparency") || httpContext.Request.Path.ToString().EndsWith("/Contact") || httpContext.Request.Path.ToString().Contains("/News/Post"))
             {
-                //if(httpContext.Request.Path.ToString().Contains("/News/Post/"))
-                //{
-                //    var url = httpContext.Request.Path.ToString();
-                //    var Id = int.Parse(url.Substring(url.LastIndexOf("/Post/") + 6));
+                if (httpContext.Request.Path.ToString().Contains("/News/Post/"))
+                {
+                    var url = httpContext.Request.Path.ToString();
+                    var Id = int.Parse(url.Substring(url.LastIndexOf("/Post/") + 6));
 
-                //    News ItemNew = Provider.DataAccessSQLServerService.SelectNewsById(Id);
-                //    ItemNew.PageView += 1;
+                    News ItemNew = Provider.DataAccessSQLServerService.SelectNewsById(Id);
+                    ItemNew.PageView += 1;
 
-                //    Provider.DataAccessSQLServerService.UpdateNews(Id, ItemNew);
-                //}
+                    Provider.DataAccessSQLServerService.UpdateNews(Id, ItemNew);
+                }
                 await _next(httpContext);
             }
             else if (httpContext.Request.Path.ToString().Contains("/Auth"))

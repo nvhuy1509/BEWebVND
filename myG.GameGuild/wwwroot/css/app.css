@@ -210,13 +210,12 @@ header {
 
         header .menu-item {
             padding-bottom: 10px;
-            border-bottom: 1px solid #c4c4c4;
             display: block;
         }
 
             header .menu-item i {
                 font-size: 20px;
-                color: #0095d4;
+                color: #FFB800;
             }
 
             header .menu-item span {
@@ -512,7 +511,7 @@ li {
 }
 
 .back-to-top {
-    background-color: #29b9f2;
+    background-color: #FFB800;
     position: fixed;
     bottom: 60px;
     padding: 8px;
@@ -785,7 +784,9 @@ h3 {
     .blogall-item-btn button:hover {
         background: #303030;
     }
-
+.blogall-item-btn-active {
+    background: #303030 !important;
+}
 .blogall-item-title:hover {
     color: #FFB800;
 }
@@ -814,6 +815,10 @@ h3 {
 
     .blog-desc-top {
         padding: 0px 16px;
+    }
+
+    .blog-all .blogall-btn {
+        padding: 0px 0px 30px 0px;
     }
 
     .blog-search {
@@ -918,7 +923,7 @@ h3 {
 
     .blogall-item-desc {
         font-weight: 500;
-        font-size: 12px;
+        font-size: 16px;
         line-height: 130%;
         color: #8E8E8E;
         display: -webkit-box;
@@ -941,6 +946,12 @@ h3 {
 
     .carousel-item {
         width: 95%;
+        min-height: 445px;
+    }
+
+    .carousel-item a img {
+        width: 292px !important;
+        height: 184px !important;
     }
 
     .carousel-control-next {

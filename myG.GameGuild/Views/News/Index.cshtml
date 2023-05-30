@@ -113,7 +113,7 @@
         </section>
         <section>
           <div  class="blog-search">
-            <input class="blog-insearch" type="search" placeholder="Search">
+            <input class="blog-insearch" id="txtSearch" type="search" placeholder="Search">
             <div class="blog-search-tag">
               <div class="blog-search-txt">Trending Tag: </div>
               <div> 
@@ -121,7 +121,7 @@
                 {
                     @foreach(var obj in lstTag)
                     {
-                             <button id="@obj.Id" class="blog-search-btn" onclick="getPostTag(id)">@obj.TagName</button>       
+                             <button id="@obj.Id" class="blog-search-btn" onclick="getPostTagTrend(id)">@obj.TagName</button>       
                     }
                 }
               </div>
@@ -143,7 +143,7 @@
                             <img src="/images/PC_blog/img-readmore2.svg" alt="">
                             <img src="/images/PC_blog/img-readmore1.svg" alt="">
                           </div>
-                          <a href="/News/Post/@obj.Id">
+                          <a href="/News/Post/@obj.Id" target="_blank">
                             <div class="trending-post">
                               <!-- <div class="col-md-6 col-8 "> -->
                                 <img src="@obj.Thumb" alt="">
@@ -223,22 +223,22 @@
                     }
           </div>
           <div class="trending-btn">
-            <button class="blog-button" onclick="AddBlog()">Read more <i class="fa fa-caret-right"></i></button>
+            <button class="blog-button" id="btnRMTrend" onclick="AddBlogTrend()">Read more <i class="fa fa-caret-right"></i></button>
           </div>
         </section>
         <section class="container blog-all">
           <div class="blogall-title"><img src="/images/PC_blog/icon-arrow.svg" alt=""> All Blog</div>
-          <div class="col-md-10 blogall-list visible-lg">
+          <div class="col-md-10 blogall-list visible-lg" id="listAllBlogPC">
               @if(lstBlogs.Count() > 0 )
                 {
                     @foreach(var obj in lstBlogs)
                     {
-                        <div class="row blogall-item">
+                        <div class="row blogall-item" id="@obj.Id">
                           <div class="col-md-8">
                             <div class="blogall-item-author">
                               <i class="fa fa-caret-right"></i> Tylie Do&Yoo &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> @obj.StrCreateTime
                             </div>
-                            <a href="/News/Post/@obj.Id">
+                            <a href="/News/Post/@obj.Id" target="_blank">
                                 <div class="blogall-item-title">
                                   @obj.Title
                                 </div>
@@ -255,14 +255,14 @@
                                     {
                                         if(item != "")
                                         {
-                                            <button>@item</button> 
+                                            <button id="@obj.Id+@item" onclick="getPostTagAll(id)">@item</button> 
                                         }
                                     }
                                 }
                             </div>
                           </div>
                           <div class="col-md-4">
-                              <a href="/News/Post/@obj.Id">
+                              <a href="/News/Post/@obj.Id" target="_blank">
                                   <img src="@obj.Thumb" alt="">
                               </a>
                             
@@ -343,12 +343,12 @@
            
           </div>
           <div class="blogall-btn visible-lg">
-            <button class="blog-button" onclick="AddBlog()">Read more <i class="fa fa-caret-right"></i></button>
+            <button class="blog-button" onclick="AddBlogAllPC()">Read more <i class="fa fa-caret-right"></i></button>
           </div>
           <div id="demo" class="carousel slide visible-s" data-bs-ride="carousel">
           
             <!-- The slideshow/carousel -->
-            <div class="carousel-inner">
+            <div class="carousel-inner"  id="listAllBlogMobile">
                     @if (lstBlogs.Count() > 0)
                     {
                         var count = 0;
@@ -357,12 +357,12 @@
                             count++;
                             @if(count == 1)
                             {
-                                <div class="carousel-item active">
-                                    <a href="/News/Post/@obj.Id"><img src="@obj.Thumb"  class="d-block w-100"></a>
+                                <div class="carousel-item active"  id="@obj.Id">
+                                    <a href="/News/Post/@obj.Id"  target="_blank"><img src="@obj.Thumb"  class="d-block w-100"></a>
                                     <div class="blogall-item-author">
                                       @obj.StrCreateTime
                                     </div>
-                                    <a href="/News/Post/@obj.Id"><div class="blogall-item-title">
+                                    <a href="/News/Post/@obj.Id"  target="_blank"><div class="blogall-item-title">
                                       @obj.Title
                                     </div></a>
                                     <div  class="blogall-item-desc">
@@ -377,7 +377,7 @@
                                             {
                                                 if(item != "")
                                                 {
-                                                    <button>@item</button> 
+                                                    <button id="@obj.Id+@item" onclick="getPostTagAll(id)">@item</button> 
                                                 }
                                             }
                                         }
@@ -385,12 +385,12 @@
                                 </div>
                             } else
                             {
-                                    <div class="carousel-item">
-                                        <a href="/News/Post/@obj.Id"><img src="@obj.Thumb"  class="d-block w-100"></a>
+                                    <div class="carousel-item"  id="@obj.Id">
+                                        <a href="/News/Post/@obj.Id"  target="_blank"><img src="@obj.Thumb"  class="d-block w-100"></a>
                                         <div class="blogall-item-author">
                                           @obj.StrCreateTime
                                         </div>
-                                        <a href="/News/Post/@obj.Id"><div class="blogall-item-title">
+                                        <a href="/News/Post/@obj.Id"  target="_blank"><div class="blogall-item-title">
                                           @obj.Title
                                         </div></a>
                                         <div  class="blogall-item-desc">
@@ -405,7 +405,7 @@
                                                 {
                                                     if(item != "")
                                                     {
-                                                       <button>@item</button> 
+                                                       <button  id="@obj.Id+@item" onclick="getPostTagAll(id)">@item</button> 
                                                     }
                                                 }
                                             }
@@ -468,12 +468,15 @@
             <!-- Left and right controls/icons -->
             <div class="carousel-control-hr"></div>
 
-            <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev" onclick="onActiveBtnCarou(this)">
               <i class="fas fa-angle-left carousel-control-prev-icon" id="carouPrev"></i>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next" onclick="onActiveBtnCarou(this)">
               <i class="fas fa-angle-right carousel-control-next-icon" id="carouNext"></i>
             </button>
+          </div>
+          <div class="blogall-btn visible-s">
+            <button class="blog-button" onclick="AddBlogAllMobile()">Read more <i class="fa fa-caret-right"></i></button>
           </div>
         </section>
       </main>
@@ -525,24 +528,99 @@
               </li>
             </ul>
             <div div class="footer-bot">© 2023, All Rights Reserved by DONG</div>
+            <a href="#" class="back-to-top">
+              <img src="../images/PC_index/keyboard_double_arrow_up.svg" alt="" />
+            </a>
       </footer>
     </div>
     <script>
+        $(document).keyup(function(event) {
+            if (event.which === 13) {
+                var tagElement = document.getElementsByClassName("blog-search-btn-active");
+                var textInput = document.getElementById("txtSearch").value;
+                var TagName = "";
+                if (tagElement.length > 0) {
+                    for (let i = 0; i < tagElement.length; i++) {
+                        TagName = tagElement[i].textContent;
+                    }
+                }
+                console.log(tagElement);
+                if(textInput != "") {
+                    var param = {
+                        "TagName": TagName,
+                        "txtSearch": textInput
+                    }
+                    console.log(param);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "@Url.Action("searchPostTrend")",
+                        data: param,
+                        async: true,
+                        success: function (data) {
+                            if (data.isSuccess) {
+                                console.log("data", data);
+                                $("#listTrendingBlogs").empty();
+                                var obj = data.data;
+                                var content = "";
+                                for (let i = 0; i < obj.length; i++) {
+                                    let opt = ` <div class="trending-item" id="${obj[i].id}">
+                                                    <div class="readmore" >
+                                                    <img src="/images/PC_blog/img-readmore1.svg" alt="">
+                                                    <img src="/images/PC_blog/img-readmore2.svg" alt="">
+                                                    <img src="/images/PC_blog/img-readmore1.svg" alt="">
+                                                </div>
+                                                <a href="/News/Post/${obj[i].id}">
+                                                    <div class="trending-post">
+                                                     <!-- <div class="col-md-6 col-8 "> -->
+                                                        <img src="${obj[i].thumb}" alt="">
+                                                        <div  class="trending-post-header">${obj[i].title}</div>
+                                                        <div class="trending-post-date">${obj[i].strCreateTime}</div>
+                                                      <!-- </div> -->
+                                                    </div>
+                                                </a>
+                                            `
+                                    $("#listTrendingBlogs").append(opt);
+                                }
+                            }
+                            else {
+                                alert(data.errorMessage);
+                            }
+                        }
+                    });
+                }
+                
+            }
+        });
+
         var IdTag = 0;
-        function AddBlog(){
+        var IdTagAllBlog = "";
+        function AddBlogTrend(){  // onclick button readmore bên dưới trending blog
             var lstBlog = document.querySelectorAll(".trending-item");
+            var tagElement = document.getElementsByClassName("blog-search-btn-active");
+            var textInput = document.getElementById("txtSearch").value;
+            var TagName = "";
             var lstId = [];
+            if (tagElement.length > 0) {
+                for (let i = 0; i < tagElement.length; i++) {
+                    TagName = tagElement[i].textContent;
+                }
+            }
+            console.log(tagElement)
             console.log(lstBlog);
             for (let i = 0; i < lstBlog.length; i++) {
                 lstId.push(lstBlog[i].id);
             }
-            console.log(lstId);
             var param = {
-                "listBlog": lstId
+                "listBlog": lstId,
+                "TagName": TagName,
+                "txtSearch": textInput
             }
+            console.log(param);
+
             $.ajax({
                 type: 'POST',
-                url: "@Url.Action("getMoreBlog")",
+                url: "@Url.Action("getMoreBlogTrend")",
                 data: param,
                 async: true,
                 success: function (data) {
@@ -550,8 +628,9 @@
                         console.log("data", data);
                         var obj = data.data;
                         var content = "";
+                        
                         for (let i = 0; i < obj.length; i++) {
-                            let opt = ` <div class="trending-item">
+                            let opt = ` <div class="trending-item" id="${obj[i].id}">
                                             <div class="readmore" >
                                             <img src="/images/PC_blog/img-readmore1.svg" alt="">
                                             <img src="/images/PC_blog/img-readmore2.svg" alt="">
@@ -568,6 +647,10 @@
                                         </a>
                                     `
                             $("#listTrendingBlogs").append(opt);
+                        }
+                        if (data.effectRow == 999) {
+                            document.getElementById("btnRMTrend").disabled = true;
+                            document.getElementById("btnRMTrend").style.background = "#a19f97";
                         }
                     }
                     else {
@@ -577,56 +660,317 @@
             });
         }
 
-        function getPostTag(Id) {
-            if(IdTag!= 0 && Id != IdTag) {
-                var oldTag = document.getElementById(IdTag);
-                oldTag.classList.remove("blog-search-btn-active");
-            }
-            var element = document.getElementById(Id);
-            element.classList.add("blog-search-btn-active");
-            var tag = element.textContent;
-            var param = {
-                "TagName": tag
-            }
-            console.log(param)
-            $.ajax({
-                type: 'POST',
-                url: "@Url.Action("getPostFTag")",
-                data: param,
-                async: true,
-                success: function (data) {
-                    if (data.isSuccess) {
-                        IdTag = Id;
-                        console.log("data", data);
-                        var obj = data.data;
-                        $("#listTrendingBlogs").empty();
-                        var content = "";
-                        for (let i = 0; i < obj.length; i++) {
-                            let opt = ` <div class="trending-item">
-                                            <div class="readmore" >
-                                            <img src="/images/PC_blog/img-readmore1.svg" alt="">
-                                            <img src="/images/PC_blog/img-readmore2.svg" alt="">
-                                            <img src="/images/PC_blog/img-readmore1.svg" alt="">
-                                        </div>
-                                        <a href="/News/Post/${obj[i].id}">
-                                            <div class="trending-post">
-                                             <!-- <div class="col-md-6 col-8 "> -->
-                                                <img src="${obj[i].thumb}" alt="">
-                                                <div  class="trending-post-header">${obj[i].title}</div>
-                                                <div class="trending-post-date">${obj[i].strCreateTime}</div>
-                                              <!-- </div> -->
-                                            </div>
-                                        </a>
-                                    `
-                            $("#listTrendingBlogs").append(opt);
-                        }
-                    }
-                    else {
-                        alert(data.errorMessage);
+    function AddBlogAllPC(){ // button readmore bên dưới all blog PC
+        var lstBlog = document.querySelectorAll(".blogall-item");
+        var tagElement = document.getElementsByClassName("blogall-item-btn-active");
+        var TagName = "";
+        var lstId = [];
+        if (tagElement.length > 0) {
+            TagName = tagElement[0].textContent;
+        }
+
+        for (let i = 0; i < lstBlog.length; i++) {
+            lstId.push(lstBlog[i].id);
+        }
+        console.log(lstId);
+        var param = {
+            "listBlog": lstId,
+            "TagName": TagName
+        }
+        console.log(param);
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("getMoreBlogAll")",
+            data: param,
+            async: true,
+            success: function (data) {
+                if (data.isSuccess) {
+                    console.log("data", data);
+                    var obj = data.data;
+                    for (let i = 0; i < obj.length; i++) {
+                        let opt = `<div class="row blogall-item" id="${obj[i].id}">
+                            <div class="col-md-8">
+                            <div class="blogall-item-author">
+                                <i class="fa fa-caret-right"></i> Tylie Do&amp;Yoo &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> ${obj[i].strCreateTime}
+                            </div>
+                            <a href="/News/Post/${obj[i].id}" target="_blank">
+                                <div class="blogall-item-title">
+                                    ${obj[i].title}
+                                </div>
+                            </a>
+                            <div class="blogall-item-desc">
+                                ${obj[i].description}
+                            </div>
+                            <div class="blogall-item-btn">`;
+                            var lstTag = JSON.parse(obj[i].metaDescription);
+                                for (let j = 0; j < lstTag.length; j++) {
+                                    if(TagName == lstTag[j]) {
+                                        opt += `<button id="${obj[i].id}+${lstTag[j]}" class="blogall-item-btn-active" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                    } else {
+                                        opt += `<button id="${obj[i].id}+${lstTag[j]}" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                    }
+                                }
+
+                            opt += ` </div>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/News/Post/${obj[i].id}" target="_blank">
+                                    <img src="${obj[i].thumb}" alt="">
+                                </a>
+                            
+                            </div>
+                            <div class="blogall-hr"></div>
+                        </div>
+                    `
+                        $("#listAllBlogPC").append(opt);
                     }
                 }
-            });
+                else {
+                    alert(data.errorMessage);
+                }
+            }
+        });
+    } 
+    
+    function AddBlogAllMobile(){ // button readmore bên dưới trending blog Mobile
+        var lstBlog = document.querySelectorAll(".carousel-item");
+        var tagElement = document.getElementsByClassName("blogall-item-btn-active");
+        var TagName = "";
+        var lstId = [];
+        if (tagElement.length > 0) {
+            TagName = tagElement[0].textContent;
         }
+
+        for (let i = 0; i < lstBlog.length; i++) {
+            lstId.push(lstBlog[i].id);
+        }
+        console.log(lstId);
+        var param = {
+            "listBlog": lstId,
+            "TagName": TagName
+        }
+        console.log(param);
+
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("getMoreBlogAll")",
+            data: param,
+            async: true,
+            success: function (data) {
+                if (data.isSuccess) {
+                    console.log("data", data);
+                    var obj = data.data;
+                    for (let i = 0; i < obj.length; i++) {
+                        let opt = ` <div class="carousel-item"  id="${obj[i].id}">
+                                    <a href="/News/Post/${obj[i].id}"  target="_blank"><img src="${obj[i].thumb}"  class="d-block w-100"></a>
+                                    <div class="blogall-item-author">
+                                        ${obj[i].strCreateTime}
+                                    </div>
+                                    <a href="/News/Post/${obj[i].id}"  target="_blank"><div class="blogall-item-title">
+                                        ${obj[i].title}
+                                    </div></a>
+                                    <div  class="blogall-item-desc">
+                                        ${obj[i].description}
+                                    </div>
+                                    <div  class="blogall-item-btn">`;
+                                         var lstTag = JSON.parse(obj[i].metaDescription);
+                                            for (let j = 0; j < lstTag.length; j++) {
+                                                if(TagName == lstTag[j]) {
+                                                    opt += `<button id="${obj[i].id}+${lstTag[j]}" class="blogall-item-btn-active" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                                } else {
+                                                    opt += `<button id="${obj[i].id}+${lstTag[j]}" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                                }
+                                            }
+
+                                opt += `</div>
+                                        </div>`;
+                        $("#listAllBlogMobile").append(opt);
+                    }
+                }
+                else {
+                    alert(data.errorMessage);
+                }
+            }
+        });
+    }
+
+    function getPostTagTrend(Id) { // onclick trending tag bên cạnh input search
+        if(IdTag!= 0 && Id != IdTag) {
+            var oldTag = document.getElementById(IdTag);
+            oldTag.classList.remove("blog-search-btn-active");
+        }
+        var element = document.getElementById(Id);
+        element.classList.add("blog-search-btn-active");
+        var tag = element.textContent;
+        var param = {
+            "TagName": tag
+        }
+        console.log(param)
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("getPostFTagAll")",
+            data: param,
+            async: true,
+            success: function (data) {
+                if (data.isSuccess) {
+                    IdTag = Id;
+                    console.log("data", data);
+                    var obj = data.data;
+                    $("#listTrendingBlogs").empty();
+                    var content = "";
+                    for (let i = 0; i < obj.length; i++) {
+                        let opt = ` <div class="trending-item" id="${obj[i].id}">
+                                        <div class="readmore" >
+                                        <img src="/images/PC_blog/img-readmore1.svg" alt="">
+                                        <img src="/images/PC_blog/img-readmore2.svg" alt="">
+                                        <img src="/images/PC_blog/img-readmore1.svg" alt="">
+                                    </div>
+                                    <a href="/News/Post/${obj[i].id}">
+                                        <div class="trending-post">
+                                            <!-- <div class="col-md-6 col-8 "> -->
+                                            <img src="${obj[i].thumb}" alt="">
+                                            <div  class="trending-post-header">${obj[i].title}</div>
+                                            <div class="trending-post-date">${obj[i].strCreateTime}</div>
+                                            <!-- </div> -->
+                                        </div>
+                                    </a>
+                                `
+                        $("#listTrendingBlogs").append(opt);
+                    }
+                }
+                else {
+                    alert(data.errorMessage);
+                }
+            }
+        });
+    }
+    
+    function getPostTagAll(Id) { // onclick tag các bài blog hiển thị ở all blog
+        console.log('-------' + Id)
+        var element = document.getElementById(Id);
+        var tag = element.textContent;
+        var param = {
+            "TagName": tag
+        }
+        console.log(param)
+        $.ajax({
+            type: 'POST',
+            url: "@Url.Action("getPostFTagAll")",
+            data: param,
+            async: true,
+            success: function (data) {
+                if (data.isSuccess) {
+                    IdTagAllBlog = Id;
+                    console.log("data", data);
+                    var obj = data.data;
+                    var tagChoosed = Id.substring(Id.indexOf('+') + 1);
+
+                        addPostTagAllPC(obj, tagChoosed);
+                        addPostTagAllMobile(obj, tagChoosed);
+                }
+                else {
+                    alert(data.errorMessage);
+                }
+            }
+        });
+    }
+
+    function addPostTagAllPC(obj, idOld){  // add các bài lấy đc ở PC
+        $("#listAllBlogPC").empty();
+        var content = "";
+        for (let i = 0; i < obj.length; i++) {
+            let opt = `<div class="row blogall-item" id="${obj[i].id}">
+                            <div class="col-md-8">
+                            <div class="blogall-item-author">
+                                <i class="fa fa-caret-right"></i> Tylie Do&amp;Yoo &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> ${obj[i].strCreateTime}
+                            </div>
+                            <a href="/News/Post/${obj[i].id}" target="_blank">
+                                <div class="blogall-item-title">
+                                    ${obj[i].title}
+                                </div>
+                            </a>
+                            <div class="blogall-item-desc">
+                                ${obj[i].description}
+                            </div>
+                            <div class="blogall-item-btn">`;
+                            var lstTag = JSON.parse(obj[i].metaDescription);
+                                for (let j = 0; j < lstTag.length; j++) {
+                                    if(idOld == lstTag[j]) {
+                                        opt += `<button id="${obj[i].id}+${lstTag[j]}" class="blogall-item-btn-active" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                    } else {
+                                        opt += `<button id="${obj[i].id}+${lstTag[j]}" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                    }
+                                }
+
+                            opt += ` </div>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="/News/Post/${obj[i].id}" target="_blank">
+                                    <img src="${obj[i].thumb}" alt="">
+                                </a>
+                            
+                            </div>
+                            <div class="blogall-hr"></div>
+                        </div>
+                    `
+            $("#listAllBlogPC").append(opt);
+        }
+    }
+    function addPostTagAllMobile(obj, idOld){ // add các bài lấy đc ở Mobile
+        $("#listAllBlogMobile").empty();
+        var content = "";
+        let opt = `<div class="carousel-item active"  id="${obj[0].id}">
+                        <a href="/News/Post/${obj[0].id}"  target="_blank"><img src="${obj[0].thumb}"  class="d-block w-100"></a>
+                        <div class="blogall-item-author">
+                            ${obj[0].strCreateTime}
+                        </div>
+                        <a href="/News/Post/${obj[0].id}"  target="_blank"><div class="blogall-item-title">
+                            ${obj[0].title}
+                        </div></a>
+                        <div  class="blogall-item-desc">
+                            ${obj[0].description}
+                        </div>
+                        <div  class="blogall-item-btn">`;
+                             var lstTag = JSON.parse(obj[0].metaDescription);
+                                for (let j = 0; j < lstTag.length; j++) {
+                                    if(idOld == lstTag[j]) {
+                                        opt += `<button id="${obj[0].id}+${lstTag[j]}" class="blogall-item-btn-active" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                    } else {
+                                        opt += `<button id="${obj[0].id}+${lstTag[j]}" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                    }
+                                }
+
+                        opt += `</div>
+                    </div>`;
+        $("#listAllBlogMobile").append(opt);
+        for (let i = 1; i < obj.length; i++) {
+            let opt1 = ` <div class="carousel-item"  id="${obj[i].id}">
+                        <a href="/News/Post/${obj[i].id}"  target="_blank"><img src="${obj[i].thumb}"  class="d-block w-100"></a>
+                        <div class="blogall-item-author">
+                            ${obj[i].strCreateTime}
+                        </div>
+                        <a href="/News/Post/${obj[i].id}"  target="_blank"><div class="blogall-item-title">
+                            ${obj[i].title}
+                        </div></a>
+                        <div  class="blogall-item-desc">
+                            ${obj[i].description}
+                        </div>
+                        <div  class="blogall-item-btn">`;
+                             var lstTag = JSON.parse(obj[i].metaDescription);
+                                for (let j = 0; j < lstTag.length; j++) {
+                                    if(idOld == lstTag[j]) {
+                                        opt1 += `<button id="${obj[i].id}+${lstTag[j]}" class="blogall-item-btn-active" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                    } else {
+                                        opt1 += `<button id="${obj[i].id}+${lstTag[j]}" onclick="getPostTagAll(id)">${lstTag[j]}</button>`;
+                                    }
+                                }
+
+                    opt1 += `</div>
+                            </div>`;
+            $("#listAllBlogMobile").append(opt1);
+        }
+    }
     </script>
     <script
       type="text/javascript"

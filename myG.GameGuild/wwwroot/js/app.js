@@ -1,34 +1,41 @@
 $(document).ready(function () {
-  $(".menu-item-wrapper").each(function (idx, el) {
-    $(this).click(function (e) {
-      if (e.target.matches(".visible-s")) {
-        console.log(e.target);
-        e.target.classList.toggle("active");
-      } else {
-        e.target.querySelector(".visible-s").classList.toggle("active");
-      }
-      $(this).next().slideToggle(200);
+    $(".menu-item-wrapper").each(function (idx, el) {
+        $(this).click(function (e) {
+            if (e.target.matches(".visible-s")) {
+                console.log(e.target);
+                e.target.classList.toggle("active");
+            } else {
+                e.target.querySelector(".visible-s").classList.toggle("active");
+            }
+            $(this).next().slideToggle(200);
+        });
     });
-  });
 });
-
-
-
-const header = document.querySelector(".header-top");
-const backToTop = document.querySelector(".back-to-top");
-window.addEventListener("scroll", (e) => {
-  const srollY = window.pageYOffset;
-  const headerHeight = header.offsetHeight;
-  if (srollY >= headerHeight) {
-    backToTop.classList.add("show");
-  } else {
-    backToTop.classList.remove("show");
-  }
-});
-
 
 const headerBar = document.querySelector(".header-bar img");
 const headerFixed = document.querySelector(".header-fixed");
+headerBar.addEventListener("click", () => {
+    headerFixed.classList.add("show");
+});
+
+const iconCloseHeaderFixed = document.querySelector(".close-header-fixed");
+iconCloseHeaderFixed.addEventListener("click", () => {
+    headerFixed.classList.remove("show");
+});
+
+const header = document.querySelector("header");
+const backToTop = document.querySelector(".back-to-top");
+window.addEventListener("scroll", (e) => {
+    const srollY = window.pageYOffset;
+    const headerHeight = header.offsetHeight;
+    if (srollY >= headerHeight) {
+        backToTop.classList.add("show");
+    } else {
+        backToTop.classList.remove("show");
+    }
+});
+
+
 const menuItem = document.querySelectorAll(".menu-link");
 let logo = document.getElementById("logoHeader");
 let bar = document.getElementById("imgBarHeader");
