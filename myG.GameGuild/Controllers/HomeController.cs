@@ -40,7 +40,7 @@ namespace myG.GameGuild.Controllers
             var urlAp = lstConfig.Where(t => t.Key == "downloadAppStore").Select(t => t.Value).ToList();
             var urlAndr = lstConfig.Where(t => t.Key == "downloadAndroid").Select(t => t.Value).ToList();
 
-            List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).ToList();
+            List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView)).ToList();
 
             dynamic mymodel = new ExpandoObject();
             mymodel.urlFb = urlFb[0];

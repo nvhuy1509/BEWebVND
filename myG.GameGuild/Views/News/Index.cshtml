@@ -3,7 +3,9 @@
 @using Newtonsoft.Json
 @{
     Layout = null;
-    List<News> lstBlogs = Model;
+    List<News> lstBlogs = Model.lstBLogs;
+    List<News> tredingBLogs = Model.tredingBLogs;
+    List<Tag> lstTag = Model.lstTag;
 }
 
 <!DOCTYPE html>
@@ -114,10 +116,14 @@
             <input class="blog-insearch" type="search" placeholder="Search">
             <div class="blog-search-tag">
               <div class="blog-search-txt">Trending Tag: </div>
-              <div  > 
-                <button class="blog-search-btn">Tag01</button>
-                <button class="blog-search-btn">Tag02</button>
-                <button class="blog-search-btn">Tag03</button>
+              <div> 
+                @if(lstTag.Count() > 0 )
+                {
+                    @foreach(var obj in lstTag)
+                    {
+                             <button id="@obj.Id" class="blog-search-btn" onclick="getPostTag(id)">@obj.TagName</button>       
+                    }
+                }
               </div>
               
             </div>
@@ -126,23 +132,23 @@
         </section>
         <section class="container blog-trending">
           <div class="trending-title"><img src="/images/PC_blog/icon-arrow.svg" alt=""> Trending Blog</div>
-          <div>
-                @if(lstBlogs.Count() > 0 )
+          <div id="listTrendingBlogs">
+                @if(tredingBLogs.Count() > 0 )
                 {
-                        @foreach(var obj in lstBlogs)
+                        @foreach(var obj in tredingBLogs)
                     {
-                        <div class="trending-item">
+                        <div class="trending-item" id="@obj.Id">
                           <div class="readmore" >
                             <img src="/images/PC_blog/img-readmore1.svg" alt="">
                             <img src="/images/PC_blog/img-readmore2.svg" alt="">
                             <img src="/images/PC_blog/img-readmore1.svg" alt="">
                           </div>
-                          <a href="News/Post/@obj.Id">
+                          <a href="/News/Post/@obj.Id">
                             <div class="trending-post">
                               <!-- <div class="col-md-6 col-8 "> -->
                                 <img src="@obj.Thumb" alt="">
                                 <div  class="trending-post-header">@obj.Title</div>
-                                <div class="trending-post-date">@obj.CreateTime</div>
+                                <div class="trending-post-date">@obj.StrCreateTime</div>
                               <!-- </div> -->
                             </div>
                           </a>
@@ -217,7 +223,7 @@
                     }
           </div>
           <div class="trending-btn">
-            <button class="blog-button">Read more <i class="fa fa-caret-right"></i></button>
+            <button class="blog-button" onclick="AddBlog()">Read more <i class="fa fa-caret-right"></i></button>
           </div>
         </section>
         <section class="container blog-all">
@@ -225,12 +231,12 @@
           <div class="col-md-10 blogall-list visible-lg">
               @if(lstBlogs.Count() > 0 )
                 {
-                        @foreach(var obj in lstBlogs)
+                    @foreach(var obj in lstBlogs)
                     {
                         <div class="row blogall-item">
                           <div class="col-md-8">
                             <div class="blogall-item-author">
-                              <i class="fa fa-caret-right"></i> Tylie Do&Yoo &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> @obj.CreateTime
+                              <i class="fa fa-caret-right"></i> Tylie Do&Yoo &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> @obj.StrCreateTime
                             </div>
                             <a href="/News/Post/@obj.Id">
                                 <div class="blogall-item-title">
@@ -243,9 +249,9 @@
                             <div  class="blogall-item-btn">
                                 @if (!string.IsNullOrEmpty(obj.MetaDescription))
                                 {
-                                    List<string> lstTag = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
+                                    List<string> lstTagItem = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
                                    
-                                    foreach (var item in lstTag)
+                                    foreach (var item in lstTagItem)
                                     {
                                         if(item != "")
                                         {
@@ -256,7 +262,7 @@
                             </div>
                           </div>
                           <div class="col-md-4">
-                              <a href="News/Post/@obj.Id">
+                              <a href="/News/Post/@obj.Id">
                                   <img src="@obj.Thumb" alt="">
                               </a>
                             
@@ -337,7 +343,7 @@
            
           </div>
           <div class="blogall-btn visible-lg">
-            <button class="blog-button">Read more <i class="fa fa-caret-right"></i></button>
+            <button class="blog-button" onclick="AddBlog()">Read more <i class="fa fa-caret-right"></i></button>
           </div>
           <div id="demo" class="carousel slide visible-s" data-bs-ride="carousel">
           
@@ -354,7 +360,7 @@
                                 <div class="carousel-item active">
                                     <a href="/News/Post/@obj.Id"><img src="@obj.Thumb"  class="d-block w-100"></a>
                                     <div class="blogall-item-author">
-                                      @obj.CreateTime
+                                      @obj.StrCreateTime
                                     </div>
                                     <a href="/News/Post/@obj.Id"><div class="blogall-item-title">
                                       @obj.Title
@@ -365,9 +371,9 @@
                                     <div  class="blogall-item-btn">
                                       @if (!string.IsNullOrEmpty(obj.MetaDescription))
                                         {
-                                            List<string> lstTag = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
+                                            List<string> lstTagItem = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
                                    
-                                            foreach (var item in lstTag)
+                                            foreach (var item in lstTagItem)
                                             {
                                                 if(item != "")
                                                 {
@@ -382,7 +388,7 @@
                                     <div class="carousel-item">
                                         <a href="/News/Post/@obj.Id"><img src="@obj.Thumb"  class="d-block w-100"></a>
                                         <div class="blogall-item-author">
-                                          @obj.CreateTime
+                                          @obj.StrCreateTime
                                         </div>
                                         <a href="/News/Post/@obj.Id"><div class="blogall-item-title">
                                           @obj.Title
@@ -393,9 +399,9 @@
                                         <div  class="blogall-item-btn">
                                           @if (!string.IsNullOrEmpty(obj.MetaDescription))
                                             {
-                                                List<string> lstTag = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
+                                                List<string> lstTagItem = JsonConvert.DeserializeObject<List<string>>(obj.MetaDescription);
                                    
-                                                foreach (var item in lstTag)
+                                                foreach (var item in lstTagItem)
                                                 {
                                                     if(item != "")
                                                     {
@@ -460,11 +466,13 @@
                 </div>
           
             <!-- Left and right controls/icons -->
+            <div class="carousel-control-hr"></div>
+
             <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon"></span>
+              <i class="fas fa-angle-left carousel-control-prev-icon" id="carouPrev"></i>
             </button>
             <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-              <span class="carousel-control-next-icon"></span>
+              <i class="fas fa-angle-right carousel-control-next-icon" id="carouNext"></i>
             </button>
           </div>
         </section>
@@ -519,6 +527,107 @@
             <div div class="footer-bot">© 2023, All Rights Reserved by DONG</div>
       </footer>
     </div>
+    <script>
+        var IdTag = 0;
+        function AddBlog(){
+            var lstBlog = document.querySelectorAll(".trending-item");
+            var lstId = [];
+            console.log(lstBlog);
+            for (let i = 0; i < lstBlog.length; i++) {
+                lstId.push(lstBlog[i].id);
+            }
+            console.log(lstId);
+            var param = {
+                "listBlog": lstId
+            }
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("getMoreBlog")",
+                data: param,
+                async: true,
+                success: function (data) {
+                    if (data.isSuccess) {
+                        console.log("data", data);
+                        var obj = data.data;
+                        var content = "";
+                        for (let i = 0; i < obj.length; i++) {
+                            let opt = ` <div class="trending-item">
+                                            <div class="readmore" >
+                                            <img src="/images/PC_blog/img-readmore1.svg" alt="">
+                                            <img src="/images/PC_blog/img-readmore2.svg" alt="">
+                                            <img src="/images/PC_blog/img-readmore1.svg" alt="">
+                                        </div>
+                                        <a href="/News/Post/${obj[i].id}">
+                                            <div class="trending-post">
+                                             <!-- <div class="col-md-6 col-8 "> -->
+                                                <img src="${obj[i].thumb}" alt="">
+                                                <div  class="trending-post-header">${obj[i].title}</div>
+                                                <div class="trending-post-date">${obj[i].strCreateTime}</div>
+                                              <!-- </div> -->
+                                            </div>
+                                        </a>
+                                    `
+                            $("#listTrendingBlogs").append(opt);
+                        }
+                    }
+                    else {
+                        alert(data.errorMessage);
+                    }
+                }
+            });
+        }
+
+        function getPostTag(Id) {
+            if(IdTag!= 0 && Id != IdTag) {
+                var oldTag = document.getElementById(IdTag);
+                oldTag.classList.remove("blog-search-btn-active");
+            }
+            var element = document.getElementById(Id);
+            element.classList.add("blog-search-btn-active");
+            var tag = element.textContent;
+            var param = {
+                "TagName": tag
+            }
+            console.log(param)
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("getPostFTag")",
+                data: param,
+                async: true,
+                success: function (data) {
+                    if (data.isSuccess) {
+                        IdTag = Id;
+                        console.log("data", data);
+                        var obj = data.data;
+                        $("#listTrendingBlogs").empty();
+                        var content = "";
+                        for (let i = 0; i < obj.length; i++) {
+                            let opt = ` <div class="trending-item">
+                                            <div class="readmore" >
+                                            <img src="/images/PC_blog/img-readmore1.svg" alt="">
+                                            <img src="/images/PC_blog/img-readmore2.svg" alt="">
+                                            <img src="/images/PC_blog/img-readmore1.svg" alt="">
+                                        </div>
+                                        <a href="/News/Post/${obj[i].id}">
+                                            <div class="trending-post">
+                                             <!-- <div class="col-md-6 col-8 "> -->
+                                                <img src="${obj[i].thumb}" alt="">
+                                                <div  class="trending-post-header">${obj[i].title}</div>
+                                                <div class="trending-post-date">${obj[i].strCreateTime}</div>
+                                              <!-- </div> -->
+                                            </div>
+                                        </a>
+                                    `
+                            $("#listTrendingBlogs").append(opt);
+                        }
+                    }
+                    else {
+                        alert(data.errorMessage);
+                    }
+                }
+            });
+        }
+    </script>
     <script
       type="text/javascript"
       src="//code.jquery.com/jquery-1.11.0.min.js"

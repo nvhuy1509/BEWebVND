@@ -3,6 +3,7 @@
 @using System.Globalization;
 @{
     News NewItem = Model.dataItem;
+    List<Tag> lstTagAll = Model.lstTagAll;
     var tagArray =  Model.lstTag;
 }
 
@@ -27,11 +28,11 @@
                     <div class=" row mb-4">
                         <label class="col-md-3 form-label" for="image">Ảnh thumb<span class="text-red">*</span></label>
                         <div class="col-md-9">
-                            <input type="file" id="uploadImage" class="form-control"  accept="image/*">
+                            <input type="file" id="uploadImage" class="form-control" value="@NewItem.Thumb"  accept="image/*">
                         </div>
                     </div>
                     
-                    <div class=" row mb-4" id="divViewImg" style="display: none">
+                    <div class=" row mb-4" id="divViewImg" >
                         <label class="col-md-3 form-label" ></label>
                         <div class="col-md-9">
                             <img id="viewImage" src="@NewItem.Thumb" width="471" height="300" />
@@ -55,7 +56,22 @@
                     <div class=" row mb-4">
                         <label class="col-md-3 form-label" for="description">Tag <span class="text-red">*</span></label>
                         <div class="col-md-9">
-                            <a class="btn btn-primary " onclick="addTag()"><i class="fe fe-plus"></i>Add Tag</a>
+                            <select id="tags" class="form-control select2 select2-hidden-accessible" data-placeholder="Select Tag" multiple="" tabindex="-1" aria-hidden="true">
+                                @if(lstTagAll.Count() > 0 )
+                                {
+                                    @foreach(var obj in lstTagAll)
+                                    {
+                                        @if (tagArray.Contains(@obj.TagName))
+                                        {
+                                            <option value="@obj.TagName" selected> @obj.TagName </option>  
+                                        } else {
+                                            <option value="@obj.TagName" > @obj.TagName </option>  
+                                        }
+                     
+                                    }
+                                }
+                            </select>
+                          @*  <a class="btn btn-primary " onclick="addTag()"><i class="fe fe-plus"></i>Add Tag</a>
                             
                             
                             <div id="divTag" style="display: flex; gap: 10px; padding-top: 5px">
@@ -70,7 +86,7 @@
                                     <input type="text" name="tag[]" class="form-control" value="" placeholder="Điền Tag" required>
                                 }
 
-                            </div>
+                            </div>*@
                         </div>
                     </div>
 
@@ -108,6 +124,10 @@
 
     var urlImage = '@NewItem.Thumb';
     $(document).ready(function() {
+        var nameFileImg = document.getElementById('uploadImage'); 
+        nameFileImg.files.item(0).name = '@NewItem.Thumb';
+
+        
         uploadImage.onchange = evt => {
           const [ file ] = uploadImage.files
 
@@ -181,17 +201,6 @@
         }
     });
 
-    function addTag() {
-            const input_Value = document.createElement('input');
-			input_Value.type = 'text';
-			input_Value.setAttribute("class", "form-control");
-			input_Value.placeholder="Điền Tag" ;
-			input_Value.name = 'tag[]' ; 
-
-            var divTag = document.getElementById('divTag');
-
-            divTag.appendChild(input_Value);
-    }
 
     function saveBlog() {
 
@@ -200,16 +209,7 @@
         var description = document.getElementById("description").value;
         var detailBlog = tinyMCE.get('detailblog').getContent();
         var status = document.getElementById("status").value;
-        var lstTag = [];
-
-        // Lấy tất cả các phần tử input có thuộc tính "name"
-        var inputElements = document.querySelectorAll('input[name="tag[]"]');
-
-        // Lặp qua từng phần tử input và thêm giá trị vào mảng nameValues
-        for (var i = 0; i < inputElements.length; i++) {
-          var value = inputElements[i].value;
-          lstTag.push(value);
-        }
+       var lstTag = $('#tags').val();
           
       
         if (title == "") {

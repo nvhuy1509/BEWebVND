@@ -296,6 +296,7 @@ header {
 footer {
     border-top: 1px solid #4B4B4B;
     text-align: center;
+    background: #111111;
     padding: 24px 0px 40px;
 }
 
@@ -596,6 +597,16 @@ h3 {
     color: #494949;
 }
 
+.blog-search-btn:hover {
+    background: #757575;
+    color: #f5f5f5
+}    
+    
+.blog-search-btn-active {
+    background: #757575;
+    color: #f5f5f5
+}
+
 .blog-search-tag {
     display: flex;
     align-items: center;
@@ -771,6 +782,10 @@ h3 {
     color: #8E8E8E;
 }
 
+    .blogall-item-btn button:hover {
+        background: #303030;
+    }
+
 .blogall-item-title:hover {
     color: #FFB800;
 }
@@ -921,6 +936,7 @@ h3 {
     .carousel-inner {
         padding: 20px 15px;
         width: 90%;
+        margin-left: 13%;
     }
 
     .carousel-item {
@@ -1148,12 +1164,13 @@ h3 {
 
 .work .col-md-5 {
     position: relative;
+    background: url("../images/PC_work/bg-frame.svg") center/cover no-repeat;
+    background-size: contain;
 }
 
 .work .work-border {
     width: 400.59px;
     height: 342.32px;
-    border: 4px dashed #F5DDA0;
     opacity: 0.6;
     border-radius: 13px;
 }

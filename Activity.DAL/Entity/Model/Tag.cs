@@ -35,9 +35,9 @@
             set { _count = value; }
         }
 
-        private byte _status;
+        private int _status;
 
-        public byte Status
+        public int Status
         {
             get { return _status; }
             set { _status = value; }

@@ -5,6 +5,7 @@
 @{
     News Blogs = Model.NewItem;
     List<News> lstBlog = Model.lstBLogs;
+    var txtDate = Model.DateCreated;
     Layout = null;
 }
 
@@ -105,8 +106,25 @@
         </div>
       </header>
       <main>
-        <section class="container" style="padding: 40px 20px">
-             @Html.Raw(Blogs.MainContent)
+       
+        <section class="container row justify-content-center" style="padding: 40px 20px; color: rgb(236, 240, 241);">
+             <div class="detail-trending-title col-md-8 col-10" style="text-align: center;">
+                @Blogs.Title
+            </div>
+            <div class="col-md-8 col-10 detailblog" style="padding: 0px 0px 7px 10px">
+                <div class="detailblog-author">
+                    <div >
+                      <span><i class="fa fa-caret-right"></i>&nbsp;&nbsp;Tylie Do&Yoo</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span><i class="fa fa-caret-right"></i>&nbsp;&nbsp;@txtDate</span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-center col-md-8 col-10" style="padding-bottom: 50px">
+                <img src="@Blogs.Thumb" alt="" />
+            </div>
+            <div class="col-md-8 col-10">
+                @Html.Raw(Blogs.MainContent)
+            </div>
+             
         </section>
         <section class="detail-trending">
           <div class="detail-trending-title"><img src="/images/PC_blog/icon-arrow.svg" alt=""> Trending Blogs</div>
@@ -195,7 +213,6 @@
             </div>
               
             <div id="demo" class="carousel slide visible-s" data-bs-ride="carousel">
-          
                 <!-- The slideshow/carousel -->
                 <div class="carousel-inner">
                     @if (lstBlog.Count() > 0)
@@ -310,13 +327,14 @@
                         </div>
                     }
                 </div>
-                <div class="carousel-control-hr"></div>
                 <!-- Left and right controls/icons -->
+                <div class="carousel-control-hr"></div>
+
                 <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon"></span>
+                  <i class="fas fa-angle-left carousel-control-prev-icon" id="carouPrev"></i>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-                  <span class="carousel-control-next-icon"></span>
+                  <i class="fas fa-angle-right carousel-control-next-icon" id="carouNext"></i>
                 </button>
             </div>
             <div class="btn-readmore">

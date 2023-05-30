@@ -88,8 +88,13 @@
         arrow4.classList.add('work-arrow-left');
       }
 
-      setInterval(myFunction, 8000);
-      setInterval(myFunctionRestart, 10000);
+     if (window.innerWidth > 768) {
+        console.log('màn hình to')
+        setInterval(myFunction, 8000);
+        setInterval(myFunctionRestart, 10000);
+      } else {
+        console.log('màn hình điện thoại')
+      }
     </script>
   </head>
   <body>

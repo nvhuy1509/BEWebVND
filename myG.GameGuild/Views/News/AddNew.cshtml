@@ -1,8 +1,9 @@
 ﻿
 @using Activity.DAL.Entity;
 @using System.Globalization;
+@using Minxtu.DAL.Entity
 @{
-    
+    List<Tag> lstTag = Model;
 }
  <script src="/lib/tinymce/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
@@ -51,12 +52,15 @@
                     <div class=" row mb-4">
                         <label class="col-md-3 form-label" for="description">Tag <span class="text-red">*</span></label>
                         <div class="col-md-9">
-                            <a class="btn btn-primary " onclick="addTag()"><i class="fe fe-plus"></i>Add Tag</a>
-                            
-                            
-                            <div id="divTag" style="display: flex; gap: 10px; padding-top: 5px">
-                                <input type="text" name="tag[]" class="form-control" placeholder="Điền Tag" required>
-                            </div>
+                            <select id="tags" class="form-control select2 select2-hidden-accessible" data-placeholder="Select Tag" multiple="" tabindex="-1" aria-hidden="true">
+                                @if(lstTag.Count() > 0 )
+                                {
+                                    @foreach(var obj in lstTag)
+                                    {
+                                        <option value="@obj.TagName" > @obj.TagName </option>   
+                                    }
+                                }
+                            </select>
                         </div>
                     </div>
 
@@ -160,18 +164,6 @@
         }
     });
 
-    function addTag() {
-            const input_Value = document.createElement('input');
-			input_Value.type = 'text';
-			input_Value.setAttribute("class", "form-control");
-			input_Value.placeholder="Điền Tag" ;
-			input_Value.name = 'tag[]' ; 
-
-            var divTag = document.getElementById('divTag');
-
-            divTag.appendChild(input_Value);
-    }
-
     function saveBlog() {
         
         var title = document.getElementById("title").value;
@@ -179,17 +171,10 @@
         var description = document.getElementById("description").value;
         var detailBlog = tinyMCE.get('detailblog').getContent();
         var status = document.getElementById("status").value;
-        var lstTag = [];
+        var lstTag = $('#tags').val();
 
-        // Lấy tất cả các phần tử input có thuộc tính "name"
-        var inputElements = document.querySelectorAll('input[name="tag[]"]');
+        console.log(lstTag);
 
-        // Lặp qua từng phần tử input và thêm giá trị vào mảng nameValues
-        for (var i = 0; i < inputElements.length; i++) {
-          var value = inputElements[i].value;
-          lstTag.push(value);
-        }
-          
       
         if (title == "") {
             alert('Bạn cần điền thông tin title');

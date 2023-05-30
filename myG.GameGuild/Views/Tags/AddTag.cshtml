@@ -1,0 +1,88 @@
+﻿
+@using Activity.DAL.Entity;
+@using System.Globalization;
+@{
+    
+}
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Thêm mới Tag</h4>
+            </div>
+            <div class="card-body">
+                <form class=" needs-validation" novalidate>
+                                        
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="name">TagName <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="name" class="form-control" placeholder="Điền TagName" >
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <label class="col-md-3 form-label" for="status"> Trạng thái</label>
+                        <div class="col-md-9">
+                            <select id="status" class="form-control  form-select"  >
+                                <option value="1" selected> Hiện </option>
+                                <option value="3"> Ẩn </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary" onclick="saveConfig()">Tạo</a>
+                    <a class="btn btn-danger" href="@Url.Action("Index")">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="file-upload" accept=".jpg, .png" style="display:none;">
+
+<script>
+
+    function saveConfig() {
+
+        var name = document.getElementById("name").value;
+        var status = document.getElementById("status").value;
+
+        if (name == "") {
+            alert('Bạn cần điền thông tin name');
+        }
+        else {
+            var param = {
+                "TagName": name,
+                "Status": status,
+            }
+
+            console.log(param);
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Add")",
+                data: param,
+                async: true,
+                success: function (data) {
+                    console.log("data", data)
+                    if (data.isSuccess) {
+                        alert('Thêm mới thành công');
+                        location.href = '@Url.Action("Index")';
+                    }
+                    else {
+                        notifyError(data.errorMessage);
+                    }
+                }
+            });
+        }
+       
+    }
+
+
+
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />

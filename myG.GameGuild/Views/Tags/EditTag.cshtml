@@ -1,0 +1,88 @@
+﻿
+@using Minxtu.DAL.Entity;
+@using System.Globalization;
+@{
+    Config item = Model;
+}
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Chỉnh sửa Config</h4>
+            </div>
+            <div class="card-body">
+                <form class=" needs-validation" novalidate>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="key">Key <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="key" class="form-control" value="@item.Key" placeholder="Điền Key"  disabled>
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="value">Value <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="value" class="form-control" value="@item.Value" placeholder="Điền value" >
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary" onclick="saveBlog()">Lưu</a>
+                    <a class="btn btn-danger" href="@Url.Action("Index")">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="file-upload" accept=".jpg, .png" style="display:none;">
+
+<script>
+
+    function saveBlog() {
+
+        var key = document.getElementById("key").value;
+        var value = document.getElementById("value").value;
+
+        if (key == "") {
+            alert('Bạn cần điền thông tin key');
+        }
+        else if (value == "") {
+            alert('Bạn cần điền thông tin value');
+        }
+        else {
+            var param = {
+                "Key": key,
+                "Value": value,
+            }
+
+            console.log(param);
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Update")",
+                data: param,
+                async: true,
+                success: function (data) {
+                    console.log("data", data)
+                    if (data.isSuccess) {
+                        alert('Chỉnh sửa thành công');
+                        location.href = '@Url.Action("Index")';
+                    }
+                    else {
+                        notifyError(data.errorMessage);
+                    }
+                }
+            });
+        }
+       
+    }
+
+
+
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />

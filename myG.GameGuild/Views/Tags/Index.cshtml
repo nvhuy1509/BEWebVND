@@ -1,0 +1,102 @@
+﻿
+@using Minxtu.DAL.Entity;
+@using Activity.DAL.Enum;
+@{
+    List<Tag> lstData = Model;
+    ViewData["Title"] = "Danh sách Tag";
+}
+
+<!-- Row -->
+<div class="row row-sm">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"] </h3>
+                <div class="card-options">
+                    <a class="btn btn-primary " href="@Url.Action("AddTag")"><i class="fe fe-plus"></i> Thêm mới</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p border-bottom-0">STT</th>
+                                <th class="wd-15p border-bottom-0">TagName</th>
+                                <th class="wd-15p border-bottom-0">Trạng thái</th>
+                                <th class="wd-0p wd-center border-bottom-0">Tính năng</th>
+                            </tr>
+                        </thead>
+                        @if (lstData.Count > 0)
+                        {
+                            var stt = 0;
+                            <tbody>
+                                @foreach (var obj in lstData)
+                                    {
+                                    stt++;
+                                    <tr>
+                                            <td>@stt</td>
+                                            <td>@obj.TagName</td>
+                                            @if (obj.Status == 1)
+                                            {
+                                                <td><span class="tag tag-blue"> Hiển thị </span></td>
+                                            }
+                                            @if (obj.Status == 3)
+                                            {
+                                                <td><span class="tag tag-cyan">Ẩn</span></td>
+                                            }
+                                            <td>
+                                                <a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Chỉnh sửa" href="@Url.Action("EditTag", new {Id=obj.Id })" class="btn btn-icon  btn-success"><i class="fe fe-edit"></i></a>
+                                                <a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Xóa" onclick="onDelete(@obj.Id)" class="btn btn-icon btn-danger"><i class="fe fe-trash"></i></a>
+                                            </td>
+                                        </tr>
+
+                                    }
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/del.js"></script>
+<script>
+    function onDelete(Id) {
+        swal({
+            title: " ",
+            text: "Bạn có chắc chắn muốn xóa Tag này?",
+            showCancelButton: true,
+            confirmButtonText: "Xóa",
+            cancelButtonText:"Hủy"
+        });
+         document.querySelectorAll('.confirm').forEach(item => {
+            item.addEventListener('click', event => {
+                var param = {
+                    'Id': Id,
+                }
+                console.log("param", param)
+                $.ajax({
+                    type: 'POST',
+                    url: "@Url.Action("Del")",
+                    data: param,
+                    async: true,
+                    success: function (data) {
+                        console.log("data", data)
+                        if (data.isSuccess) {
+                            alert('Đã xóa thành công');
+                            window.location.reload();
+                        }
+                        else {
+                            notifyError(data.errorMessage);
+                        }
+                    }
+
+                });
+            })
+        })
+    }
+</script>
+<script>//var t = document.getElementById("demo").innerHTML;</script>
+<!-- End Row -->
