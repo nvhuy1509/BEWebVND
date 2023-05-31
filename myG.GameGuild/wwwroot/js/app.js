@@ -87,22 +87,27 @@ function onActiveBtnCarou(element) {
 //scroll-view-display
 
 function reveal() {
-  var reveals = document.querySelectorAll(".reveal");
+    var reveals = document.querySelectorAll(".reveal");
 
-  for (var i = 0; i < reveals.length; i++) {
-    var windowHeight = window.innerHeight;
-    var elementTop = reveals[i].getBoundingClientRect().top;
-    var elementVisible = 150;
-
-    if (elementTop < windowHeight - elementVisible) {
-      reveals[i].classList.add("active");
-      // window.addEventListener("scroll", animateValue(obj1, 0, 125, 2000));
-      // window.addEventListener("scroll", animateValue(obj2, 0, 20, 1000));
-      // window.addEventListener("scroll", animateValue(obj3, 0, 20, 1000));
-    } else {
-      reveals[i].classList.remove("active");
+    for (var i = 0; i < reveals.length; i++) {
+        var windowHeight = window.innerHeight;
+        var elementTop = reveals[i].getBoundingClientRect().top;
+        var elementVisible = 150;
+        if (window.innerWidth <= 768) {
+            if (elementTop < windowHeight - elementVisible) {
+                reveals[i].classList.add("active");
+                reveals[i].classList.add("infor-item-active");
+                console.log(reveals[i])
+                //window.addEventListener("scroll", animateValue(obj1, 0, 125, 2000));
+                //window.addEventListener("scroll", animateValue(obj2, 0, 20, 1000));
+                //window.addEventListener("scroll", animateValue(obj3, 0, 20, 1000));
+            } else {
+                reveals[i].classList.remove("active");
+                reveals[i].classList.remove("infor-item-active");
+            }
+        }
     }
-  }
 }
 
 window.addEventListener("scroll", reveal);
+

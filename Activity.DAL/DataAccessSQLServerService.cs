@@ -721,6 +721,7 @@ new SqlParameter("@Id", id),
                                      new SqlParameter("@UpdateTime", obj.UpdateTime),
                                      new SqlParameter("@DisplayNo", obj.DisplayNo),
                                      new SqlParameter("@Status", obj.Status),
+                                     new SqlParameter("@Author", obj.Author),
                                      //new SqlParameter("@Url", obj.Url),
                                  };
             var p = parameters[0];
@@ -753,6 +754,7 @@ new SqlParameter("@Id", id),
                                         new SqlParameter("@UpdateTime", obj.UpdateTime),
                                         new SqlParameter("@DisplayNo", obj.DisplayNo),
                                         new SqlParameter("@Status", obj.Status),
+                                        new SqlParameter("@Author", obj.Author),
                                         //new SqlParameter("@Url", obj.Url),
                                     };
             db.ExecuteScalarSP(spName, objParamArray);

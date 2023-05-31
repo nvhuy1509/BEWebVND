@@ -114,7 +114,7 @@
             <div class="col-md-8 col-10 detailblog" style="padding: 0px 0px 7px 10px">
                 <div class="detailblog-author">
                     <div >
-                      <span><i class="fa fa-caret-right"></i>&nbsp;&nbsp;Tylie Do&Yoo</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span><i class="fa fa-caret-right"></i>&nbsp;&nbsp;@txtDate</span>
+                      <span><i class="fa fa-caret-right"></i>&nbsp;&nbsp;@Blogs.Author</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span><i class="fa fa-caret-right"></i>&nbsp;&nbsp;@txtDate</span>
                     </div>
                 </div>
             </div>
@@ -136,7 +136,7 @@
                     {
                          <div>
                             <a href="/News/Post/@obj.Id"><img src="@obj.Thumb" alt=""></a>
-                            <div class="slide-date">@obj.CreateTime</div>
+                            <div class="slide-date">@obj.StrCreateTime</div>
                             <a href="/News/Post/@obj.Id"><div class="slide-title">@obj.Title</div></a>
                             <div class="slide-desc">@obj.Description
                             </div>

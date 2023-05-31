@@ -8,7 +8,7 @@ html {
 
 @font-face {
     font-family: 'Integral CF';
-    src: url('/fonts/IntegralCF/Fontspring-DEMO-integralcf-bold.otf') format('truetype'); /* Đường dẫn tới tệp font */
+    src: url('/fonts/IntegralCF/IntegralCF-ExtraBold.woff2') format('woff2'); /* Đường dẫn tới tệp font */
     /* Nếu bạn có các định dạng tệp font khác, hãy thêm chúng vào đây */
 }
 
@@ -23,11 +23,16 @@ html {
 header {
     padding: 20px 60px 0px 60px;
 }
+    header .logo img {
+        width: 60px;
+        max-width: unset
+    }
 
     header .header-top {
         display: flex;
         align-items: center;
-        justify-content: space-around;
+        justify-content: center;
+        gap: 250px;
         background-color: transparent;
         width: 100%;
         z-index: 99;
@@ -629,7 +634,45 @@ h3 {
     font-size: 16px;
     line-height: 120%;
     color: #494949;
+    display: inline-block;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
 }
+
+    .blog-button:after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #FFB800;
+        border-radius: 10rem;
+        z-index: -2;
+    }
+
+    .blog-button:before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0%;
+        height: 100%;
+        background-color: #b38100;
+        transition: all 0.3s;
+        border-radius: 40px 0px 40px 40px;
+        z-index: -1;
+    }
+
+    .blog-button:hover {
+        color: #494949;
+    }
+
+        .blog-button:hover:before {
+            width: 100%;
+        }
 
 .blog-trending .trending-title {
     display: flex;
@@ -731,14 +774,19 @@ h3 {
     align-items: center;
 }
 
-.blogall-item-author {
-    font-family: "Inter";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 120%;
-    color: #8E8E8E;
-}
+    .blogall-item img:hover {
+        border: 1px solid #FFB800;
+        border-radius: 10px;
+    }
+
+    .blogall-item-author {
+        font-family: "Inter";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 120%;
+        color: #8E8E8E;
+    }
 
     .blogall-item-author i {
         color: #FFB800;
@@ -1480,8 +1528,12 @@ h3 {
         color: #BFBFBF;
     }
 
-    .detail-trending .main .slide-title:hover {
+    .detail-trending .main .slick-slide:hover .slide-title {
         color: #FFB800;
+    }
+
+    .detail-trending .main .slick-slide:hover img {
+        border: 1px solid #FFB800;
     }
 
     .detail-trending .main .slide-desc {
@@ -1909,6 +1961,92 @@ h3 {
         left: 42%;
     }
 
+@media screen and (max-width: 768px) {
+    .information .infor-item-image .icon-libra {
+        position: absolute;
+        left: 80%;
+        bottom: 65%;
+        z-index: 3;
+    }
+
+    .information .infor-item-image .icon-circle {
+        position: absolute;
+        right: 94.7%;
+        bottom: 75%;
+    }
+
+    .information .infor-item-image .icon-triangle {
+        position: absolute;
+        bottom: 5%;
+        left: 94%;
+    }
+
+    .information .infor-item-image .icon-11 {
+        z-index: 3;
+        position: absolute;
+        bottom: 70%;
+        left: 74%;
+    }
+
+    .information .infor-item-image .icon-circle2 {
+        position: absolute;
+        right: 95%;
+        top: 76%;
+    }
+
+    .information .infor-item-image .icon-paint1 {
+        position: absolute;
+        bottom: -17%;
+        left: 71%;
+    }
+
+    .information .infor-item-image .icon-smallCircle {
+        position: absolute;
+        left: -9%;
+        top: 57%;
+    }
+
+    .information .infor-item-image .icon-circleback {
+        z-index: 3;
+        position: absolute;
+        bottom: 77%;
+        left: 80%;
+    }
+
+    .information .infor-item-image .icon-circleItem3 {
+        position: absolute;
+        right: 95%;
+        top: -2%;
+    }
+
+    .information .infor-item-image .icon-double {
+        position: absolute;
+        bottom: -10%;
+        left: 15%;
+    }
+
+    .information .infor-item-image .icon-smallCircleItem3 {
+        position: absolute;
+        left: 7%;
+        top: -11%;
+    }
+
+    .information .infor-item-image .icon-circlecheck {
+        z-index: 3;
+        position: absolute;
+        bottom: 70%;
+        left: 76%;
+    }
+
+    .information .infor-item-image .icon-paint1Item4 {
+        position: absolute;
+        bottom: -18%;
+        left: 10%;
+    }
+
+
+}
+
 .information .infor-box:nth-child(odd) {
     justify-content: flex-end;
     display: flex;
@@ -1926,9 +2064,19 @@ h3 {
     /* Note: backdrop-filter has minimal browser support */
 }
 
+.infor-item-active {
+    animation: showBorder 1s ease-in-out forwards;
+    box-shadow: 4px 4px 16px rgba(255, 184, 0, 0.2);
+    /* Note: backdrop-filter has minimal browser support */
+}
+
     .infor-item:hover .infor-item-desc {
         color: #BFBFBF;
     }
+
+.infor-item-active .infor-item-desc {
+    color: #BFBFBF;
+}
 
     .infor-item:hover .infor-item-image {
         animation: showItemImg 1s ease-in-out forwards;
@@ -1949,105 +2097,138 @@ h3 {
     .infor-item:hover .infor-item-image .icon-circlecheck {
         animation: showItem4 1.4s ease-in-out forwards;
     }
-
-
-
-.infor-item-image::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    border-radius: 15px;
-    height: 100%;
-    background-color: rgba(73, 73, 73, 0.2);
-    backdrop-filter: blur(5px);
-    z-index: 2; /* Đặt z-index cao hơn so với ảnh */
-}
-
-@keyframes showBorder {
-    from {
-        border: 0.2px solid transparent;
-        ; /* Start font-size at 0 */
+    
+    
+    .infor-item-active .infor-item-image {
+        animation: showItemImg 1s ease-in-out forwards;
     }
 
-    to {
-        border: 0.2px solid #FFB800; /* End font-size at 16 */
+    .infor-item-active .infor-item-image .icon-libra {
+        animation: showItem1 1.4s ease-in-out forwards;
     }
-}
 
-@keyframes showItemImg {
-    from {
+    .infor-item-active .infor-item-image .icon-11 {
+        animation: showItem2 1.4s ease-in-out forwards;
+    }
+
+    .infor-item-active .infor-item-image .icon-circleback {
+        animation: showItem3 1.4s ease-in-out forwards;
+    }
+
+    .infor-item-active .infor-item-image .icon-circlecheck {
+        animation: showItem4 1.4s ease-in-out forwards;
+    }
+
+@media screen and (max-width: 768px) {
+    .reveal {
+        position: relative;
+        transform: translateY(150px);
         opacity: 0;
-        ; /* Start font-size at 0 */
+        transition: 1s all ease;
     }
 
-    to {
-        opacity: 1; /* End font-size at 16 */
-    }
+        .reveal.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
 }
 
-
-@keyframes showItem1 {
-    from {
-        width: 50px; /* Start font-size at 0 */
+    .infor-item-image::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        border-radius: 15px;
+        height: 100%;
+        background-color: rgba(73, 73, 73, 0.2);
+        backdrop-filter: blur(5px);
+        z-index: 2; /* Đặt z-index cao hơn so với ảnh */
     }
 
-    to {
-        width: 110px; /* End font-size at 16 */
-    }
-}
+    @keyframes showBorder {
+        from {
+            border: 0.2px solid transparent;
+            ; /* Start font-size at 0 */
+        }
 
-@keyframes showElement {
-    from {
-        opacity: 1; /* Start font-size at 0 */
-    }
-
-    to {
-        opacity: 0; /* End font-size at 16 */
-    }
-}
-
-@keyframes showItem2 {
-    0% {
-        width: 80px;
-        height: 70px;
-        transform: rotate(240deg);
+        to {
+            border: 0.2px solid #FFB800; /* End font-size at 16 */
+        }
     }
 
-    100% {
-        width: 130px;
-        height: 121px;
-        transform: rotate(360deg);
-    }
-}
+    @keyframes showItemImg {
+        from {
+            opacity: 0;
+            ; /* Start font-size at 0 */
+        }
 
-@keyframes showItem3 {
-    0% {
-        width: 0px;
-        height: 0px;
-        transform: rotate(200deg);
+        to {
+            opacity: 1; /* End font-size at 16 */
+        }
     }
 
-    100% {
-        width: 135px;
-        height: 136px;
-        transform: rotate(360deg);
-    }
-}
 
-@keyframes showItem4 {
-    0% {
-        width: 0px;
-        height: 0px;
-        transform: rotate(200deg);
+    @keyframes showItem1 {
+        from {
+            width: 50px; /* Start font-size at 0 */
+        }
+
+        to {
+            width: 110px; /* End font-size at 16 */
+        }
     }
 
-    100% {
-        width: 107px;
-        height: 136px;
-        transform: rotate(360deg);
-    }
-}
+    @keyframes showElement {
+        from {
+            opacity: 1; /* Start font-size at 0 */
+        }
 
-/*# sourceMappingURL=app.css.map */
+        to {
+            opacity: 0; /* End font-size at 16 */
+        }
+    }
+
+    @keyframes showItem2 {
+        0% {
+            width: 80px;
+            height: 70px;
+            transform: rotate(240deg);
+        }
+
+        100% {
+            width: 130px;
+            height: 121px;
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes showItem3 {
+        0% {
+            width: 0px;
+            height: 0px;
+            transform: rotate(200deg);
+        }
+
+        100% {
+            width: 135px;
+            height: 136px;
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes showItem4 {
+        0% {
+            width: 0px;
+            height: 0px;
+            transform: rotate(200deg);
+        }
+
+        100% {
+            width: 107px;
+            height: 136px;
+            transform: rotate(360deg);
+        }
+    }
+
+    /*# sourceMappingURL=app.css.map */

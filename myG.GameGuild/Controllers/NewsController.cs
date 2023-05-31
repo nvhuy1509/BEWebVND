@@ -95,7 +95,7 @@ namespace myG.GameGuild.Controllers
                 }
                 if(!string.IsNullOrEmpty(txtSearch))
                 {
-                    lstBLogs = lstBLogs.Where(t => t.Title.Contains(txtSearch)).ToList();
+                    lstBLogs = lstBLogs.Where(t => t.Title.ToLower().Contains(txtSearch.ToLower())).ToList();
                 }
                 lstBLogs = lstBLogs.Take(3).ToList();
                 result.Data = lstBLogs;
@@ -217,7 +217,7 @@ namespace myG.GameGuild.Controllers
 
         }
         [HttpPost]
-        public async Task<JsonResult> Add(string Title, string Thumb, string Description, string Content, string MetaDescription, int Status)
+        public async Task<JsonResult> Add(string Title, string Thumb, string Description, string Content, string MetaDescription, int Status, string Author)
         {
             DalResult result = new DalResult();
             try
@@ -236,6 +236,7 @@ namespace myG.GameGuild.Controllers
                     UpdateTime = DateTime.Now,
                     DisplayNo = int.Parse(_sessionManager.AccountId), //Id người tạo để lấy author
                     Status = Status, // status == 1 : active
+                    Author = Author 
                 };
 
                 Provider.DataAccessSQLServerService.InsertNews(newBlog);
@@ -263,7 +264,7 @@ namespace myG.GameGuild.Controllers
 
         }
         [HttpPost]
-        public async Task<JsonResult> Update(string Id, string Title, string Thumb, string Description, string Content, string MetaDescription, int Status)
+        public async Task<JsonResult> Update(string Id, string Title, string Thumb, string Description, string Content, string MetaDescription, int Status, string Author)
         {
             DalResult result = new DalResult();
             try
@@ -275,6 +276,7 @@ namespace myG.GameGuild.Controllers
                 item.MainContent = Content.Replace("<img src=\"..", "<img src=\"");
                 item.MetaDescription = MetaDescription;
                 item.Status = Status;
+                item.Author = Author;
 
 
                 Provider.DataAccessSQLServerService.UpdateNews(Convert.ToInt64(Id), item);

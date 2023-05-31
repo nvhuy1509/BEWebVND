@@ -56,6 +56,12 @@ namespace Minxtu.DAL.Entity
             get { return _metaDescription; }
             set { _metaDescription = value; }
         }
+        private string _author = string.Empty;
+        public string Author
+        {
+            get { return _author; }
+            set { _author = value; }
+        }
 
         private string _thumb = string.Empty;
 

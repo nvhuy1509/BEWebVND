@@ -52,7 +52,12 @@
                             <input type="text" id="description" value="@NewItem.Description" class="form-control" placeholder="Điền mô tả" required>
                         </div>
                     </div>
-
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="author">Author <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="author" class="form-control" placeholder="Điền tên tác giả" value="@NewItem.Author" required>
+                        </div>
+                    </div>
                     <div class=" row mb-4">
                         <label class="col-md-3 form-label" for="description">Tag <span class="text-red">*</span></label>
                         <div class="col-md-9">
@@ -205,6 +210,7 @@
     function saveBlog() {
 
          var title = document.getElementById("title").value;
+         var author = document.getElementById("author").value;
         var thumb = urlImage;
         var description = document.getElementById("description").value;
         var detailBlog = tinyMCE.get('detailblog').getContent();
@@ -221,6 +227,9 @@
         else if (urlImage == "") {
             alert('Bạn cần tải lên ảnh');
         }
+        else if (author == "") {
+            alert('Bạn cần điền tên tác giả');
+        }
         else if (detailBlog == "") {
             alert('Bạn cần điền thông tin chi tiết bài viết');
         }
@@ -231,6 +240,7 @@
                 "Title": title,
                 "Description": description,
                 "Content": detailBlog,
+                "Author": author,
                 "Status": status,
                 "MetaDescription": JSON.stringify(lstTag),
             }

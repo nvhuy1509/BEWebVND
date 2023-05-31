@@ -236,7 +236,7 @@
                         <div class="row blogall-item" id="@obj.Id">
                           <div class="col-md-8">
                             <div class="blogall-item-author">
-                              <i class="fa fa-caret-right"></i> Tylie Do&Yoo &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> @obj.StrCreateTime
+                              <i class="fa fa-caret-right"></i> @obj.Author &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> @obj.StrCreateTime
                             </div>
                             <a href="/News/Post/@obj.Id" target="_blank">
                                 <div class="blogall-item-title">
@@ -570,7 +570,7 @@
                                                     <img src="/images/PC_blog/img-readmore2.svg" alt="">
                                                     <img src="/images/PC_blog/img-readmore1.svg" alt="">
                                                 </div>
-                                                <a href="/News/Post/${obj[i].id}">
+                                                <a href="/News/Post/${obj[i].id}"  target="_blank">
                                                     <div class="trending-post">
                                                      <!-- <div class="col-md-6 col-8 "> -->
                                                         <img src="${obj[i].thumb}" alt="">
@@ -636,7 +636,7 @@
                                             <img src="/images/PC_blog/img-readmore2.svg" alt="">
                                             <img src="/images/PC_blog/img-readmore1.svg" alt="">
                                         </div>
-                                        <a href="/News/Post/${obj[i].id}">
+                                        <a href="/News/Post/${obj[i].id}"  target="_blank">
                                             <div class="trending-post">
                                              <!-- <div class="col-md-6 col-8 "> -->
                                                 <img src="${obj[i].thumb}" alt="">
@@ -649,8 +649,7 @@
                             $("#listTrendingBlogs").append(opt);
                         }
                         if (data.effectRow == 999) {
-                            document.getElementById("btnRMTrend").disabled = true;
-                            document.getElementById("btnRMTrend").style.background = "#a19f97";
+                            document.getElementById("btnRMTrend").style.display = 'none';
                         }
                     }
                     else {
@@ -692,7 +691,7 @@
                         let opt = `<div class="row blogall-item" id="${obj[i].id}">
                             <div class="col-md-8">
                             <div class="blogall-item-author">
-                                <i class="fa fa-caret-right"></i> Tylie Do&amp;Yoo &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> ${obj[i].strCreateTime}
+                                <i class="fa fa-caret-right"></i> ${obj[i].author} &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> ${obj[i].strCreateTime}
                             </div>
                             <a href="/News/Post/${obj[i].id}" target="_blank">
                                 <div class="blogall-item-title">
@@ -826,7 +825,7 @@
                                         <img src="/images/PC_blog/img-readmore2.svg" alt="">
                                         <img src="/images/PC_blog/img-readmore1.svg" alt="">
                                     </div>
-                                    <a href="/News/Post/${obj[i].id}">
+                                    <a href="/News/Post/${obj[i].id}"  target="_blank">
                                         <div class="trending-post">
                                             <!-- <div class="col-md-6 col-8 "> -->
                                             <img src="${obj[i].thumb}" alt="">
@@ -883,7 +882,7 @@
             let opt = `<div class="row blogall-item" id="${obj[i].id}">
                             <div class="col-md-8">
                             <div class="blogall-item-author">
-                                <i class="fa fa-caret-right"></i> Tylie Do&amp;Yoo &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> ${obj[i].strCreateTime}
+                                <i class="fa fa-caret-right"></i> ${obj[i].author} &nbsp;&nbsp;&nbsp;<i class="fa fa-caret-right"></i> ${obj[i].strCreateTime}
                             </div>
                             <a href="/News/Post/${obj[i].id}" target="_blank">
                                 <div class="blogall-item-title">
