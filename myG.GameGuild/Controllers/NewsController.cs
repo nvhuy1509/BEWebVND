@@ -37,14 +37,12 @@ namespace myG.GameGuild.Controllers
             mymodel.lstTag = lstTag;
             return View(mymodel);
         }
-        [Route("News/AddNew")]
         public IActionResult AddNew()
         {
             ViewData["UserID"] = _sessionManager.AccountId;
             List<Tag> lstTag = (Provider.DataAccessSQLServerService.SelectAllTag().Where(t => t.Status == 1)).ToList();
             return View(lstTag);
         }
-        [Route("News/EditNew/{Id}")]
         public IActionResult EditNew(int id)
         {
             ViewData["UserID"] = _sessionManager.AccountId;
@@ -74,7 +72,6 @@ namespace myG.GameGuild.Controllers
 
             return View(mymodel);
         }
-        [Route("News/Detail")]
         public IActionResult Detail()
         {
             List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status != 0).OrderByDescending(t => t.CreateTime).ToList(); 
@@ -82,140 +79,6 @@ namespace myG.GameGuild.Controllers
         }
 
         #region http
-        [HttpPost]
-        public async Task<JsonResult> searchPostTrend( string TagName, string txtSearch)
-        {
-            DalResult result = new DalResult();
-            try
-            {
-                List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime).ToList();
-                if(!string.IsNullOrEmpty(TagName))
-                {
-                    lstBLogs = lstBLogs.Where(t => t.MetaDescription.Contains(TagName)).ToList();
-                }
-                if(!string.IsNullOrEmpty(txtSearch))
-                {
-                    lstBLogs = lstBLogs.Where(t => t.Title.ToLower().Contains(txtSearch.ToLower())).ToList();
-                }
-                lstBLogs = lstBLogs.Take(3).ToList();
-                result.Data = lstBLogs;
-                result.IsSuccess = true;
-                return Json(result);
-
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                return Json(result);
-            }
-
-        }
-        
-        [HttpPost]
-        public async Task<JsonResult> getMoreBlogTrend(List<int> listBlog, string TagName, string txtSearch)
-        {
-            DalResult result = new DalResult();
-            try
-            {
-                List<News> lstBLogs = Provider.DataAccessSQLServerService.SelectAllNews().Where(t => !listBlog.Contains(t.Id) && t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime).ToList();
-                if(!string.IsNullOrEmpty(TagName))
-                {
-                    lstBLogs = lstBLogs.Where(t => t.MetaDescription.Contains(TagName)).ToList();
-                }
-                if(!string.IsNullOrEmpty(txtSearch))
-                {
-                    lstBLogs = lstBLogs.Where(t => t.Title.Contains(txtSearch)).ToList();
-                }
-                if(lstBLogs.Count <=3)
-                {
-                    result.EffectRow = 999;
-                }
-                lstBLogs = lstBLogs.Take(3).ToList();
-
-
-                result.Data = lstBLogs;
-                result.IsSuccess = true;
-                return Json(result);
-
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                return Json(result);
-            }
-
-        }
-        [HttpPost]
-        public async Task<JsonResult> getMoreBlogAll(List<int> listBlog, string TagName)
-        {
-            DalResult result = new DalResult();
-            try
-            {
-                List<News> lstBLogs = new List<News>();
-                if (string.IsNullOrEmpty(TagName))
-                {
-                    lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => !listBlog.Contains(t.Id) && t.Status == 1).OrderByDescending(t => t.CreateTime)).Take(3).ToList();
-                }
-                else
-                {
-                    lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => !listBlog.Contains(t.Id) && t.Status == 1 && t.MetaDescription.Contains(TagName)).OrderByDescending(t => t.CreateTime)).Take(3).ToList();
-                }
-                result.Data = lstBLogs;
-                result.IsSuccess = true;
-                return Json(result);
-
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                return Json(result);
-            }
-
-        }
-        
-        [HttpPost]
-        public async Task<JsonResult> getPostFTagTrend(string TagName)
-        {
-            DalResult result = new DalResult();
-            try
-            {
-                List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1 && t.MetaDescription.Contains(TagName)).OrderByDescending(t=> t.PageView).OrderByDescending(t => t.CreateTime)).ToList();
-                result.Data = lstBLogs;
-                result.IsSuccess = true;
-                return Json(result);
-
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                return Json(result);
-            }
-
-        }
-        [HttpPost]
-        public async Task<JsonResult> getPostFTagAll(string TagName)
-        {
-            DalResult result = new DalResult();
-            try
-            {
-                List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1 && t.MetaDescription.Contains(TagName)).OrderByDescending(t => t.CreateTime)).ToList();
-                result.Data = lstBLogs;
-                result.IsSuccess = true;
-                return Json(result);
-
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                return Json(result);
-            }
-
-        }
         [HttpPost]
         public async Task<JsonResult> Add(string Title, string Thumb, string Description, string Content, string MetaDescription, int Status, string Author)
         {

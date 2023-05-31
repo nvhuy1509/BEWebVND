@@ -26,7 +26,7 @@ namespace myG.GameGuild
 
             _sessionManager = sessionManager;
             _sessionManager.IsPremission = true;
-            if (httpContext.Request.Path.ToString().EndsWith("/") || httpContext.Request.Path.ToString().EndsWith("/Work")  || httpContext.Request.Path.ToString().EndsWith("/News/getPostFTagTrend")  || httpContext.Request.Path.ToString().EndsWith("/News/getPostFTagAll")  || httpContext.Request.Path.ToString().EndsWith("/News/searchPostTrend")  || httpContext.Request.Path.ToString().EndsWith("/News/getMoreBlogTrend") || httpContext.Request.Path.ToString().EndsWith("/News/getMoreBlogAll") || httpContext.Request.Path.ToString().EndsWith("/News") || httpContext.Request.Path.ToString().EndsWith("/Transparency") || httpContext.Request.Path.ToString().EndsWith("/Contact") || httpContext.Request.Path.ToString().Contains("/News/Post"))
+            if (httpContext.Request.Path.ToString().EndsWith("/") || httpContext.Request.Path.ToString().EndsWith("/Work") ||  httpContext.Request.Path.ToString().Contains("/Api") || httpContext.Request.Path.ToString().EndsWith("/News") || httpContext.Request.Path.ToString().EndsWith("/Transparency") || httpContext.Request.Path.ToString().EndsWith("/Contact") || httpContext.Request.Path.ToString().Contains("/News/Post"))
             {
                 if (httpContext.Request.Path.ToString().Contains("/News/Post/"))
                 {

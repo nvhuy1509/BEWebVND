@@ -14,7 +14,7 @@ namespace myGUnitTest
             var rijndaelKey = new RijndaelEnhanced("OhayVN", "@1B2c3D4e5F6g7H8");
             // string conn =
             //   "ffoylQVUl3zGfVGEz0Rmdfye5wvw74wjyDi6liKprTm9QCbL6BLG9DjWFbnE6D2bF/lP1+OpLCxw7x/IdgBG8ru87yj+Wtqrz/zRM0WBndY0R0yTWYWx3T8CHX/RC0t6";
-            string conn = "bA2zBVE8gzqap1EEFUX2EmGfFdupVNmA5vDK728wMZV2jKIMWgVSxvvzFYha4F5llljD4xx9eWbqJL7Wba8GEWG0Mo/CpLeSh0G+//33TQ66YqcjYIhwpaKRs48vqXL7";
+            string conn = "jzkgPoCIkzjFWv6ebuSE3rihh4T2sqKf27SdiPBcFCSbmddcsu/b5lHw8dQbIvKzRGK1REKfbSY+J3UCTLXHDCyIVv3Lj7VJeQPyv9Eh9A4=";
             var decryptConn = rijndaelKey.Decrypt(conn);
 
             Console.WriteLine(decryptConn);
@@ -28,7 +28,7 @@ namespace myGUnitTest
                 //string conn = "Server=123.30.245.58;port=21032;Database=game_guild;User Id=postgres;Password=123JQKGame6789;CommandTimeout=60;Pooling=true;MinPoolSize=1;MaxPoolSize=100";
                 // string conn = "Server=123.30.245.58;port=16232;Database=webtest;User Id=postgres;Password=develop_myg_db;CommandTimeout=60;Pooling=true;MinPoolSize=1;MaxPoolSize=100";
                //  string conn = "server=ANPHATPC\\MYGSERVER;database=myG.VNDmoneyLocal;Trusted_Connection=True;";//local
-               string conn = "server=192.168.10.170;database=myG.BetaVNDmoney;uid=myg.id;pwd=katKAT@123; "; // public
+               string conn = "server=192.168.10.170;database=VNDmoney;uid=myg.id;pwd=katKAT@123; "; // public
                 //conn = "Server=123.30.245.58;Port=16089;User=root;Password=AFFWINNOW2022;Database=webux_aff;SSL Mode=None";
                 //string conn = "server=123.30.245.58,61433;database=myG.BeAStar;uid=myg.id;pwd=myG.id_c0re123*654;";
                 var decryptConn = rijndaelKey.Encrypt(conn);
