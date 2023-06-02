@@ -23,7 +23,10 @@ namespace myG.GameGuild.Controllers
         // GET: /<controller>/
         public async Task<IActionResult> Index()
         {
-
+            List<Config> lstConfig = Provider.DataAccessSQLServerService.SelectAllConfig();
+            var urlFb = lstConfig.Where(t => t.Key == "facebook").Select(t => t.Value).ToList();
+            var urlTele = lstConfig.Where(t => t.Key == "telegram").Select(t => t.Value).ToList();
+            var urlTt = lstConfig.Where(t => t.Key == "twitter").Select(t => t.Value).ToList();
             List<News> tredingBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime)).Take(3).ToList();
             List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1)).OrderByDescending(t => t.CreateTime).Take(5).ToList();
             List<Tag> lstTag = (Provider.DataAccessSQLServerService.SelectAllTag().OrderByDescending(t => t.Count).Take(3)).ToList();
@@ -34,6 +37,9 @@ namespace myG.GameGuild.Controllers
             dynamic mymodel = new ExpandoObject();
             mymodel.lstBLogs = lstBLogs;
             mymodel.tredingBLogs = tredingBLogs;
+            mymodel.urlFb = urlFb[0];
+            mymodel.urlTele = urlTele[0];
+            mymodel.urlTt = urlTt[0];
             mymodel.lstTag = lstTag;
             return View(mymodel);
         }
@@ -63,11 +69,18 @@ namespace myG.GameGuild.Controllers
             ViewData["UserID"] = _sessionManager.AccountId;
             News NewItem = Provider.DataAccessSQLServerService.SelectNewsById(id);
             List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime)).Take(5).ToList();
+            List<Config> lstConfig = Provider.DataAccessSQLServerService.SelectAllConfig();
+            var urlFb = lstConfig.Where(t => t.Key == "facebook").Select(t => t.Value).ToList();
+            var urlTele = lstConfig.Where(t => t.Key == "telegram").Select(t => t.Value).ToList();
+            var urlTt = lstConfig.Where(t => t.Key == "twitter").Select(t => t.Value).ToList();
+
 
             dynamic mymodel = new ExpandoObject();
             mymodel.NewItem = NewItem;
             mymodel.lstBLogs = lstBLogs;
-            mymodel.DateCreated = NewItem.StrCreateTime;
+            mymodel.urlFb = urlFb[0];
+            mymodel.urlTele = urlTele[0];
+            mymodel.urlTt = urlTt[0];
             
 
             return View(mymodel);

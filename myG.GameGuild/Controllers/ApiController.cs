@@ -25,7 +25,7 @@ namespace myG.GameGuild.Controllers
 
         #region http
         [HttpPost]
-        public async Task<JsonResult> searchPostTrend( string TagName, string txtSearch)
+        public async Task<JsonResult> searchDataPost( string TagName, string txtSearch)
         {
             DalResult result = new DalResult();
             try
@@ -39,7 +39,6 @@ namespace myG.GameGuild.Controllers
                 {
                     lstBLogs = lstBLogs.Where(t => t.Title.ToLower().Contains(txtSearch.ToLower())).ToList();
                 }
-                lstBLogs = lstBLogs.Take(3).ToList();
                 result.Data = lstBLogs;
                 result.IsSuccess = true;
                 return Json(result);
@@ -122,26 +121,7 @@ namespace myG.GameGuild.Controllers
 
         }
         
-        [HttpPost]
-        public async Task<JsonResult> getPostFTagTrend(string TagName)
-        {
-            DalResult result = new DalResult();
-            try
-            {
-                List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1 && t.MetaDescription.Contains(TagName)).OrderByDescending(t=> t.PageView).OrderByDescending(t => t.CreateTime)).ToList();
-                result.Data = lstBLogs;
-                result.IsSuccess = true;
-                return Json(result);
-
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
-                return Json(result);
-            }
-
-        }
+       
         [HttpPost]
         public async Task<JsonResult> getPostFTagAll(string TagName)
         {
