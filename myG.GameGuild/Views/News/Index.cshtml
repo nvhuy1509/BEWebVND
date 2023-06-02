@@ -984,10 +984,13 @@
 
         if(element.textContent == "Newest") {
             console.log("sắp xếp các bài viết gần đây nhất")
+            element.classList.add("dropdown-sort-border-top");
             dataSearchAll = dataSearchAll.sort(
                 (objA, objB) => Number(objB.createTime) - Number(objA.createTime),
             );
         } else {
+            console.log("sắp xếp các bài viết cũ nhất");
+            element.classList.add("dropdown-sort-border-bot");
             dataSearchAll = dataSearchAll.sort(
                 (objA, objB) => Number(objA.createTime) - Number(objB.createTime),
             );

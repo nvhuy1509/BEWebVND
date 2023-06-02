@@ -2285,9 +2285,21 @@ h3 {
     .dropdown-sort a:hover {
         background-color: #FFB800 !important;
     }
+    .dropdown-sort li:nth-child(1) a:hover {
+        border-radius: 7px 7px 0px 0px
+    }
+    .dropdown-sort li:nth-child(2) a:hover {
+        border-radius: 0px 0px 7px 7px
+    }
     .dropdown-sort-active {
         background-color: #FFB800 !important;
         color: #111111 !important
+    }
+    .dropdown-sort-border-top {
+        border-radius: 7px 7px 0px 0px
+    }
+    .dropdown-sort-border-bot {
+        border-radius: 0px 0px 7px 7px
     }
     .blogall-sort {
         padding: 10px 0px 25px 0px;
