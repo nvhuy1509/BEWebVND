@@ -433,6 +433,14 @@
       </footer>
     </div>
     <script>
+        $( document ).ready(function() {
+            var divParent = document.getElementById("listAllBlogSearchPC");
+            var countDiv = divParent.children.length;
+
+            if(countDiv < 5) {
+                $("#readmoreBtnPC").hide();
+            }
+        });
         var dataSearchAll = [];
         var tagSearch = "";
         document.getElementById("txtSearch").addEventListener("search", function(event) {

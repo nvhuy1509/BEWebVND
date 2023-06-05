@@ -626,7 +626,7 @@ h3 {
 
 .blog-button {
     background: #FFB800;
-    border-radius: 40px 0px 40px 40px;
+    border-radius: 40px 0px 70px 40px;
     padding: 16px 40px;
     font-family: "Inter";
     font-style: normal;
@@ -1024,7 +1024,7 @@ h3 {
         }
 
         .carousel-inner {
-            padding: 20px 30px;
+            padding: 0px 30px;
         }
 
         .carousel-blog-item {
@@ -1033,7 +1033,7 @@ h3 {
 
         .carousel-item {
             width: 95%;
-            min-height: 445px;
+            min-height: 415px;
         }
 
             .carousel-item a img {
