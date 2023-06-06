@@ -1,0 +1,73 @@
+﻿
+@using Minxtu.DAL.Entity;
+@using Activity.DAL.Enum;
+@{
+    List<Menu> lstData = Model;
+    ViewData["Title"] = "Danh sách Menu";
+}
+
+<!-- Row -->
+<div class="row row-sm">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">@ViewData["Title"] </h3>
+                <div class="card-options">
+                    <a class="btn btn-primary " href="@Url.Action("AddMenu")"><i class="fe fe-plus"></i> Thêm mới</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered text-nowrap border-bottom" id="responsive-datatable">
+                        <thead>
+                            <tr>
+                                <th class="wd-15p border-bottom-0">STT</th>
+                                <th class="wd-15p border-bottom-0">Title</th>
+                                <th class="wd-15p border-bottom-0">Description</th>
+                                <th class="wd-15p border-bottom-0">OrderNumber</th>
+                                <th class="wd-15p border-bottom-0">LinkMenu</th>
+                                <th class="wd-15p border-bottom-0">Status</th>
+                                <th class="wd-0p wd-center border-bottom-0">Tính năng</th>
+                            </tr>
+                        </thead>
+                        @if (lstData.Count > 0)
+                        {
+                            var stt = 0;
+                            <tbody>
+                                @foreach (var obj in lstData)
+                                    {
+                                    stt++;
+                                    <tr>
+                                            <td>@stt</td>
+                                            <td>@obj.Title</td>
+                                            <td>@obj.Description</td>
+                                            <td>@obj.OrderNumber</td>
+                                            <td>@obj.LinkMenu</td>
+                                            @if (obj.Status == 1)
+                                            {
+                                                <td><span class="tag tag-blue"> Hiển thị </span></td>
+                                            }
+                                            @if (obj.Status == 3)
+                                            {
+                                                <td><span class="tag tag-cyan">Ẩn</span></td>
+                                            }
+                                            <td>
+                                                <a data-bs-placement="top" data-bs-toggle="tooltip" title="" data-bs-original-title="Chỉnh sửa" href="@Url.Action("EditMenu", new {Id=obj.Id })" class="btn btn-icon  btn-success"><i class="fe fe-edit"></i></a>
+                                            </td>
+                                        </tr>
+
+                                    }
+                            </tbody>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/assets/js/del.js"></script>
+<script>
+</script>
+<script>//var t = document.getElementById("demo").innerHTML;</script>
+<!-- End Row -->

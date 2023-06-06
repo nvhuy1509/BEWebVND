@@ -458,7 +458,7 @@ new SqlParameter("@Id", id),
                                      new SqlParameter("@LinkMenu", obj.LinkMenu),
                                      new SqlParameter("@ArticleId", obj.ArticleId),
                                      new SqlParameter("@Status", obj.Status),
-                                     new SqlParameter("@ParentId", obj.ParentId),
+                                     new SqlParameter("@CateID", obj.ParentId),
                                  };
             var p = parameters[0];
             p.Direction = ParameterDirection.Output;
@@ -486,7 +486,7 @@ new SqlParameter("@Id", id),
                                         new SqlParameter("@LinkMenu", obj.LinkMenu),
                                         new SqlParameter("@ArticleId", obj.ArticleId),
                                         new SqlParameter("@Status", obj.Status),
-                                        new SqlParameter("@ParentId", obj.ParentId),
+                                        new SqlParameter("@CateID", obj.ParentId),
                                     };
             db.ExecuteScalarSP(spName, objParamArray);
             DalResult dalResult = new DalResult();

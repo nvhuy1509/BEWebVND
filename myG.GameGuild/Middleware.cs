@@ -26,7 +26,12 @@ namespace myG.GameGuild
 
             _sessionManager = sessionManager;
             _sessionManager.IsPremission = true;
-            if (httpContext.Request.Path.ToString().EndsWith("/") || httpContext.Request.Path.ToString().EndsWith("/Work") ||  httpContext.Request.Path.ToString().Contains("/Api") || httpContext.Request.Path.ToString().EndsWith("/News") || httpContext.Request.Path.ToString().EndsWith("/Transparency") || httpContext.Request.Path.ToString().EndsWith("/Contact") || httpContext.Request.Path.ToString().Contains("/News/Post"))
+
+            List<string> lstData = Provider.DataAccessSQLServerService.SelectAllMenu().Where(x => x.Status == 1).Select(x => x.LinkMenu).ToList();
+
+            httpContext.Items["LinkUrl"] = httpContext.Request.Path.ToString();
+
+            if (lstData.Contains(httpContext.Request.Path.ToString()) || httpContext.Request.Path.ToString().Contains("/Api") || httpContext.Request.Path.ToString().Contains("/News/Post"))
             {
                 if (httpContext.Request.Path.ToString().Contains("/News/Post/"))
                 {

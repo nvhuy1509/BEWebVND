@@ -1,10 +1,12 @@
-﻿
+﻿@using Minxtu.DAL.Entity;
 @{
     Layout = null;
         var urlFb = Model.urlFb;
         var urlTele = Model.urlTele;
         var urlMail = Model.urlMail;
         var urlTt = Model.urlTt;
+        List<Menu> headerMenu = Model.headerMenu;
+        List<Menu> footerMenu = Model.footerMenu;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -83,19 +85,19 @@
         function animateProgress() {
              $(".progress-bar-one").animate({
                 width: "20%"
-            }, 1000);
+            }, 2000);
             
             $(".progress-bar-two").animate({
                 width: "80%"
-            }, 1000);
+            }, 2000);
             
             $(".progress-bar-three").animate({
                 width: "40%"
-            }, 1000);
+            }, 2000);
             
             $(".progress-bar-four").animate({
                 width: "10%"
-            }, 1000);
+            }, 2000);
             console.log("dsadasdasdasdsa-------------------------")
         }
 
@@ -121,24 +123,24 @@
           </div>
           <div class="header-fixed">
             <ul class="menu">
-              <li class="menu-item menu-home">
-                <a href="@Url.Action("Index","Home")" class="menu-link menu-active "
-                  >Home</a
-                >
-                <i class="fas fa-times close-header-fixed visible-s"></i>
-              </li>
-              <li class="menu-item">
-                <a href="@Url.Action("Index","Work")" class="menu-link menu-active">How It Works</a>
-              </li>
-              <li class="menu-item">
-                <a href="@Url.Action("Index","News")" class="menu-link menu-active">Blog</a>
-              </li>
-              <li class="menu-item">
-                <a href="@Url.Action("Index","Transparency")" class="menu-link menu-active actived">Transparency</a>
-              </li>
-              <li class="menu-item">
-                <a href="@Url.Action("Index","Contact")" class="menu-link menu-active">Contact</a>
-              </li>
+              @foreach(Menu menu in headerMenu)
+              {
+                @if(Context.Items["LinkUrl"].ToString() == menu.LinkMenu  )
+                {
+                    <li class="menu-item menu-home">
+                        <a href="@menu.LinkMenu" class="menu-link menu-active actived"
+                            >@menu.Title</a
+                        >
+                        <i class="fas fa-times close-header-fixed visible-s"></i>
+                    </li>
+                } else
+                {
+                    <li class="menu-item">
+                        <a href="@menu.LinkMenu" class="menu-link menu-active">@menu.Title</a>
+                    </li>     
+                }
+                             
+              }
             </ul>
           </div>
           <button  class="blog-button visible-lg"  onclick="window.open('https://docs.mymoney.credit/my-money-credit/how-my-money-credit-operates/2.-vietnam-dong-coin-dong','_blank')">
@@ -209,24 +211,25 @@
           </div>
         </div >
             <ul class="footer-menu">
-              <li>
-                <a href="@Url.Action("Index","Home")">Home</a>
-              </li>
-              <li>
-                <a href="@Url.Action("Index","Work")">How It Works</a>
-              </li>
-              <li>
-                <a href="https://docs.mymoney.credit/my-money-credit/how-my-money-credit-operates/2.-vietnam-dong-coin-dong" target="_blank">Whitepaper</a>
-              </li>
-              <li>
-                <a href="@Url.Action("Index","News")">Blog</a>
-              </li>
-              <li>
-                <a  class="footer-menu-active" href="@Url.Action("Index","Transparency")">Transparency</a>
-              </li>
-              <li>
-                <a href="@Url.Action("Index","Contact")">Contact</a>
-              </li>
+                @foreach(Menu menu in footerMenu)
+                {
+                    @if(Context.Items["LinkUrl"].ToString() == menu.LinkMenu  )
+                    {
+                        <li>
+                            <a class="footer-menu-active" href="@menu.LinkMenu">@menu.Title</a>
+                        </li>
+                    } else
+                    {
+                        <li>
+                            @if(@menu.LinkMenu.Contains("http")) {
+                                    <a href="@menu.LinkMenu" target="_blank">@menu.Title</a>
+                            } else {
+                                <a href="@menu.LinkMenu">@menu.Title</a>
+                            }
+                        </li>
+                    }
+                             
+                }
             </ul>
             <div class="d-flex justify-content-center visible-lg">
               <div class="footer-desc">

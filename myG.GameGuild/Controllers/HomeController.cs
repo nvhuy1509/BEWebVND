@@ -41,7 +41,9 @@ namespace myG.GameGuild.Controllers
             var urlAndr = lstConfig.Where(t => t.Key == "downloadAndroid").Select(t => t.Value).ToList();
 
             List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime)).Take(5).ToList();
-
+            List<Menu> lstMenu = Provider.DataAccessSQLServerService.SelectAllMenu().Where(x => x.Status == 1).OrderBy(x => x.OrderNumber).ToList();
+            List<Menu> headerMenu = lstMenu.Where(t => t.ArticleId == 1 || t.ArticleId == 2).ToList();
+            List<Menu> footerMenu = lstMenu.Where(t => t.ArticleId == 1 || t.ArticleId == 3).ToList();
             dynamic mymodel = new ExpandoObject();
             mymodel.urlFb = urlFb[0];
             mymodel.urlTele = urlTele[0];
@@ -50,6 +52,8 @@ namespace myG.GameGuild.Controllers
             mymodel.urlAp = urlAp[0];
             mymodel.urlAndr = urlAndr[0];
             mymodel.lstBLogs = lstBLogs;
+            mymodel.headerMenu = headerMenu;
+            mymodel.footerMenu = footerMenu;
 
             return View(mymodel);
         }

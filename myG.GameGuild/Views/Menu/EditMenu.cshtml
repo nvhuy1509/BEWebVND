@@ -1,0 +1,157 @@
+﻿
+@using Minxtu.DAL.Entity;
+@using System.Globalization;
+@{
+    Menu item = Model;
+}
+<div class="row">
+    <div class="col-xl-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Chỉnh sửa Menu</h4>
+            </div>
+            <div class="card-body">
+                <form class=" needs-validation" novalidate>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="title">Title <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="title" value="@item.Title" class="form-control" placeholder="Điền title" >
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="description">Description </label>
+                        <div class="col-md-9">
+                            <input type="text" id="description" value="@item.Description" class="form-control" placeholder="Điền description" >
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="order">Order <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="number" min="1" id="order" value="@item.OrderNumber" class="form-control" placeholder="Điền Order" >
+                        </div>
+                    </div>
+
+                    <div class=" row mb-4">
+                        <label class="col-md-3 form-label" for="url">Url <span class="text-red">*</span></label>
+                        <div class="col-md-9">
+                            <input type="text" id="url" value="@item.LinkMenu" class="form-control" placeholder="Điền Url" >
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <label class="col-md-3 form-label" for="view"> View</label>
+                        <div class="col-md-9">
+                            <select id="view" class="form-control  form-select"  >
+                                @if(@item.ArticleId == 1)
+                                {
+                                    <option value="1" selected> All </option>
+                                    <option value="2"> Header </option>
+                                    <option value="3"> Footer </option>
+                                }
+                                else if(@item.ArticleId == 2)
+                                {
+                                    <option value="1"> All </option>
+                                    <option value="2" selected> Header </option>
+                                    <option value="3"> Footer </option>
+                                } else
+                                {
+                                    <option value="1"> All </option>
+                                    <option value="2"> Header </option>
+                                    <option value="3" selected> Footer </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <label class="col-md-3 form-label" for="status"> Trạng thái</label>
+                        <div class="col-md-9">
+                            <select id="status" class="form-control  form-select"  >
+                                @if(@item.Status == 1)
+                                {
+                                    <option value="1" selected> Hiện </option>
+                                    <option value="3"> Ẩn </option>
+                                }
+                                else 
+                                {
+                                    <option value="1"> Hiện </option>
+                                    <option value="3" selected> Ẩn </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <a class="btn btn-primary" onclick="saveMenu()">Lưu</a>
+                    <a class="btn btn-danger" href="@Url.Action("Index")">Hủy</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="file-upload" accept=".jpg, .png" style="display:none;">
+
+<script>
+
+    function saveMenu() {
+
+        var title = document.getElementById("title").value;
+        var description = document.getElementById("description").value;
+        var number = document.getElementById("order").value;
+        var url = document.getElementById("url").value;
+        var view = document.getElementById("view").value;
+        var status = document.getElementById("status").value;
+
+        if (title == "") {
+            alert('Bạn cần điền thông tin title');
+        }
+        else if (number == "") {
+            alert('Bạn cần điền thứ tự hiển thị');
+        } 
+        else if (url == "") {
+            alert('Bạn cần điền đường dẫn tới trang');
+        } 
+        else {
+            var param = {
+                "Id": '@item.Id',
+                "Title": title,
+                "Description": description,
+                "Number": number,
+                "Url": url,
+                "ArticleId": view,
+                "Status": status,
+            }
+
+            console.log(param);
+
+            $.ajax({
+                type: 'POST',
+                url: "@Url.Action("Update")",
+                data: param,
+                async: true,
+                success: function (data) {
+                    console.log("data", data)
+                    if (data.isSuccess) {
+                        alert('Chỉnh sửa thành công');
+                        location.href = '@Url.Action("Index")';
+                    }
+                    else {
+                        notifyError(data.errorMessage);
+                    }
+                }
+            });
+        }
+       
+    }
+
+
+
+</script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />

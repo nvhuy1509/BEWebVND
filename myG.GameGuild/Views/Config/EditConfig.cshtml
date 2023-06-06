@@ -27,7 +27,7 @@
                         </div>
                     </div>
 
-                    <a class="btn btn-primary" onclick="saveBlog()">Lưu</a>
+                    <a class="btn btn-primary" onclick="saveConfig()">Lưu</a>
                     <a class="btn btn-danger" href="@Url.Action("Index")">Hủy</a>
                 </form>
             </div>
@@ -39,7 +39,7 @@
 
 <script>
 
-    function saveBlog() {
+    function saveConfig() {
 
         var key = document.getElementById("key").value;
         var value = document.getElementById("value").value;

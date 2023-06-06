@@ -27,6 +27,9 @@ namespace myG.GameGuild.Controllers
             var urlFb = lstConfig.Where(t => t.Key == "facebook").Select(t => t.Value).ToList();
             var urlTele = lstConfig.Where(t => t.Key == "telegram").Select(t => t.Value).ToList();
             var urlTt = lstConfig.Where(t => t.Key == "twitter").Select(t => t.Value).ToList();
+            List<Menu> lstMenu = Provider.DataAccessSQLServerService.SelectAllMenu().Where(x => x.Status == 1).OrderBy(x => x.OrderNumber).ToList();
+            List<Menu> headerMenu = lstMenu.Where(t => t.ArticleId == 1 || t.ArticleId == 2).ToList();
+            List<Menu> footerMenu = lstMenu.Where(t => t.ArticleId == 1 || t.ArticleId == 3).ToList();
             List<News> tredingBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1).OrderByDescending(t => t.PageView).OrderByDescending(t => t.CreateTime)).Take(3).ToList();
             List<News> lstBLogs = (Provider.DataAccessSQLServerService.SelectAllNews().Where(t => t.Status == 1)).OrderByDescending(t => t.CreateTime).Take(5).ToList();
             List<Tag> lstTag = (Provider.DataAccessSQLServerService.SelectAllTag().OrderByDescending(t => t.Count).Take(3)).ToList();
@@ -41,6 +44,8 @@ namespace myG.GameGuild.Controllers
             mymodel.urlTele = urlTele[0];
             mymodel.urlTt = urlTt[0];
             mymodel.lstTag = lstTag;
+            mymodel.headerMenu = headerMenu;
+            mymodel.footerMenu = footerMenu;
             return View(mymodel);
         }
         public IActionResult AddNew()
@@ -73,7 +78,9 @@ namespace myG.GameGuild.Controllers
             var urlFb = lstConfig.Where(t => t.Key == "facebook").Select(t => t.Value).ToList();
             var urlTele = lstConfig.Where(t => t.Key == "telegram").Select(t => t.Value).ToList();
             var urlTt = lstConfig.Where(t => t.Key == "twitter").Select(t => t.Value).ToList();
-
+            List<Menu> lstMenu = Provider.DataAccessSQLServerService.SelectAllMenu().Where(x => x.Status == 1).OrderBy(x => x.OrderNumber).ToList();
+            List<Menu> headerMenu = lstMenu.Where(t => t.ArticleId == 1 || t.ArticleId == 2).ToList();
+            List<Menu> footerMenu = lstMenu.Where(t => t.ArticleId == 1 || t.ArticleId == 3).ToList();
 
             dynamic mymodel = new ExpandoObject();
             mymodel.NewItem = NewItem;
@@ -81,7 +88,9 @@ namespace myG.GameGuild.Controllers
             mymodel.urlFb = urlFb[0];
             mymodel.urlTele = urlTele[0];
             mymodel.urlTt = urlTt[0];
-            
+            mymodel.headerMenu = headerMenu;
+            mymodel.footerMenu = footerMenu;
+
 
             return View(mymodel);
         }
